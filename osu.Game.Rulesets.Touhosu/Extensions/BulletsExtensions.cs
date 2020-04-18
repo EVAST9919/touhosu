@@ -53,11 +53,11 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                 // Don't take into account very small sliders. There's a chance that they will contain reverse spam, and offset looks ugly
                 if (spanDuration < 75 && curve.RepeatCount > 0)
                 {
-                    sliderEventPosition = objPosition * new Vector2(0.5f, 0.5f);
+                    sliderEventPosition = objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
                     isRepeatSpam = true;
                 }
                 else
-                    sliderEventPosition = (curve.CurvePositionAt(e.PathProgress / (curve.RepeatCount + 1)) + objPosition) * new Vector2(0.5f, 0.5f);
+                    sliderEventPosition = (curve.CurvePositionAt(e.PathProgress / (curve.RepeatCount + 1)) + objPosition) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
 
                 switch (e.Type)
                 {
@@ -142,7 +142,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             for (int i = 0; i < bodyCherriesCount; i++)
             {
                 var progress = (float)i / bodyCherriesCount;
-                var position = (curve.CurvePositionAt(progress) + objPosition) * new Vector2(0.5f, 0.5f);
+                var position = (curve.CurvePositionAt(progress) + objPosition) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
 
                 if (positionIsValid(position))
                 {
@@ -170,7 +170,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             hitObjects.AddRange(generateExplosion(
                 obj.StartTime,
                 bullets_per_hitcircle,
-                objPosition * new Vector2(0.5f, 0.5f),
+                objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
                 comboData,
                 index,
                 0,
@@ -199,7 +199,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                 hitObjects.AddRange(generateExplosion(
                     obj.StartTime + i * spinner_span_delay,
                     bullets_per_spinner_span,
-                    objPosition * new Vector2(0.5f, 0.5f),
+                    objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
                     comboData,
                     index,
                     i * spinner_angle_per_span));

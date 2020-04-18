@@ -35,8 +35,8 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                 Player = new Container
                 {
                     Origin = Anchor.Centre,
-                    Position = new Vector2(TouhosuPlayfield.ACTUAL_SIZE.X / 2, TouhosuPlayfield.ACTUAL_SIZE.Y - 20),
-                    Size = new Vector2(15, 22),
+                    Position = new Vector2(TouhosuPlayfield.ACTUAL_SIZE.X / 2f, TouhosuPlayfield.ACTUAL_SIZE.Y - 20),
+                    Size = new Vector2(23.25f, 33.75f),
                     Children = new Drawable[]
                     {
                         drawablePlayer = new Sprite
@@ -137,7 +137,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
             if (horizontalDirection != 0)
             {
-                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, 0, TouhosuPlayfield.ACTUAL_SIZE.X);
+                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, Player.DrawWidth / 2f, TouhosuPlayfield.ACTUAL_SIZE.X - Player.DrawWidth / 2f);
 
                 Player.Scale = new Vector2(Math.Abs(Scale.X) * (horizontalDirection > 0 ? 1 : -1), Player.Scale.Y);
 
@@ -149,7 +149,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
             if (verticalDirection != 0)
             {
-                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, 0, TouhosuPlayfield.ACTUAL_SIZE.Y);
+                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, Player.DrawHeight / 2f, TouhosuPlayfield.ACTUAL_SIZE.Y - Player.DrawHeight / 2f);
 
                 if (position == Player.Y)
                     return;

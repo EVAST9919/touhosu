@@ -13,7 +13,8 @@ namespace osu.Game.Rulesets.Touhosu.UI
     public class TouhosuPlayfield : Playfield
     {
         public static readonly Vector2 BASE_SIZE = new Vector2(512, 384);
-        public static readonly Vector2 ACTUAL_SIZE = new Vector2(256, 384);
+        public static readonly Vector2 ACTUAL_SIZE = new Vector2(307, 384);
+        public static readonly float X_SCALE_MULTIPLIER = 0.6f;
 
         internal readonly TouhosuPlayer Player;
 
@@ -25,7 +26,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 new Container
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(0.5f, 1),
+                    Size = new Vector2(X_SCALE_MULTIPLIER, 1),
                     Masking = true,
                     Children = new Drawable[]
                     {
@@ -36,9 +37,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 new Container
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(0.5f, 1),
+                    Size = new Vector2(1 - X_SCALE_MULTIPLIER, 1),
                     RelativePositionAxes = Axes.Both,
-                    X = 0.5f,
+                    X = X_SCALE_MULTIPLIER,
                     Child = new Box
                     {
                         RelativeSizeAxes = Axes.Both,
