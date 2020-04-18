@@ -35,7 +35,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             switch (wall)
             {
                 case Wall.Bottom:
-                    finalY = TouhosuPlayfield.BASE_SIZE.Y + (finalSize / 2f);
+                    finalY = TouhosuPlayfield.ACTUAL_SIZE.Y + (finalSize / 2f);
                     finalX = (float)getXPosition(Position, finalY, angle);
                     break;
 
@@ -50,7 +50,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                     break;
 
                 case Wall.Right:
-                    finalX = TouhosuPlayfield.BASE_SIZE.X + (finalSize / 2f);
+                    finalX = TouhosuPlayfield.ACTUAL_SIZE.X + (finalSize / 2f);
                     finalY = (float)getYPosition(Position, finalX, angle);
                     break;
             }
@@ -112,7 +112,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             // Top/Right
             if (angle <= 90)
             {
-                if (angle < getCornerAngle(Position, new Vector2(TouhosuPlayfield.BASE_SIZE.X, 0)) - 360)
+                if (angle < getCornerAngle(Position, new Vector2(TouhosuPlayfield.ACTUAL_SIZE.X, 0)) - 360)
                     return Wall.Top;
 
                 return Wall.Right;
@@ -121,7 +121,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             // Right/Bottom
             if (angle <= 180)
             {
-                if (angle < getCornerAngle(Position, new Vector2(TouhosuPlayfield.BASE_SIZE.X, TouhosuPlayfield.BASE_SIZE.Y)))
+                if (angle < getCornerAngle(Position, new Vector2(TouhosuPlayfield.ACTUAL_SIZE.X, TouhosuPlayfield.ACTUAL_SIZE.Y)))
                     return Wall.Right;
 
                 return Wall.Bottom;
@@ -130,7 +130,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             // Bottom/Left
             if (angle <= 270)
             {
-                if (angle < getCornerAngle(Position, new Vector2(0, TouhosuPlayfield.BASE_SIZE.Y)))
+                if (angle < getCornerAngle(Position, new Vector2(0, TouhosuPlayfield.ACTUAL_SIZE.Y)))
                     return Wall.Bottom;
 
                 return Wall.Left;
