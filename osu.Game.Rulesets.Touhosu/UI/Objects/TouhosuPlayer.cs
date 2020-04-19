@@ -14,6 +14,8 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
     public class TouhosuPlayer : CompositeDrawable, IKeyBindingHandler<TouhosuAction>
     {
         private const float base_speed = 0.2f;
+        private const float shoot_delay = 80;
+
         private float speedMultiplier = 1;
 
         [Resolved]
@@ -27,9 +29,12 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         public readonly Container Player;
         private readonly Sprite drawablePlayer;
         private readonly FocusAnimation focus;
+        private readonly CardsController cardsController;
 
-        public TouhosuPlayer()
+        public TouhosuPlayer(CardsController cardsController)
         {
+            this.cardsController = cardsController;
+
             RelativeSizeAxes = Axes.Both;
             AddRangeInternal(new Drawable[]
             {
@@ -99,6 +104,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                     return true;
 
                 case TouhosuAction.Shoot:
+                    onShootPressed();
                     return true;
             }
 
@@ -130,6 +136,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                     return;
 
                 case TouhosuAction.Shoot:
+                    onShootReleased();
                     return;
             }
         }
@@ -171,6 +178,17 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         {
             speedMultiplier = 1;
             focus.FocusLost();
+        }
+
+        private void onShootPressed()
+        {
+            cardsController.Shoot(PlayerPosition());
+            Scheduler.AddDelayed(onShootPressed, shoot_delay);
+        }
+
+        private void onShootReleased()
+        {
+            Scheduler.CancelDelayedTasks();
         }
     }
 }
