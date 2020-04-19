@@ -11,11 +11,8 @@ namespace osu.Game.Rulesets.Touhosu.Judgements
         {
             switch (result)
             {
-                case HitResult.Perfect:
-                    return 0.0007f;
-
                 case HitResult.Miss:
-                    return -0.1f;
+                    return -0.08f;
 
                 default:
                     return 0;
