@@ -7,6 +7,7 @@ using osu.Game.Rulesets.UI;
 using osuTK;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
+using osu.Game.Rulesets.Touhosu.UI.HUD;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -18,7 +19,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
 
         internal readonly TouhosuPlayer Player;
 
-        public TouhosuPlayfield()
+        public TouhosuPlayfield(Ruleset ruleset)
         {
             InternalChildren = new Drawable[]
             {
@@ -40,10 +41,18 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     Size = new Vector2(1 - X_SCALE_MULTIPLIER, 1),
                     RelativePositionAxes = Axes.Both,
                     X = X_SCALE_MULTIPLIER,
-                    Child = new Box
+                    Children = new Drawable[]
                     {
-                        RelativeSizeAxes = Axes.Both,
-                        Colour = Color4.Gray
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Color4.Gray
+                        },
+                        new HealthDisplay(((TouhosuRuleset)ruleset).HealthProcessor)
+                        {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                        }
                     }
                 }
             };

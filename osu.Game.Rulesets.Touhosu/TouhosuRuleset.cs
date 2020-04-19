@@ -24,7 +24,9 @@ namespace osu.Game.Rulesets.Touhosu
 
         public override ScoreProcessor CreateScoreProcessor() => new TouhosuScoreProcessor();
 
-        public override HealthProcessor CreateHealthProcessor(double drainStartTime) => new TouhosuHealthProcessor();
+        public TouhosuHealthProcessor HealthProcessor;
+
+        public override HealthProcessor CreateHealthProcessor(double drainStartTime) => HealthProcessor = new TouhosuHealthProcessor();
 
         public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) => new TouhosuBeatmapConverter(beatmap, this);
 
