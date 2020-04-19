@@ -8,6 +8,8 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Shapes;
+using System.Collections.Generic;
+using osu.Game.Rulesets.UI;
 
 namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
@@ -20,6 +22,19 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
         [Resolved]
         private TextureStore textures { get; set; }
+
+
+        private HitObjectContainer hitObjects;
+
+        public HitObjectContainer HitObjects
+        {
+            get => hitObjects;
+            set
+            {
+                hitObjects = value;
+                cardsController.HitObjects = value;
+            }
+        }
 
         public override bool RemoveCompletedTransforms => false;
 
@@ -167,21 +182,29 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
             }
         }
 
+        public List<Card> GetCards() => cardsController.GetCards();
+
+        public List<SmartCard> GetSmartCards() => cardsController.GetSmartCards();
+
+        private bool isFocused;
+
         private void onFocusPressed()
         {
+            isFocused = true;
             speedMultiplier = 0.5f;
             focus.Focus();
         }
 
         private void onFocusReleased()
         {
+            isFocused = false;
             speedMultiplier = 1;
             focus.FocusLost();
         }
 
         private void onShootPressed()
         {
-            cardsController.Shoot(PlayerPosition());
+            cardsController.Shoot(PlayerPosition(), isFocused);
             Scheduler.AddDelayed(onShootPressed, shoot_delay);
         }
 

@@ -64,11 +64,13 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     }
                 }
             };
+
+            Player.HitObjects = HitObjectContainer;
         }
 
         public override void Add(DrawableHitObject h)
         {
-            if (h is DrawableMovingBullet drawable)
+            if (h is DrawableTouhosuHitObject drawable)
             {
                 drawable.GetPlayerToTrace(Player);
                 base.Add(drawable);

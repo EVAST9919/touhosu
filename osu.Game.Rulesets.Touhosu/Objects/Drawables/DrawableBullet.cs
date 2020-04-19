@@ -4,17 +4,12 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Containers;
-using osuTK.Graphics;
-using System.Collections.Generic;
 using osu.Game.Rulesets.Touhosu.Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
     public abstract class DrawableBullet : DrawableTouhosuHitObject
     {
-        protected override Color4 GetComboColour(IReadOnlyList<Color4> comboColours) =>
-            comboColours[(HitObject.IndexInBeatmap + 1) % comboColours.Count];
-
         protected virtual float GetBaseSize() => 40;
 
         private readonly Sprite texture;

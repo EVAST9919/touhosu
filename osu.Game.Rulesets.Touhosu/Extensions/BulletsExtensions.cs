@@ -9,6 +9,9 @@ using osuTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using osu.Game.Rulesets.UI;
+using osu.Game.Rulesets.Touhosu.Objects.Drawables;
+using osu.Framework.Extensions.IEnumerableExtensions;
 
 namespace osu.Game.Rulesets.Touhosu.Extensions
 {
@@ -185,6 +188,31 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             return hitObjects;
         }
 
+        public static List<TouhosuHitObject> ConvertGenerator(HitObject obj, int index)
+        {
+            List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
+
+            var objPosition = (obj as IHasPosition)?.Position ?? Vector2.Zero;
+            var comboData = obj as IHasCombo;
+
+            hitObjects.Add(new BulletGenerator
+            {
+                StartTime = obj.StartTime,
+                Position = objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
+                NewCombo = comboData?.NewCombo ?? false,
+                ComboOffset = comboData?.ComboOffset ?? 0,
+                IndexInBeatmap = index
+            });
+
+            hitObjects.Add(new SoundHitObject
+            {
+                StartTime = obj.StartTime,
+                Samples = obj.Samples
+            });
+
+            return hitObjects;
+        }
+
         public static List<TouhosuHitObject> ConvertSpinner(HitObject obj, IHasEndTime endTime, int index)
         {
             List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
@@ -206,6 +234,38 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             }
 
             return hitObjects;
+        }
+
+        public static DrawableBulletGenerator GetClosest(Vector2 position, HitObjectContainer hitObjects)
+        {
+            DrawableBulletGenerator closest = null;
+            double closestDistance = double.MaxValue;
+
+            if (!hitObjects.AliveObjects.Any())
+                return null;
+
+            hitObjects.AliveObjects.ForEach(h =>
+            {
+                if (h is DrawableBulletGenerator drawable)
+                {
+                    if (!drawable.IsHit)
+                    {
+                        if (closest == null)
+                            closest = drawable;
+                        else
+                        {
+                            var possibleClosestDistance = MathExtensions.GetDistance(position, drawable.Position);
+                            if (possibleClosestDistance < closestDistance)
+                            {
+                                closestDistance = possibleClosestDistance;
+                                closest = drawable;
+                            }
+                        }
+                    }
+                }
+            });
+
+            return closest;
         }
 
         private static IEnumerable<MovingBullet> generateExplosion(double startTime, int bulletCount, Vector2 position, IHasCombo comboData, int index, float angleOffset = 0, float angleRange = 360f)

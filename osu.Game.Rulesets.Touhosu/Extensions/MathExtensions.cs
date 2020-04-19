@@ -1,4 +1,7 @@
-﻿namespace osu.Game.Rulesets.Touhosu.Extensions
+﻿using osuTK;
+using System;
+
+namespace osu.Game.Rulesets.Touhosu.Extensions
 {
     public static class MathExtensions
     {
@@ -20,5 +23,7 @@
 
             static float getPerBulletAngle(int bulletsPerObject, float angleRange) => angleRange / bulletsPerObject;
         }
+
+        public static double GetDistance(Vector2 input, Vector2 comparison) => Math.Sqrt(Math.Pow(input.X - comparison.X, 2) + Math.Pow(input.Y - comparison.Y, 2));
     }
 }

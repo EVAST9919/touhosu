@@ -26,6 +26,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             switch (h)
             {
+                case BulletGenerator generator:
+                    return new DrawableBulletGenerator(generator);
+
                 case SoundHitObject sound:
                     return new DrawableSoundHitObject(sound);
 
