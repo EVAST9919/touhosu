@@ -21,8 +21,6 @@ namespace osu.Game.Rulesets.Touhosu.UI
 
         public TouhosuPlayfield(Ruleset ruleset)
         {
-            CardsController cardsController;
-
             InternalChildren = new Drawable[]
             {
                 new TouhosuBackground(),
@@ -33,8 +31,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     Masking = true,
                     Children = new Drawable[]
                     {
-                        cardsController = new CardsController(),
-                        Player = new TouhosuPlayer(cardsController),
+                        Player = new TouhosuPlayer(),
                         HitObjectContainer
                     }
                 },

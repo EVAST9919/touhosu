@@ -19,7 +19,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         {
             var cardStack = new FillFlowContainer
             {
-                Position = position,
+                Position = new Vector2(position.X, position.Y - 20),
                 AutoSizeAxes = Axes.Both,
                 Origin = Anchor.BottomCentre,
                 Direction = FillDirection.Horizontal,

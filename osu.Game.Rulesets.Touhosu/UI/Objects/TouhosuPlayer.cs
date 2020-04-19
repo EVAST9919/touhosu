@@ -31,13 +31,12 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         private readonly FocusAnimation focus;
         private readonly CardsController cardsController;
 
-        public TouhosuPlayer(CardsController cardsController)
+        public TouhosuPlayer()
         {
-            this.cardsController = cardsController;
-
             RelativeSizeAxes = Axes.Both;
             AddRangeInternal(new Drawable[]
             {
+                cardsController = new CardsController(),
                 Player = new Container
                 {
                     Origin = Anchor.Centre,
