@@ -18,7 +18,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
 
         protected override PassThroughInputManager CreateInputManager() => new TouhosuInputManager(Ruleset.RulesetInfo);
 
-        protected override Playfield CreatePlayfield() => new TouhosuPlayfield(Ruleset);
+        protected override Playfield CreatePlayfield() => new TouhosuPlayfield((TouhosuRuleset)Ruleset);
 
         public override PlayfieldAdjustmentContainer CreatePlayfieldAdjustmentContainer() => new TouhosuPlayfieldAdjustmentContainer();
 

@@ -20,11 +20,13 @@ namespace osu.Game.Rulesets.Touhosu
 {
     public class TouhosuRuleset : Ruleset
     {
+        public TouhosuHealthProcessor HealthProcessor;
+
+        public TouhosuScoreProcessor ScoreProcessor;
+
         public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) => new DrawableTouhosuRuleset(this, beatmap, mods);
 
-        public override ScoreProcessor CreateScoreProcessor() => new TouhosuScoreProcessor();
-
-        public TouhosuHealthProcessor HealthProcessor;
+        public override ScoreProcessor CreateScoreProcessor() => ScoreProcessor = new TouhosuScoreProcessor();
 
         public override HealthProcessor CreateHealthProcessor(double drainStartTime) => HealthProcessor = new TouhosuHealthProcessor();
 

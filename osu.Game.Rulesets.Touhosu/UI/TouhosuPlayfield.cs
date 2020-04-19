@@ -19,7 +19,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
 
         internal readonly TouhosuPlayer Player;
 
-        public TouhosuPlayfield(Ruleset ruleset)
+        public TouhosuPlayfield(TouhosuRuleset ruleset)
         {
             InternalChildren = new Drawable[]
             {
@@ -48,10 +48,18 @@ namespace osu.Game.Rulesets.Touhosu.UI
                             RelativeSizeAxes = Axes.Both,
                             Colour = Color4.Gray
                         },
-                        new HealthDisplay(((TouhosuRuleset)ruleset).HealthProcessor)
+                        new FillFlowContainer
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
+                            AutoSizeAxes = Axes.Both,
+                            Direction = FillDirection.Vertical,
+                            Spacing = new Vector2(0, 5),
+                            Children = new Drawable[]
+                            {
+                                new HealthDisplay(ruleset.HealthProcessor),
+                                new ScoreDisplay(ruleset.ScoreProcessor)
+                            }
                         }
                     }
                 }
