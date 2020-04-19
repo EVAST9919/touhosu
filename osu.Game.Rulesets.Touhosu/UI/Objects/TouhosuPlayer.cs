@@ -26,8 +26,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
         public readonly Container Player;
         private readonly Sprite drawablePlayer;
-        private readonly Sprite focus1;
-        private readonly Sprite focus2;
+        private readonly FocusAnimation focus;
 
         public TouhosuPlayer()
         {
@@ -40,24 +39,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                     Position = new Vector2(TouhosuPlayfield.ACTUAL_SIZE.X / 2f, TouhosuPlayfield.ACTUAL_SIZE.Y - 20),
                     Children = new Drawable[]
                     {
-                        focus1 = new Sprite
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            Size = new Vector2(60),
-                            Scale = new Vector2(0.7f),
-                            Alpha = 0,
-                            AlwaysPresent = true,
-                        },
-                        focus2 = new Sprite
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            Size = new Vector2(60),
-                            Scale = new Vector2(0.7f),
-                            Alpha = 0,
-                            AlwaysPresent = true,
-                        },
+                        focus = new FocusAnimation(),
                         drawablePlayer = new Sprite
                         {
                             Anchor = Anchor.Centre,
@@ -86,10 +68,6 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         {
             base.LoadComplete();
             drawablePlayer.Texture = textures.Get("player");
-            focus1.Texture = focus2.Texture = textures.Get("Player/focus");
-
-            focus1.Spin(4000, RotationDirection.Clockwise);
-            focus2.Spin(4000, RotationDirection.CounterClockwise);
         }
 
         public Vector2 PlayerPosition() => Player.Position;
@@ -186,23 +164,13 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         private void onFocusPressed()
         {
             speedMultiplier = 0.5f;
-
-            focus1.ScaleTo(1, 200, Easing.Out);
-            focus1.FadeIn(200);
-
-            focus2.ScaleTo(1, 200, Easing.Out);
-            focus2.FadeIn(200);
+            focus.Focus();
         }
 
         private void onFocusReleased()
         {
             speedMultiplier = 1;
-
-            focus1.ScaleTo(0.7f, 200, Easing.Out);
-            focus1.FadeOut(200);
-
-            focus2.ScaleTo(0.7f, 200, Easing.Out);
-            focus2.FadeOut(200);
+            focus.FocusLost();
         }
     }
 }
