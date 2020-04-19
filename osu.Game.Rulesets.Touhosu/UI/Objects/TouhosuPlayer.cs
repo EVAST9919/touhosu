@@ -26,6 +26,8 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
         public readonly Container Player;
         private readonly Sprite drawablePlayer;
+        private readonly Sprite focus1;
+        private readonly Sprite focus2;
 
         public TouhosuPlayer()
         {
@@ -36,12 +38,31 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                 {
                     Origin = Anchor.Centre,
                     Position = new Vector2(TouhosuPlayfield.ACTUAL_SIZE.X / 2f, TouhosuPlayfield.ACTUAL_SIZE.Y - 20),
-                    Size = new Vector2(23.25f, 33.75f),
                     Children = new Drawable[]
                     {
+                        focus1 = new Sprite
+                        {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            Size = new Vector2(60),
+                            Scale = new Vector2(0.7f),
+                            Alpha = 0,
+                            AlwaysPresent = true,
+                        },
+                        focus2 = new Sprite
+                        {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            Size = new Vector2(60),
+                            Scale = new Vector2(0.7f),
+                            Alpha = 0,
+                            AlwaysPresent = true,
+                        },
                         drawablePlayer = new Sprite
                         {
-                            RelativeSizeAxes = Axes.Both
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            Size = new Vector2(23.25f, 33.75f),
                         },
                         new Circle
                         {
@@ -65,6 +86,10 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         {
             base.LoadComplete();
             drawablePlayer.Texture = textures.Get("player");
+            focus1.Texture = focus2.Texture = textures.Get("Player/focus");
+
+            focus1.Spin(4000, RotationDirection.Clockwise);
+            focus2.Spin(4000, RotationDirection.CounterClockwise);
         }
 
         public Vector2 PlayerPosition() => Player.Position;
@@ -92,7 +117,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                     return true;
 
                 case TouhosuAction.Focus:
-                    speedMultiplier = 0.5f;
+                    onFocusPressed();
                     return true;
 
                 case TouhosuAction.Shoot:
@@ -123,7 +148,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                     return;
 
                 case TouhosuAction.Focus:
-                    speedMultiplier = 1;
+                    onFocusReleased();
                     return;
 
                 case TouhosuAction.Shoot:
@@ -137,9 +162,9 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
             if (horizontalDirection != 0)
             {
-                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, Player.DrawWidth / 2f, TouhosuPlayfield.ACTUAL_SIZE.X - Player.DrawWidth / 2f);
+                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, drawablePlayer.DrawWidth / 2f, TouhosuPlayfield.ACTUAL_SIZE.X - drawablePlayer.DrawWidth / 2f);
 
-                Player.Scale = new Vector2(Math.Abs(Scale.X) * (horizontalDirection > 0 ? 1 : -1), Player.Scale.Y);
+                drawablePlayer.Scale = new Vector2(Math.Abs(drawablePlayer.Scale.X) * (horizontalDirection > 0 ? 1 : -1), drawablePlayer.Scale.Y);
 
                 if (position == Player.X)
                     return;
@@ -149,13 +174,35 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
             if (verticalDirection != 0)
             {
-                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, Player.DrawHeight / 2f, TouhosuPlayfield.ACTUAL_SIZE.Y - Player.DrawHeight / 2f);
+                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, drawablePlayer.DrawHeight / 2f, TouhosuPlayfield.ACTUAL_SIZE.Y - drawablePlayer.DrawHeight / 2f);
 
                 if (position == Player.Y)
                     return;
 
                 Player.Y = (float)position;
             }
+        }
+
+        private void onFocusPressed()
+        {
+            speedMultiplier = 0.5f;
+
+            focus1.ScaleTo(1, 200, Easing.Out);
+            focus1.FadeIn(200);
+
+            focus2.ScaleTo(1, 200, Easing.Out);
+            focus2.FadeIn(200);
+        }
+
+        private void onFocusReleased()
+        {
+            speedMultiplier = 1;
+
+            focus1.ScaleTo(0.7f, 200, Easing.Out);
+            focus1.FadeOut(200);
+
+            focus2.ScaleTo(0.7f, 200, Easing.Out);
+            focus2.FadeOut(200);
         }
     }
 }
