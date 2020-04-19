@@ -17,7 +17,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         protected virtual float GetBaseSize() => 40;
 
-        private readonly Sprite sprite;
+        private readonly Sprite texture;
         private readonly Sprite overlay;
         protected readonly Container Content;
 
@@ -36,7 +36,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                 Origin = Anchor.Centre,
                 Children = new Drawable[]
                 {
-                    sprite = new Sprite
+                    texture = new Sprite
                     {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
@@ -55,18 +55,15 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
-            sprite.Texture = textures.Get("cherry");
-            overlay.Texture = textures.Get("cherry-overlay");
+            texture.Texture = textures.Get("Projectiles/Sphere/texture");
+            overlay.Texture = textures.Get("Projectiles/Sphere/overlay");
 
-            AccentColour.BindValueChanged(accent => sprite.Colour = accent.NewValue, true);
+            AccentColour.BindValueChanged(accent => overlay.Colour = accent.NewValue, true);
         }
 
         protected override void UpdateInitialTransforms()
         {
             this.ScaleTo(Vector2.One, HitObject.TimePreempt);
-
-            sprite.Delay(HitObject.TimePreempt).Then().FlashColour(Color4.White, 300);
-            overlay.Delay(HitObject.TimePreempt).Then().FlashColour(Color4.White, 300);
         }
     }
 }
