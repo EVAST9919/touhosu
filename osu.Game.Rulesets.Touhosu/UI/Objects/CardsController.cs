@@ -51,10 +51,18 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                 var closest = BulletsExtensions.GetClosest(position, HitObjects);
                 if (closest != null)
                 {
-                    AddInternal(new SmartCard(closest)
+                    AddRangeInternal(new Drawable[]
                     {
-                        Position = position,
-                        HitObjects = HitObjects
+                        new SmartCard(closest)
+                        {
+                            Position = new Vector2(position.X + 5, position.Y - 15),
+                            HitObjects = HitObjects
+                        },
+                        new SmartCard(closest)
+                        {
+                            Position = new Vector2(position.X - 5, position.Y - 15),
+                            HitObjects = HitObjects
+                        }
                     });
                 }
             }
