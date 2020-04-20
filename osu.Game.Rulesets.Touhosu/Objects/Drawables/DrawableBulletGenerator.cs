@@ -10,6 +10,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
     public class DrawableBulletGenerator : DrawableTouhosuHitObject
     {
+        public bool IsReady { get; set; }
+
         private readonly Box box;
 
         private double missTime;
@@ -48,6 +50,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         {
             if (timeOffset > 0)
             {
+                IsReady = true;
+
                 foreach (var card in Player.GetCards())
                 {
                     if (!(card.Position.Y - card.DrawHeight > Position.Y + DrawHeight / 2f

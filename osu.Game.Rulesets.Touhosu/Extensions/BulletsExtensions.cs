@@ -248,7 +248,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             {
                 if (h is DrawableBulletGenerator drawable)
                 {
-                    if (!drawable.IsHit)
+                    if (!drawable.IsHit && drawable.IsReady)
                     {
                         if (closest == null)
                             closest = drawable;
