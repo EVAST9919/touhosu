@@ -4,7 +4,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.Objects.Drawables;
-using osu.Framework.Utils;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
@@ -64,16 +63,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                         hp -= card.Strength;
                     }
                 };
-
-                foreach (var card in Player.GetSmartCards())
-                {
-                    if (Precision.AlmostEquals(card.Position.X, Position.X, 0.5f) && Precision.AlmostEquals(card.Position.Y, Position.Y, 0.5f))
-                    {
-                        card.ClearTransforms();
-                        card.Expire();
-                        hp--;
-                    }
-                }
 
                 if (hp <= 0)
                 {

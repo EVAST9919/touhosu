@@ -4,7 +4,6 @@ using osuTK;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Game.Rulesets.UI;
-using osu.Game.Rulesets.Touhosu.Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
@@ -20,8 +19,6 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         {
             RelativeSizeAxes = Axes.Both;
         }
-
-        private bool populateSmart;
 
         public void Shoot(Vector2 position, bool isFocused)
         {
@@ -45,33 +42,8 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
             var time = speed_per_field * (position.Y / TouhosuPlayfield.ACTUAL_SIZE.Y);
             left.MoveToY(0, time).Expire();
             right.MoveToY(0, time).Expire();
-
-            if (populateSmart)
-            {
-                var closest = BulletsExtensions.GetClosest(position, HitObjects);
-                if (closest != null)
-                {
-                    AddRangeInternal(new Drawable[]
-                    {
-                        new SmartCard(closest)
-                        {
-                            Position = new Vector2(position.X + 5, position.Y - 15),
-                            HitObjects = HitObjects
-                        },
-                        new SmartCard(closest)
-                        {
-                            Position = new Vector2(position.X - 5, position.Y - 15),
-                            HitObjects = HitObjects
-                        }
-                    });
-                }
-            }
-
-            populateSmart = !populateSmart;
         }
 
         public List<Card> GetCards() => InternalChildren.OfType<Card>().Where(c => c.IsAlive).ToList();
-
-        public List<SmartCard> GetSmartCards() => InternalChildren.OfType<SmartCard>().Where(c => c.IsAlive).ToList();
     }
 }

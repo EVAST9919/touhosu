@@ -181,8 +181,6 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
         public List<Card> GetCards() => cardsController.GetCards();
 
-        public List<SmartCard> GetSmartCards() => cardsController.GetSmartCards();
-
         private bool isFocused;
 
         private void onFocusPressed()
