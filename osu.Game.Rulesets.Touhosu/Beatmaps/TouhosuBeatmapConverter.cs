@@ -29,17 +29,16 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
 
             switch (obj)
             {
-                //case IHasCurve curve:
-                //    hitObjects.AddRange(BulletsExtensions.ConvertSlider(obj, beatmap, curve, index));
-                //    break;
+                case IHasPathWithRepeats curve:
+                    hitObjects.AddRange(BulletsExtensions.ConvertSlider(obj, beatmap, curve, index));
+                    break;
 
-                //case IHasEndTime endTime:
-                //    hitObjects.AddRange(BulletsExtensions.ConvertSpinner(obj, endTime, index));
-                //    break;
+                case IHasDuration endTime:
+                    hitObjects.AddRange(BulletsExtensions.ConvertSpinner(obj, endTime, index));
+                    break;
 
                 default:
-                    hitObjects.AddRange(BulletsExtensions.ConvertGenerator(obj, index));
-                    //hitObjects.AddRange(BulletsExtensions.ConvertHitCircle(obj, index));
+                    hitObjects.AddRange(BulletsExtensions.ConvertHitCircle(obj, index));
                     break;
             }
 
