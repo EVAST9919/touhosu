@@ -4,12 +4,10 @@ using osuTK;
 using System;
 using osuTK.Graphics;
 using osu.Framework.Input.Bindings;
-using osu.Framework.Graphics.Sprites;
-using osu.Framework.Allocation;
-using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Shapes;
 using System.Collections.Generic;
 using osu.Game.Rulesets.UI;
+using osu.Framework.Bindables;
 
 namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
@@ -20,9 +18,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
         private float speedMultiplier = 1;
 
-        [Resolved]
-        private TextureStore textures { get; set; }
-
+        private readonly Bindable<PlayerState> state = new Bindable<PlayerState>(PlayerState.Idle);
 
         private HitObjectContainer hitObjects;
 
@@ -42,9 +38,9 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         private int verticalDirection;
 
         public readonly Container Player;
-        private readonly Sprite drawablePlayer;
         private readonly FocusAnimation focus;
         private readonly CardsController cardsController;
+        private readonly Container animationContainer;
 
         public TouhosuPlayer()
         {
@@ -59,7 +55,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                     Children = new Drawable[]
                     {
                         focus = new FocusAnimation(),
-                        drawablePlayer = new Sprite
+                        animationContainer = new Container
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
@@ -86,12 +82,13 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            drawablePlayer.Texture = textures.Get("player");
+
+            state.BindValueChanged(onStateChanged, true);
         }
 
         public Vector2 PlayerPosition() => Player.Position;
 
-        public void PlayMissAnimation() => drawablePlayer.FlashColour(Color4.Red, 1000, Easing.OutQuint);
+        public void PlayMissAnimation() => animationContainer.FlashColour(Color4.Red, 1000, Easing.OutQuint);
 
         public bool OnPressed(TouhosuAction action)
         {
@@ -161,9 +158,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
             if (horizontalDirection != 0)
             {
-                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, drawablePlayer.DrawWidth / 2f, TouhosuPlayfield.ACTUAL_SIZE.X - drawablePlayer.DrawWidth / 2f);
-
-                drawablePlayer.Scale = new Vector2(Math.Abs(drawablePlayer.Scale.X) * (horizontalDirection > 0 ? 1 : -1), drawablePlayer.Scale.Y);
+                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, animationContainer.Width / 2, TouhosuPlayfield.ACTUAL_SIZE.X - animationContainer.Width / 2);
 
                 if (position == Player.X)
                     return;
@@ -173,13 +168,15 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
             if (verticalDirection != 0)
             {
-                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, drawablePlayer.DrawHeight / 2f, TouhosuPlayfield.ACTUAL_SIZE.Y - drawablePlayer.DrawHeight / 2f);
+                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, animationContainer.Height / 2, TouhosuPlayfield.ACTUAL_SIZE.Y - animationContainer.Height / 2);
 
                 if (position == Player.Y)
                     return;
 
                 Player.Y = (float)position;
             }
+
+            updatePlayerState();
         }
 
         public List<Card> GetCards() => cardsController.GetCards();
@@ -211,6 +208,28 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         private void onShootReleased()
         {
             Scheduler.CancelDelayedTasks();
+        }
+
+        private void updatePlayerState()
+        {
+            if (horizontalDirection == 1)
+            {
+                state.Value = PlayerState.Right;
+                return;
+            }
+
+            if (horizontalDirection == -1)
+            {
+                state.Value = PlayerState.Left;
+                return;
+            }
+
+            state.Value = PlayerState.Idle;
+        }
+
+        private void onStateChanged(ValueChangedEvent<PlayerState> s)
+        {
+            animationContainer.Child = new PlayerAnimation(s.NewValue);
         }
     }
 }
