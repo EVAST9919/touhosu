@@ -66,6 +66,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         hitObjects.Add(new SoundHitObject
                         {
+                            Position = sliderEventPosition,
                             StartTime = obj.StartTime,
                             Samples = obj.Samples
                         });
@@ -89,6 +90,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         hitObjects.Add(new SoundHitObject
                         {
+                            Position = sliderEventPosition,
                             StartTime = e.Time,
                             Samples = getTickSamples(obj.Samples)
                         });
@@ -109,6 +111,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         hitObjects.Add(new SoundHitObject
                         {
+                            Position = sliderEventPosition,
                             StartTime = e.Time,
                             Samples = obj.Samples
                         });
@@ -129,6 +132,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         hitObjects.Add(new SoundHitObject
                         {
+                            Position = sliderEventPosition,
                             StartTime = curve.EndTime,
                             Samples = obj.Samples
                         });
@@ -179,6 +183,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             hitObjects.Add(new SoundHitObject
             {
+                Position = objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
                 StartTime = obj.StartTime,
                 Samples = obj.Samples
             });

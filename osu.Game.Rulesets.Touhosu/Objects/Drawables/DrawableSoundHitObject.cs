@@ -1,9 +1,12 @@
 ﻿using osu.Game.Rulesets.Scoring;
+using osu.Game.Rulesets.Touhosu.UI;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
     public class DrawableSoundHitObject : DrawableTouhosuHitObject
     {
+        protected override float SamplePlaybackPosition => HitObject.X / TouhosuPlayfield.ACTUAL_SIZE.X;
+
         public DrawableSoundHitObject(SoundHitObject h)
             : base(h)
         {
