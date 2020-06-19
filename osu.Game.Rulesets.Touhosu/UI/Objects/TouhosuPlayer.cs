@@ -8,6 +8,7 @@ using osu.Framework.Graphics.Shapes;
 using System.Collections.Generic;
 using osu.Game.Rulesets.UI;
 using osu.Framework.Bindables;
+using osu.Game.Rulesets.Touhosu.Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
@@ -156,27 +157,52 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         {
             base.Update();
 
-            if (horizontalDirection != 0)
+            move(Clock.ElapsedFrameTime, horizontalDirection, verticalDirection);
+            updatePlayerState();
+        }
+
+        private void move(double elapsedTime, int horizontalDirection, int verticalDirection)
+        {
+            var movingH = horizontalDirection != 0;
+            var movingV = verticalDirection != 0;
+
+            if (!movingV && !movingH)
+                return;
+
+            // Diagonal movement
+            if (movingV && movingH)
             {
-                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, animationContainer.Width / 2, TouhosuPlayfield.ACTUAL_SIZE.X - animationContainer.Width / 2);
+                var oldX = Player.X;
+                var oldY = Player.Y;
+                var newX = oldX + Math.Sign(horizontalDirection) * elapsedTime * base_speed * speedMultiplier;
+                var newY = oldY + Math.Sign(verticalDirection) * elapsedTime * base_speed * speedMultiplier;
 
-                if (position == Player.X)
-                    return;
+                var expectedDistance = Math.Abs(newX - oldX);
+                var realDistance = MathExtensions.Distance(new Vector2(oldX, oldY), new Vector2((float)newX, (float)newY));
+                var offset = Math.Sqrt(MathExtensions.Pow(expectedDistance - realDistance) / 2);
 
+                newX += (horizontalDirection > 0 ? -1 : 1) * offset;
+                newY += (verticalDirection > 0 ? -1 : 1) * offset;
+
+                newX = Math.Clamp(newX, animationContainer.Width / 2, TouhosuPlayfield.ACTUAL_SIZE.X - animationContainer.Width / 2);
+                newY = Math.Clamp(newY, animationContainer.Height / 2, TouhosuPlayfield.ACTUAL_SIZE.Y - animationContainer.Height / 2);
+
+                Player.Position = new Vector2((float)newX, (float)newY);
+                return;
+            }
+
+            if (movingV)
+            {
+                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * elapsedTime * base_speed * speedMultiplier, animationContainer.Height / 2, TouhosuPlayfield.ACTUAL_SIZE.Y - animationContainer.Height / 2);
+                Player.Y = (float)position;
+                return;
+            }
+
+            if (movingH)
+            {
+                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * elapsedTime * base_speed * speedMultiplier, animationContainer.Width / 2, TouhosuPlayfield.ACTUAL_SIZE.X - animationContainer.Width / 2);
                 Player.X = (float)position;
             }
-
-            if (verticalDirection != 0)
-            {
-                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * Clock.ElapsedFrameTime * base_speed * speedMultiplier, animationContainer.Height / 2, TouhosuPlayfield.ACTUAL_SIZE.Y - animationContainer.Height / 2);
-
-                if (position == Player.Y)
-                    return;
-
-                Player.Y = (float)position;
-            }
-
-            updatePlayerState();
         }
 
         public List<Card> GetCards() => cardsController.GetCards();
