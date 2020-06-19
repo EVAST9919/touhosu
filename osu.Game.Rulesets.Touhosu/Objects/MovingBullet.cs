@@ -11,6 +11,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects
 
         public double SpeedMultiplier { get; set; } = 1;
 
+        public double DeltaMultiplier { get; set; } = 1;
+
         public override Judgement CreateJudgement() => new TouhosuJudgement();
 
         protected override void ApplyDefaultsToSelf(ControlPointInfo controlPointInfo, BeatmapDifficulty difficulty)

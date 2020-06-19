@@ -35,6 +35,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 case TickBullet tick:
                     return new DrawableTickBullet(tick);
 
+                case HomingBullet homing:
+                    return new DrawableHomingBullet(homing);
+
                 case MovingBullet moving:
                     return new DrawableMovingBullet(moving);
             }

@@ -1,4 +1,5 @@
-﻿using osuTK;
+﻿using osu.Game.Rulesets.Touhosu.UI.Objects;
+using osuTK;
 using System;
 
 namespace osu.Game.Rulesets.Touhosu.Extensions
@@ -27,5 +28,35 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
         public static double Distance(Vector2 input, Vector2 comparison) => Math.Sqrt(Pow(input.X - comparison.X) + Pow(input.Y - comparison.Y));
 
         public static double Pow(double input) => input * input;
+
+        public static float GetSafeAngle(float angle)
+        {
+            if (angle < 0)
+            {
+                while (angle < 0)
+                    angle += 360;
+
+                return angle;
+            }
+
+            if (angle > 360)
+            {
+                angle %= 360f;
+                return angle;
+            }
+
+            return angle;
+        }
+
+        public static float GetPlayerAngle(TouhosuPlayer player, Vector2 input)
+        {
+            var playerPosition = player.PlayerPosition();
+            var angle = (float)(Math.Atan2(input.Y - playerPosition.Y, input.X - playerPosition.X) * 180 / Math.PI) + 270;
+
+            if (angle > 360)
+                angle %= 360f;
+
+            return angle;
+        }
     }
 }

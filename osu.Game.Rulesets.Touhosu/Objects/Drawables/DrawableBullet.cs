@@ -5,16 +5,31 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Touhosu.Extensions;
+using osu.Game.Rulesets.Objects.Drawables;
+using osu.Game.Rulesets.Scoring;
+using osu.Game.Rulesets.Touhosu.UI;
+using osu.Game.Rulesets.Touhosu.UI.Objects;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
     public abstract class DrawableBullet : DrawableTouhosuHitObject
     {
-        protected virtual float GetBaseSize() => 40;
+        private const int hidden_distance = 70;
+        private const int hidden_distance_buffer = 50;
+
+        public bool HiddenApplied;
+
+        protected virtual float GetBaseSize() => 25;
+
+        protected virtual bool AffectPlayer() => false;
+
+        protected virtual float GetWallCheckOffset() => 0;
 
         private readonly Sprite texture;
         private readonly Sprite overlay;
         protected readonly Container Content;
+        private readonly float finalSize;
+        private double missTime;
 
         protected DrawableBullet(Bullet h)
             : base(h)
@@ -23,6 +38,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             Size = new Vector2(GetBaseSize() * MathExtensions.Map(h.CircleSize, 0, 10, 0.2f, 1));
             Position = h.Position;
             Scale = Vector2.Zero;
+
+            finalSize = Size.X;
 
             AddInternal(Content = new Container
             {
@@ -59,6 +76,77 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         protected override void UpdateInitialTransforms()
         {
             this.ScaleTo(Vector2.One, HitObject.TimePreempt);
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (HiddenApplied)
+            {
+                var distance = MathExtensions.Distance(Player.PlayerPosition(), Position);
+
+                if (distance > hidden_distance + hidden_distance_buffer)
+                {
+                    Alpha = 1;
+                    return;
+                }
+
+                if (distance < hidden_distance)
+                {
+                    Alpha = 0;
+                    return;
+                }
+
+                Alpha = MathExtensions.Map((float)distance - hidden_distance, 0, hidden_distance_buffer, 0, 1);
+            }
+        }
+
+        protected override void CheckForResult(bool userTriggered, double timeOffset)
+        {
+            if (timeOffset > 0)
+            {
+                if (AffectPlayer())
+                {
+                    if (collidedWithPlayer(Player))
+                    {
+                        Player.PlayMissAnimation();
+                        missTime = timeOffset;
+                        ApplyResult(r => r.Type = HitResult.Miss);
+                        return;
+                    }
+                }
+
+                if (timeOffset > GetWallCheckOffset())
+                {
+                    if (Position.X > TouhosuPlayfield.ACTUAL_SIZE.X + Size.X / 2f
+                    || Position.X < -Size.X / 2f
+                    || Position.Y > TouhosuPlayfield.BASE_SIZE.Y + Size.Y / 2f
+                    || Position.Y < -Size.Y / 2f)
+                        ApplyResult(r => r.Type = HitResult.Perfect);
+                }
+            }
+        }
+
+        protected override void UpdateStateTransforms(ArmedState state)
+        {
+            base.UpdateStateTransforms(state);
+
+            switch (state)
+            {
+                case ArmedState.Miss:
+                    // Check DrawableHitCircle L#168
+                    this.Delay(missTime).FadeOut();
+                    break;
+            }
+        }
+
+        private bool collidedWithPlayer(TouhosuPlayer player)
+        {
+            var radius = finalSize / 2;
+            var distance = MathExtensions.Distance(player.PlayerPosition(), Position);
+
+            return distance < radius;
         }
     }
 }
