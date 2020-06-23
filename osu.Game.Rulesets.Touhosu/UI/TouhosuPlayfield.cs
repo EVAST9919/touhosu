@@ -1,13 +1,12 @@
 ﻿using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Game.Rulesets.Touhosu.Objects.Drawables;
 using osu.Game.Rulesets.Touhosu.UI.Objects;
-using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.UI;
 using osuTK;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Game.Rulesets.Touhosu.UI.HUD;
+using osu.Framework.Allocation;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -17,10 +16,25 @@ namespace osu.Game.Rulesets.Touhosu.UI
         public static readonly Vector2 ACTUAL_SIZE = new Vector2(307, 384);
         public static readonly float X_SCALE_MULTIPLIER = 0.6f;
 
-        internal readonly TouhosuPlayer Player;
+        private DependencyContainer dependencies;
+
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
+            => dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+
+        private readonly TouhosuRuleset ruleset;
+        private TouhosuPlayer player;
 
         public TouhosuPlayfield(TouhosuRuleset ruleset)
         {
+            this.ruleset = ruleset;
+        }
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            player = new TouhosuPlayer();
+            dependencies.Cache(player);
+
             InternalChildren = new Drawable[]
             {
                 new TouhosuBackground(),
@@ -31,7 +45,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     Masking = true,
                     Children = new Drawable[]
                     {
-                        Player = new TouhosuPlayer(),
+                        player,
                         HitObjectContainer
                     }
                 },
@@ -65,19 +79,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 }
             };
 
-            Player.HitObjects = HitObjectContainer;
-        }
-
-        public override void Add(DrawableHitObject h)
-        {
-            if (h is DrawableTouhosuHitObject drawable)
-            {
-                drawable.GetPlayerToTrace(Player);
-                base.Add(drawable);
-                return;
-            }
-
-            base.Add(h);
+            player.HitObjects = HitObjectContainer;
         }
     }
 }

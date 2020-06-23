@@ -2,6 +2,7 @@
 using osu.Game.Rulesets.Objects.Drawables;
 using osuTK.Graphics;
 using System.Collections.Generic;
+using osu.Framework.Allocation;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
@@ -10,7 +11,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         protected override Color4 GetComboColour(IReadOnlyList<Color4> comboColours) =>
             comboColours[(HitObject.IndexInBeatmap + 1) % comboColours.Count];
 
-        protected TouhosuPlayer Player;
+        [Resolved]
+        protected TouhosuPlayer Player { get; private set; }
 
         protected DrawableTouhosuHitObject(TouhosuHitObject hitObject)
             : base(hitObject)
@@ -18,8 +20,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         }
 
         protected sealed override double InitialLifetimeOffset => HitObject.TimePreempt;
-
-        public void GetPlayerToTrace(TouhosuPlayer player) => Player = player;
 
         protected override void UpdateStateTransforms(ArmedState state)
         {
