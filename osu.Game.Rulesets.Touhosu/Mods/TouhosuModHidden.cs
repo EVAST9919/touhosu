@@ -1,6 +1,4 @@
-﻿using osu.Framework.Graphics;
-using osu.Game.Rulesets.Touhosu.Objects;
-using osu.Game.Rulesets.Touhosu.Objects.Drawables;
+﻿using osu.Game.Rulesets.Touhosu.Objects.Drawables;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects.Drawables;
 
@@ -13,14 +11,11 @@ namespace osu.Game.Rulesets.Touhosu.Mods
 
         protected override void ApplyHiddenState(DrawableHitObject drawable, ArmedState state)
         {
-            if (!(drawable is DrawableMovingBullet))
+            if (!(drawable is DrawableBullet))
                 return;
 
-            var drawableBullet = (DrawableMovingBullet)drawable;
-            var bullet = (MovingBullet)drawableBullet.HitObject;
-
-            using (drawableBullet.BeginAbsoluteSequence(bullet.StartTime, true))
-                drawableBullet.FadeOut(bullet.TimePreempt * 1.5f);
+            var drawableCherry = (DrawableBullet)drawable;
+            drawableCherry.HiddenApplied = true;
         }
     }
 }
