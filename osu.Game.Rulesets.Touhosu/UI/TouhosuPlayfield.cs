@@ -35,9 +35,19 @@ namespace osu.Game.Rulesets.Touhosu.UI
             player = new TouhosuPlayer();
             dependencies.Cache(player);
 
+            Masking = true;
+            BorderThickness = 2;
+            MaskingSmoothness = 1;
+            BorderColour = Color4.White;
+
             InternalChildren = new Drawable[]
             {
-                new TouhosuBackground(),
+                new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Alpha = 0,
+                    AlwaysPresent = true,
+                },
                 new Container
                 {
                     RelativeSizeAxes = Axes.Both,
