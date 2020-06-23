@@ -81,5 +81,26 @@ namespace osu.Game.Rulesets.Touhosu.UI
 
             player.HitObjects = HitObjectContainer;
         }
+
+        private bool failInvoked;
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (!ruleset.HealthProcessor.HasFailed)
+                return;
+
+            if (failInvoked)
+                return;
+
+            onFail();
+            failInvoked = true;
+        }
+
+        private void onFail()
+        {
+            player.Die();
+        }
     }
 }

@@ -83,16 +83,34 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
             state.BindValueChanged(onStateChanged, true);
+        }
+
+        private bool isDead;
+
+        public void Die()
+        {
+            isDead = true;
+            onFocusReleased();
+            onShootReleased();
+            Player.FadeOut(500, Easing.Out);
+        }
+
+        public void PlayMissAnimation()
+        {
+            if (isDead)
+                return;
+
+            animationContainer.FlashColour(Color4.Red, 1000, Easing.OutQuint);
         }
 
         public Vector2 PlayerPosition() => Player.Position;
 
-        public void PlayMissAnimation() => animationContainer.FlashColour(Color4.Red, 1000, Easing.OutQuint);
-
         public bool OnPressed(TouhosuAction action)
         {
+            if (isDead)
+                return true;
+
             switch (action)
             {
                 case TouhosuAction.MoveLeft:
@@ -125,6 +143,9 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
         public void OnReleased(TouhosuAction action)
         {
+            if (isDead)
+                return;
+
             switch (action)
             {
                 case TouhosuAction.MoveLeft:
@@ -156,6 +177,9 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         protected override void Update()
         {
             base.Update();
+
+            if (isDead)
+                return;
 
             move(Clock.ElapsedFrameTime, horizontalDirection, verticalDirection);
             updatePlayerState();
