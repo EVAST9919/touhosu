@@ -1,4 +1,4 @@
-﻿using osu.Game.Rulesets.Touhosu.Extensions;
+﻿using System;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
@@ -9,6 +9,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         {
         }
 
-        protected override float GetAngle() => MathExtensions.GetPlayerAngle(Player, HitObject.Position);
+        public Func<DrawableHomingBullet, float> PlayerAngle;
+
+        protected override float GetAngle() => PlayerAngle.Invoke(this);
     }
 }

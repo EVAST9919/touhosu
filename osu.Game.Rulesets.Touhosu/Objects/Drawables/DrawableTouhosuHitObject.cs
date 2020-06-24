@@ -1,8 +1,6 @@
-﻿using osu.Game.Rulesets.Touhosu.UI.Objects;
-using osu.Game.Rulesets.Objects.Drawables;
+﻿using osu.Game.Rulesets.Objects.Drawables;
 using osuTK.Graphics;
 using System.Collections.Generic;
-using osu.Framework.Allocation;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
@@ -10,9 +8,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
     {
         protected override Color4 GetComboColour(IReadOnlyList<Color4> comboColours) =>
             comboColours[(HitObject.IndexInBeatmap + 1) % comboColours.Count];
-
-        [Resolved]
-        protected TouhosuPlayer Player { get; private set; }
 
         protected DrawableTouhosuHitObject(TouhosuHitObject hitObject)
             : base(hitObject)

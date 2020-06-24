@@ -8,7 +8,7 @@ using osu.Game.Rulesets.Touhosu.Extensions;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.Touhosu.UI;
-using osu.Game.Rulesets.Touhosu.UI.Objects;
+using System;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
@@ -28,7 +28,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         private readonly Sprite texture;
         private readonly Sprite overlay;
         protected readonly Container Content;
-        private readonly float finalSize;
+        public readonly float FinalSize;
         private double missTime;
 
         protected DrawableBullet(Bullet h)
@@ -39,7 +39,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             Position = h.Position;
             Scale = Vector2.Zero;
 
-            finalSize = Size.X;
+            FinalSize = Size.X;
 
             AddInternal(Content = new Container
             {
@@ -84,7 +84,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
             if (HiddenApplied)
             {
-                var distance = MathExtensions.Distance(Player.PlayerPosition(), Position);
+                var distance = CheckDistance.Invoke(this);
 
                 if (distance > hidden_distance + hidden_distance_buffer)
                 {
@@ -98,7 +98,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                     return;
                 }
 
-                Alpha = MathExtensions.Map((float)distance - hidden_distance, 0, hidden_distance_buffer, 0, 1);
+                Alpha = MathExtensions.Map(distance - hidden_distance, 0, hidden_distance_buffer, 0, 1);
             }
         }
 
@@ -108,9 +108,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             {
                 if (AffectPlayer())
                 {
-                    if (collidedWithPlayer(Player))
+                    if (CheckHit.Invoke(this))
                     {
-                        Player.PlayMissAnimation();
                         missTime = timeOffset;
                         ApplyResult(r => r.Type = HitResult.Miss);
                         return;
@@ -128,6 +127,10 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             }
         }
 
+        public Func<DrawableBullet, bool> CheckHit;
+
+        public Func<DrawableBullet, float> CheckDistance;
+
         protected override void UpdateStateTransforms(ArmedState state)
         {
             base.UpdateStateTransforms(state);
@@ -139,14 +142,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                     this.Delay(missTime).FadeOut();
                     break;
             }
-        }
-
-        private bool collidedWithPlayer(TouhosuPlayer player)
-        {
-            var radius = finalSize / 2;
-            var distance = MathExtensions.Distance(player.PlayerPosition(), Position);
-
-            return distance < radius;
         }
     }
 }

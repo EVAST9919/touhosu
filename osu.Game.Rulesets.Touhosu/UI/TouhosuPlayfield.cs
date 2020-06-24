@@ -7,6 +7,9 @@ using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Game.Rulesets.Touhosu.UI.HUD;
 using osu.Framework.Allocation;
+using osu.Game.Rulesets.Objects.Drawables;
+using osu.Game.Rulesets.Touhosu.Objects.Drawables;
+using osu.Game.Rulesets.Touhosu.Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -15,11 +18,6 @@ namespace osu.Game.Rulesets.Touhosu.UI
         public static readonly Vector2 BASE_SIZE = new Vector2(512, 384);
         public static readonly Vector2 ACTUAL_SIZE = new Vector2(307, 384);
         public static readonly float X_SCALE_MULTIPLIER = 0.6f;
-
-        private DependencyContainer dependencies;
-
-        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
-            => dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
         private readonly TouhosuRuleset ruleset;
         private TouhosuPlayer player;
@@ -32,9 +30,6 @@ namespace osu.Game.Rulesets.Touhosu.UI
         [BackgroundDependencyLoader]
         private void load()
         {
-            player = new TouhosuPlayer();
-            dependencies.Cache(player);
-
             Masking = true;
             BorderThickness = 2;
             MaskingSmoothness = 1;
@@ -55,7 +50,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     Masking = true,
                     Children = new Drawable[]
                     {
-                        player,
+                        player = new TouhosuPlayer(),
                         HitObjectContainer
                     }
                 },
@@ -90,6 +85,38 @@ namespace osu.Game.Rulesets.Touhosu.UI
             };
 
             player.HitObjects = HitObjectContainer;
+        }
+
+        public bool CheckHit(DrawableBullet obj)
+        {
+            var radius = obj.FinalSize / 2;
+            var distance = MathExtensions.Distance(player.PlayerPosition(), obj.Position);
+            var isHit = distance < radius;
+
+            if (isHit)
+                player.PlayMissAnimation();
+
+            return isHit;
+        }
+
+        public float CheckDistance(DrawableBullet obj) => (float)MathExtensions.Distance(player.PlayerPosition(), obj.Position);
+
+        public float GetPlayerAngle(DrawableHomingBullet obj) => MathExtensions.GetPlayerAngle(player, obj.Position);
+
+        public override void Add(DrawableHitObject h)
+        {
+            base.Add(h);
+
+            if (h is DrawableBullet bullet)
+            {
+                bullet.CheckHit += CheckHit;
+                bullet.CheckDistance += CheckDistance;
+            }
+
+            if (h is DrawableHomingBullet homingBullet)
+            {
+                homingBullet.PlayerAngle = GetPlayerAngle;
+            }
         }
 
         private bool failInvoked;
