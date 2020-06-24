@@ -91,7 +91,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             var radius = obj.FinalSize / 2;
             var distance = MathExtensions.Distance(player.PlayerPosition(), obj.Position);
-            var isHit = distance < radius;
+            var isHit = distance < radius + 2;
 
             if (isHit)
                 player.PlayMissAnimation();
