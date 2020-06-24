@@ -18,12 +18,16 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
         public override bool CanConvert() => Beatmap.HitObjects.All(h => h is IHasPosition);
 
         private int index = -1;
+        private int objectIndexInCurrentCombo = 0;
 
         protected override IEnumerable<TouhosuHitObject> ConvertHitObject(HitObject obj, IBeatmap beatmap)
         {
             var comboData = obj as IHasCombo;
             if (comboData?.NewCombo ?? false)
+            {
+                objectIndexInCurrentCombo = 0;
                 index++;
+            }
 
             List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
 
@@ -38,9 +42,11 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
                     break;
 
                 default:
-                    hitObjects.AddRange(BulletsExtensions.ConvertHitCircle(obj, index));
+                    hitObjects.AddRange(BulletsExtensions.ConvertHitCircle(obj, index, objectIndexInCurrentCombo));
                     break;
             }
+
+            objectIndexInCurrentCombo++;
 
             return hitObjects;
         }

@@ -38,6 +38,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 case HomingBullet homing:
                     return new DrawableHomingBullet(homing);
 
+                case ReverseSliderBullet rSlider:
+                    return new DrawableReverseSliderBullet(rSlider);
+
                 case MovingBullet moving:
                     return new DrawableMovingBullet(moving);
             }

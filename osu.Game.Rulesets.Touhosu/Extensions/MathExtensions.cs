@@ -58,5 +58,17 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             return angle;
         }
+
+        public static bool GetRandomTimedBool(double time)
+        {
+            var random = new Random((int)Math.Round(time * 100));
+            return random.NextDouble() > 0.5f;
+        }
+
+        public static float GetRandomTimedAngleOffset(double time)
+        {
+            var random = new Random((int)Math.Round(time * 100));
+            return (float)random.NextDouble() * 360f;
+        }
     }
 }

@@ -15,7 +15,8 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 {
     public static class BulletsExtensions
     {
-        private const int bullets_per_hitcircle = 4;
+        private const int bullets_per_hitcircle = 5;
+        private const int hitcircle_angle_offset = 5;
 
         private const int bullets_per_slider_reverse = 5;
 
@@ -27,6 +28,80 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
         private const float spinner_angle_per_span = 8f;
 
         public static List<TouhosuHitObject> ConvertSlider(HitObject obj, IBeatmap beatmap, IHasPathWithRepeats curve, int index)
+        {
+            double spanDuration = curve.Duration / (curve.RepeatCount + 1);
+            bool isRepeatSpam = spanDuration < 75 && curve.RepeatCount > 0;
+
+            if (isRepeatSpam)
+                return generateRepeatSpamSlider(obj, beatmap, curve, spanDuration, index);
+            else
+                return generateDefaultSlider(obj, beatmap, curve, spanDuration, index);
+        }
+
+        public static List<TouhosuHitObject> ConvertHitCircle(HitObject obj, int index, int indexInCurrentCombo)
+        {
+            if (indexInCurrentCombo == 0)
+                return convertImpactCircle(obj, index);
+            else
+                return convertDefaultCircle(obj, index, indexInCurrentCombo);
+        }
+
+        private static List<TouhosuHitObject> convertDefaultCircle(HitObject obj, int index, int indexInCurrentCombo)
+        {
+            List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
+
+            var circlePosition = (obj as IHasPosition)?.Position ?? Vector2.Zero;
+            circlePosition *= new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
+            var comboData = obj as IHasCombo;
+
+            hitObjects.AddRange(generateExplosion(
+                obj.StartTime,
+                bullets_per_hitcircle,
+                circlePosition,
+                comboData,
+                index,
+                hitcircle_angle_offset * indexInCurrentCombo));
+
+            hitObjects.Add(new SoundHitObject
+            {
+                StartTime = obj.StartTime,
+                Samples = obj.Samples,
+                Position = circlePosition
+            });
+
+            return hitObjects;
+        }
+
+        private static List<TouhosuHitObject> convertImpactCircle(HitObject obj, int index)
+        {
+            List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
+
+            var circlePosition = (obj as IHasPosition)?.Position ?? Vector2.Zero;
+            circlePosition *= new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
+            var comboData = obj as IHasCombo;
+
+            var randomBool = MathExtensions.GetRandomTimedBool(obj.StartTime);
+
+            hitObjects.AddRange(generatePolygonExplosion(
+                obj.StartTime,
+                4,
+                randomBool ? 3 : 4,
+                circlePosition,
+                comboData,
+                index,
+                MathExtensions.GetRandomTimedAngleOffset(obj.StartTime)));
+
+            hitObjects.Add(new SoundHitObject
+            {
+                StartTime = obj.StartTime,
+                Samples = obj.Samples,
+                Position = circlePosition
+            });
+
+            return hitObjects;
+        }
+
+        private static List<TouhosuHitObject> generateDefaultSlider(HitObject obj, IBeatmap beatmap, IHasPathWithRepeats curve, double spanDuration, int index)
         {
             List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
 
@@ -43,22 +118,11 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             var velocity = scoringDistance / timingPoint.BeatLength;
             var tickDistance = scoringDistance / difficulty.SliderTickRate;
 
-            double spanDuration = curve.Duration / (curve.RepeatCount + 1);
             double legacyLastTickOffset = (obj as IHasLegacyLastTickOffset)?.LegacyLastTickOffset ?? 0;
 
             foreach (var e in SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, legacyLastTickOffset, new CancellationToken()))
             {
-                Vector2 sliderEventPosition;
-                var isRepeatSpam = false;
-
-                // Don't take into account very small sliders. There's a chance that they will contain reverse spam, and offset looks ugly
-                if (spanDuration < 75 && curve.RepeatCount > 0)
-                {
-                    sliderEventPosition = objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
-                    isRepeatSpam = true;
-                }
-                else
-                    sliderEventPosition = (curve.CurvePositionAt(e.PathProgress / (curve.RepeatCount + 1)) + objPosition) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
+                var sliderEventPosition = (curve.CurvePositionAt(e.PathProgress / (curve.RepeatCount + 1)) + objPosition) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
 
                 switch (e.Type)
                 {
@@ -66,9 +130,9 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         hitObjects.Add(new SoundHitObject
                         {
-                            Position = sliderEventPosition,
                             StartTime = obj.StartTime,
-                            Samples = obj.Samples
+                            Samples = obj.Samples,
+                            Position = sliderEventPosition
                         });
 
                         break;
@@ -90,57 +154,147 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         hitObjects.Add(new SoundHitObject
                         {
-                            Position = sliderEventPosition,
                             StartTime = e.Time,
-                            Samples = getTickSamples(obj.Samples)
+                            Samples = getTickSamples(obj.Samples),
+                            Position = sliderEventPosition
                         });
                         break;
 
                     case SliderEventType.Repeat:
 
-                        if (positionIsValid(sliderEventPosition))
-                        {
-                            hitObjects.AddRange(generateExplosion(
-                                obj.StartTime + (e.SpanIndex + 1) * spanDuration,
-                                bullets_per_slider_reverse,
-                                sliderEventPosition,
-                                comboData,
-                                index,
-                                slider_angle_per_span * e.SpanIndex));
-                        }
+                        hitObjects.AddRange(generateExplosion(
+                            e.Time,
+                            Math.Clamp((int)curve.Distance / 15, 3, 15),
+                            sliderEventPosition,
+                            comboData,
+                            index,
+                            MathExtensions.GetRandomTimedAngleOffset(e.Time)));
 
                         hitObjects.Add(new SoundHitObject
                         {
-                            Position = sliderEventPosition,
                             StartTime = e.Time,
-                            Samples = obj.Samples
+                            Samples = obj.Samples,
+                            Position = sliderEventPosition
                         });
                         break;
 
                     case SliderEventType.Tail:
 
-                        if (positionIsValid(sliderEventPosition))
-                        {
-                            hitObjects.AddRange(generateExplosion(
-                                e.Time,
-                                Math.Clamp((int)curve.Distance / 15, 5, 20),
-                                sliderEventPosition,
-                                comboData,
-                                index,
-                                isRepeatSpam ? (slider_angle_per_span * curve.RepeatCount) : 0));
-                        }
+                        hitObjects.AddRange(generateExplosion(
+                            e.Time,
+                            Math.Clamp((int)curve.Distance * (curve.RepeatCount + 1) / 15, 5, 20),
+                            sliderEventPosition,
+                            comboData,
+                            index,
+                            MathExtensions.GetRandomTimedAngleOffset(e.Time)));
 
                         hitObjects.Add(new SoundHitObject
                         {
-                            Position = sliderEventPosition,
                             StartTime = curve.EndTime,
-                            Samples = obj.Samples
+                            Samples = obj.Samples,
+                            Position = sliderEventPosition
                         });
                         break;
                 }
             }
 
-            //body
+            hitObjects.AddRange(generateSliderBody(obj, curve, index));
+
+            return hitObjects;
+        }
+
+        private static List<TouhosuHitObject> generateRepeatSpamSlider(HitObject obj, IBeatmap beatmap, IHasPathWithRepeats curve, double spanDuration, int index)
+        {
+            List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
+
+            var objPosition = (obj as IHasPosition)?.Position ?? Vector2.Zero;
+            var comboData = obj as IHasCombo;
+            var difficulty = beatmap.BeatmapInfo.BaseDifficulty;
+
+            var controlPointInfo = beatmap.ControlPointInfo;
+            TimingControlPoint timingPoint = controlPointInfo.TimingPointAt(obj.StartTime);
+            DifficultyControlPoint difficultyPoint = controlPointInfo.DifficultyPointAt(obj.StartTime);
+
+            double scoringDistance = 100 * difficulty.SliderMultiplier * difficultyPoint.SpeedMultiplier;
+
+            var velocity = scoringDistance / timingPoint.BeatLength;
+            var tickDistance = scoringDistance / difficulty.SliderTickRate;
+
+            double legacyLastTickOffset = (obj as IHasLegacyLastTickOffset)?.LegacyLastTickOffset ?? 0;
+
+            foreach (var e in SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, legacyLastTickOffset, new CancellationToken()))
+            {
+                var sliderEventPosition = objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
+
+                switch (e.Type)
+                {
+                    case SliderEventType.Head:
+
+                        hitObjects.AddRange(generateExplosion(
+                            e.Time,
+                            bullets_per_slider_reverse,
+                            sliderEventPosition,
+                            comboData,
+                            index));
+
+                        hitObjects.Add(new SoundHitObject
+                        {
+                            StartTime = obj.StartTime,
+                            Samples = obj.Samples,
+                            Position = sliderEventPosition
+                        });
+
+                        break;
+
+                    case SliderEventType.Repeat:
+
+                        hitObjects.AddRange(generateExplosion(
+                            e.Time,
+                            bullets_per_slider_reverse,
+                            sliderEventPosition,
+                            comboData,
+                            index,
+                            slider_angle_per_span * (e.SpanIndex + 1)));
+
+                        hitObjects.Add(new SoundHitObject
+                        {
+                            StartTime = e.Time,
+                            Samples = obj.Samples,
+                            Position = sliderEventPosition
+                        });
+                        break;
+
+                    case SliderEventType.Tail:
+
+                        hitObjects.AddRange(generateExplosion(
+                            e.Time,
+                            bullets_per_slider_reverse,
+                            sliderEventPosition,
+                            comboData,
+                            index,
+                            slider_angle_per_span * (curve.RepeatCount + 1)));
+
+                        hitObjects.Add(new SoundHitObject
+                        {
+                            StartTime = curve.EndTime,
+                            Samples = obj.Samples,
+                            Position = sliderEventPosition
+                        });
+                        break;
+                }
+            }
+
+            hitObjects.AddRange(generateSliderBody(obj, curve, index));
+
+            return hitObjects;
+        }
+
+        private static List<SliderPartBullet> generateSliderBody(HitObject obj, IHasPathWithRepeats curve, int index)
+        {
+            var objPosition = (obj as IHasPosition)?.Position ?? Vector2.Zero;
+            var comboData = obj as IHasCombo;
+
+            List<SliderPartBullet> hitObjects = new List<SliderPartBullet>();
 
             var bodyCherriesCount = Math.Min(curve.Distance * (curve.RepeatCount + 1) / 10, max_visuals_per_slider_span * (curve.RepeatCount + 1));
 
@@ -161,32 +315,6 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                     });
                 }
             }
-
-            return hitObjects;
-        }
-
-        public static List<TouhosuHitObject> ConvertHitCircle(HitObject obj, int index)
-        {
-            List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
-
-            var objPosition = (obj as IHasPosition)?.Position ?? Vector2.Zero;
-            var comboData = obj as IHasCombo;
-
-            hitObjects.AddRange(generateExplosion(
-                obj.StartTime,
-                bullets_per_hitcircle,
-                objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
-                comboData,
-                index,
-                0,
-                120));
-
-            hitObjects.Add(new SoundHitObject
-            {
-                Position = objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
-                StartTime = obj.StartTime,
-                Samples = obj.Samples
-            });
 
             return hitObjects;
         }
@@ -221,6 +349,43 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                 yield return new MovingBullet
                 {
                     Angle = MathExtensions.BulletDistribution(bulletCount, angleRange, i, angleOffset),
+                    StartTime = startTime,
+                    Position = position,
+                    NewCombo = comboData?.NewCombo ?? false,
+                    ComboOffset = comboData?.ComboOffset ?? 0,
+                    IndexInBeatmap = index
+                };
+            }
+        }
+
+        private static IEnumerable<MovingBullet> generatePolygonExplosion(double startTime, int bullets_per_side, int verticesCount, Vector2 position, IHasCombo comboData, int index, float angleOffset = 0)
+        {
+            List<MovingBullet> hitObjects = new List<MovingBullet>();
+
+            for (int i = 0; i < verticesCount; i++)
+                hitObjects.AddRange(generatePolygonLine(startTime, bullets_per_side, verticesCount, position, comboData, index, i * (360f / verticesCount) + angleOffset));
+
+            return hitObjects;
+        }
+
+        private static IEnumerable<MovingBullet> generatePolygonLine(double startTime, int bullets_per_side, int verticesCount, Vector2 position, IHasCombo comboData, int index, float additionalOffset = 0)
+        {
+            var s = 1.0;
+            var side = s / (2 * Math.Sin(360.0 / (2 * verticesCount) * Math.PI / 180));
+            var partDistance = s / bullets_per_side;
+            var partialAngle = 180 * (verticesCount - 2) / (2 * verticesCount);
+
+            for (int i = 0; i < bullets_per_side; i++)
+            {
+                var c = (float)partDistance * i;
+                var length = Math.Sqrt(MathExtensions.Pow((float)side) + MathExtensions.Pow(c) - (2 * side * c * Math.Cos(partialAngle * Math.PI / 180)));
+                var missingAngle = c == 0 ? 0 : Math.Acos((MathExtensions.Pow((float)side) + MathExtensions.Pow((float)length) - MathExtensions.Pow(c)) / (2 * side * length)) * 180 / Math.PI;
+                var currentAngle = 180 + (90 - partialAngle) - missingAngle;
+
+                yield return new MovingBullet
+                {
+                    Angle = (float)currentAngle + additionalOffset,
+                    DeltaMultiplier = length / side * 1.2f,
                     StartTime = startTime,
                     Position = position,
                     NewCombo = comboData?.NewCombo ?? false,
