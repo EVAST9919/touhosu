@@ -25,9 +25,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         protected virtual float GetWallCheckOffset() => 0;
 
-        private readonly Sprite texture;
-        private readonly Sprite overlay;
-        protected readonly Container Content;
+        private Sprite texture;
+        private Sprite overlay;
+        protected Container Content;
         public readonly float FinalSize;
         private double missTime;
 
@@ -40,7 +40,11 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             Scale = Vector2.Zero;
 
             FinalSize = Size.X;
+        }
 
+        [BackgroundDependencyLoader]
+        private void load(TextureStore textures)
+        {
             AddInternal(Content = new Container
             {
                 RelativeSizeAxes = Axes.Both,
@@ -62,16 +66,14 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                     }
                 }
             });
-        }
 
-        [BackgroundDependencyLoader]
-        private void load(TextureStore textures)
-        {
-            texture.Texture = textures.Get("Projectiles/Sphere/texture");
-            overlay.Texture = textures.Get("Projectiles/Sphere/overlay");
+            texture.Texture = textures.Get($"Projectiles/{ProjectileName()}/texture");
+            overlay.Texture = textures.Get($"Projectiles/{ProjectileName()}/overlay");
 
             AccentColour.BindValueChanged(accent => overlay.Colour = accent.NewValue, true);
         }
+
+        protected virtual string ProjectileName() => "Sphere";
 
         protected override void UpdateInitialTransforms()
         {

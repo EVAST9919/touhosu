@@ -35,7 +35,10 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         protected virtual Vector2 UpdatePosition(double currentTime)
         {
             if (angle == null)
+            {
                 angle = GetAngle();
+                Rotation = angle ?? 0;
+            }
 
             var elapsedTime = Clock.CurrentTime - HitObject.StartTime;
             var xPosition = HitObject.Position.X + (elapsedTime * SpeedMultiplier * Math.Sin((angle ?? 0) * Math.PI / 180));

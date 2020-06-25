@@ -232,7 +232,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                             new ReverseSliderBullet
                             {
                                 Angle = (float)(angleRandom.NextDouble() * 360f),
-                                DeltaMultiplier = (float)(deltaRandom.NextDouble() + 0.4f),
+                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
                                 StartTime = e.Time,
                                 Position = objPosition,
                                 NewCombo = comboData?.NewCombo ?? false,
@@ -254,7 +254,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                             new ReverseSliderBullet
                             {
                                 Angle = (float)(angleRandom.NextDouble() * 360f),
-                                DeltaMultiplier = (float)(deltaRandom.NextDouble() + 0.4f),
+                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
                                 StartTime = e.Time,
                                 Position = objPosition,
                                 NewCombo = comboData?.NewCombo ?? false,
@@ -276,7 +276,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                             new ReverseSliderBullet
                             {
                                 Angle = (float)(angleRandom.NextDouble() * 360f),
-                                DeltaMultiplier = (float)(deltaRandom.NextDouble() + 0.4f),
+                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
                                 StartTime = e.Time,
                                 Position = objPosition,
                                 NewCombo = comboData?.NewCombo ?? false,

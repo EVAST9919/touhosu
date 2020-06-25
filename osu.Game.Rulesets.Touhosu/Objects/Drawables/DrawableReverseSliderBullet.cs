@@ -2,7 +2,9 @@
 {
     public class DrawableReverseSliderBullet : DrawableMovingBullet
     {
-        protected override float GetBaseSize() => base.GetBaseSize() / 2;
+        protected override float GetBaseSize() => base.GetBaseSize() * 0.65f;
+
+        protected override string ProjectileName() => "Grain";
 
         public DrawableReverseSliderBullet(ReverseSliderBullet h)
             : base(h)
