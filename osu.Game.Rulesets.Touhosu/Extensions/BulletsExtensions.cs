@@ -17,7 +17,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
     {
         private const int bullets_per_hitcircle = 5;
         private const int hitcircle_angle_offset = 5;
-        private const int max_visuals_per_slider_span = 150;
+        private const int max_visuals_per_slider_span = 120;
 
         private const int bullets_per_spinner_span = 20;
         private const float spinner_span_delay = 250f;
@@ -304,7 +304,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             List<SliderPartBullet> hitObjects = new List<SliderPartBullet>();
 
-            var bodyCherriesCount = Math.Min(curve.Distance * (curve.RepeatCount + 1) / 10, max_visuals_per_slider_span * (curve.RepeatCount + 1));
+            var bodyCherriesCount = Math.Min(curve.Distance * (curve.RepeatCount + 1) / 20, max_visuals_per_slider_span * (curve.RepeatCount + 1));
 
             for (int i = 0; i < bodyCherriesCount; i++)
             {
