@@ -17,10 +17,6 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
     {
         private const int bullets_per_hitcircle = 5;
         private const int hitcircle_angle_offset = 5;
-
-        private const int bullets_per_slider_reverse = 5;
-
-        private const float slider_angle_per_span = 2f;
         private const int max_visuals_per_slider_span = 150;
 
         private const int bullets_per_spinner_span = 20;
@@ -30,10 +26,10 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
         public static List<TouhosuHitObject> ConvertSlider(HitObject obj, IBeatmap beatmap, IHasPathWithRepeats curve, int index)
         {
             double spanDuration = curve.Duration / (curve.RepeatCount + 1);
-            bool isRepeatSpam = spanDuration < 75 && curve.RepeatCount > 0;
+            bool isBuzz = spanDuration < 75 && curve.RepeatCount > 0;
 
-            if (isRepeatSpam)
-                return generateRepeatSpamSlider(obj, beatmap, curve, spanDuration, index);
+            if (isBuzz)
+                return generateBuzzSlider(obj, beatmap, curve, spanDuration, index);
             else
                 return generateDefaultSlider(obj, beatmap, curve, spanDuration, index);
         }
@@ -203,12 +199,13 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             return hitObjects;
         }
 
-        private static List<TouhosuHitObject> generateRepeatSpamSlider(HitObject obj, IBeatmap beatmap, IHasPathWithRepeats curve, double spanDuration, int index)
+        private static List<TouhosuHitObject> generateBuzzSlider(HitObject obj, IBeatmap beatmap, IHasPathWithRepeats curve, double spanDuration, int index)
         {
             List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
 
-            var objPosition = (obj as IHasPosition)?.Position ?? Vector2.Zero;
+            var objPosition = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
             var comboData = obj as IHasCombo;
+
             var difficulty = beatmap.BeatmapInfo.BaseDifficulty;
 
             var controlPointInfo = beatmap.ControlPointInfo;
@@ -220,71 +217,82 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             var velocity = scoringDistance / timingPoint.BeatLength;
             var tickDistance = scoringDistance / difficulty.SliderTickRate;
 
-            double legacyLastTickOffset = (obj as IHasLegacyLastTickOffset)?.LegacyLastTickOffset ?? 0;
+            var legacyLastTickOffset = (obj as IHasLegacyLastTickOffset)?.LegacyLastTickOffset ?? 0;
+
+            var angleRandom = new Random((int)(obj.StartTime * 100));
+            var deltaRandom = new Random((int)(curve.Duration * 100));
 
             foreach (var e in SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, legacyLastTickOffset, new CancellationToken()))
             {
-                var sliderEventPosition = objPosition * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
-
                 switch (e.Type)
                 {
                     case SliderEventType.Head:
-
-                        hitObjects.AddRange(generateExplosion(
-                            e.Time,
-                            bullets_per_slider_reverse,
-                            sliderEventPosition,
-                            comboData,
-                            index));
-
-                        hitObjects.Add(new SoundHitObject
+                        hitObjects.AddRange(new TouhosuHitObject[]
                         {
-                            StartTime = obj.StartTime,
-                            Samples = obj.Samples,
-                            Position = sliderEventPosition
+                            new ReverseSliderBullet
+                            {
+                                Angle = (float)(angleRandom.NextDouble() * 360f),
+                                DeltaMultiplier = (float)(deltaRandom.NextDouble() + 0.4f),
+                                StartTime = e.Time,
+                                Position = objPosition,
+                                NewCombo = comboData?.NewCombo ?? false,
+                                ComboOffset = comboData?.ComboOffset ?? 0,
+                                IndexInBeatmap = index
+                            },
+                            new SoundHitObject
+                            {
+                                StartTime = e.Time,
+                                Samples = obj.Samples,
+                                Position = objPosition
+                            }
                         });
-
                         break;
 
                     case SliderEventType.Repeat:
-
-                        hitObjects.AddRange(generateExplosion(
-                            e.Time,
-                            bullets_per_slider_reverse,
-                            sliderEventPosition,
-                            comboData,
-                            index,
-                            slider_angle_per_span * (e.SpanIndex + 1)));
-
-                        hitObjects.Add(new SoundHitObject
+                        hitObjects.AddRange(new TouhosuHitObject[]
                         {
-                            StartTime = e.Time,
-                            Samples = obj.Samples,
-                            Position = sliderEventPosition
+                            new ReverseSliderBullet
+                            {
+                                Angle = (float)(angleRandom.NextDouble() * 360f),
+                                DeltaMultiplier = (float)(deltaRandom.NextDouble() + 0.4f),
+                                StartTime = e.Time,
+                                Position = objPosition,
+                                NewCombo = comboData?.NewCombo ?? false,
+                                ComboOffset = comboData?.ComboOffset ?? 0,
+                                IndexInBeatmap = index
+                            },
+                            new SoundHitObject
+                            {
+                                StartTime = e.Time,
+                                Samples = obj.Samples,
+                                Position = objPosition
+                            }
                         });
                         break;
 
                     case SliderEventType.Tail:
-
-                        hitObjects.AddRange(generateExplosion(
-                            e.Time,
-                            bullets_per_slider_reverse,
-                            sliderEventPosition,
-                            comboData,
-                            index,
-                            slider_angle_per_span * (curve.RepeatCount + 1)));
-
-                        hitObjects.Add(new SoundHitObject
+                        hitObjects.AddRange(new TouhosuHitObject[]
                         {
-                            StartTime = curve.EndTime,
-                            Samples = obj.Samples,
-                            Position = sliderEventPosition
+                            new ReverseSliderBullet
+                            {
+                                Angle = (float)(angleRandom.NextDouble() * 360f),
+                                DeltaMultiplier = (float)(deltaRandom.NextDouble() + 0.4f),
+                                StartTime = e.Time,
+                                Position = objPosition,
+                                NewCombo = comboData?.NewCombo ?? false,
+                                ComboOffset = comboData?.ComboOffset ?? 0,
+                                IndexInBeatmap = index
+                            },
+                            new SoundHitObject
+                            {
+                                StartTime = e.Time,
+                                Samples = obj.Samples,
+                                Position = objPosition
+                            }
                         });
                         break;
                 }
             }
-
-            hitObjects.AddRange(generateSliderBody(obj, curve, index));
 
             return hitObjects;
         }
