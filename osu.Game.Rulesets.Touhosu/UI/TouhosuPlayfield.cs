@@ -89,7 +89,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
 
         public bool CheckHit(DrawableBullet obj)
         {
-            var radius = obj.FinalSize / 2;
+            var radius = obj.Size.X / 2;
             var distance = MathExtensions.Distance(player.PlayerPosition(), obj.Position);
             var isHit = distance < radius + 2;
 

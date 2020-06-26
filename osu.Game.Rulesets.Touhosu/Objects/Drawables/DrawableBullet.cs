@@ -28,7 +28,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         private Sprite texture;
         private Sprite overlay;
         protected Container Content;
-        public readonly float FinalSize;
         private double missTime;
 
         protected DrawableBullet(Bullet h)
@@ -38,8 +37,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             Size = new Vector2(GetBaseSize() * MathExtensions.Map(h.CircleSize, 0, 10, 0.2f, 1));
             Position = h.Position;
             Scale = Vector2.Zero;
-
-            FinalSize = Size.X;
         }
 
         [BackgroundDependencyLoader]
