@@ -33,7 +33,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         private void load(TextureStore textures)
         {
             Masking = true;
-            BorderThickness = 2;
+            BorderThickness = 1.5f;
             MaskingSmoothness = 1;
             BorderColour = Color4.White;
 
