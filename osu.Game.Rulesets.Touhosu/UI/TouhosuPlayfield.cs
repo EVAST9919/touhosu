@@ -10,6 +10,8 @@ using osu.Framework.Allocation;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Touhosu.Objects.Drawables;
 using osu.Game.Rulesets.Touhosu.Extensions;
+using osu.Framework.Graphics.Textures;
+using osu.Framework.Graphics.Sprites;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -28,7 +30,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         }
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void load(TextureStore textures)
         {
             Masking = true;
             BorderThickness = 2;
@@ -62,10 +64,10 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     X = X_SCALE_MULTIPLIER,
                     Children = new Drawable[]
                     {
-                        new Box
+                        new Sprite
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Colour = Color4.Gray
+                            Texture = textures.Get("Frame")
                         },
                         new FillFlowContainer
                         {
