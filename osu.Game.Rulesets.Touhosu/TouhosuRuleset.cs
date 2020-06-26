@@ -12,7 +12,6 @@ using osu.Framework.Input.Bindings;
 using osu.Game.Rulesets.Touhosu.Scoring;
 using osu.Game.Rulesets.Touhosu.Difficulty;
 using osu.Game.Rulesets.Touhosu.Beatmaps;
-using osu.Game.Beatmaps.Legacy;
 using osu.Game.Rulesets.Touhosu.Mods;
 using osu.Game.Rulesets.Touhosu.UI;
 
@@ -41,29 +40,6 @@ namespace osu.Game.Rulesets.Touhosu
             new KeyBinding(InputKey.Z, TouhosuAction.Shoot),
             new KeyBinding(InputKey.Shift, TouhosuAction.Focus),
         };
-
-        public override IEnumerable<Mod> ConvertFromLegacyMods(LegacyMods mods)
-        {
-            if (mods.HasFlag(LegacyMods.Nightcore))
-                yield return new TouhosuModNightcore();
-            else if (mods.HasFlag(LegacyMods.DoubleTime))
-                yield return new TouhosuModDoubleTime();
-
-            if (mods.HasFlag(LegacyMods.SuddenDeath))
-                yield return new TouhosuModSuddenDeath();
-
-            if (mods.HasFlag(LegacyMods.NoFail))
-                yield return new TouhosuModNoFail();
-
-            if (mods.HasFlag(LegacyMods.HalfTime))
-                yield return new TouhosuModHalfTime();
-
-            if (mods.HasFlag(LegacyMods.Easy))
-                yield return new TouhosuModEasy();
-
-            if (mods.HasFlag(LegacyMods.Hidden))
-                yield return new TouhosuModHidden();
-        }
 
         public override IEnumerable<Mod> GetModsFor(ModType type)
         {
