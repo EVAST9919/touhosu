@@ -239,6 +239,16 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                                 ComboOffset = comboData?.ComboOffset ?? 0,
                                 IndexInBeatmap = index
                             },
+                            new ReverseSliderBullet
+                            {
+                                Angle = (float)(angleRandom.NextDouble() * 360f),
+                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
+                                StartTime = e.Time,
+                                Position = objPosition,
+                                NewCombo = comboData?.NewCombo ?? false,
+                                ComboOffset = comboData?.ComboOffset ?? 0,
+                                IndexInBeatmap = index
+                            },
                             new SoundHitObject
                             {
                                 StartTime = e.Time,
@@ -261,6 +271,16 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                                 ComboOffset = comboData?.ComboOffset ?? 0,
                                 IndexInBeatmap = index
                             },
+                            new ReverseSliderBullet
+                            {
+                                Angle = (float)(angleRandom.NextDouble() * 360f),
+                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
+                                StartTime = e.Time,
+                                Position = objPosition,
+                                NewCombo = comboData?.NewCombo ?? false,
+                                ComboOffset = comboData?.ComboOffset ?? 0,
+                                IndexInBeatmap = index
+                            },
                             new SoundHitObject
                             {
                                 StartTime = e.Time,
@@ -273,6 +293,16 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                     case SliderEventType.Tail:
                         hitObjects.AddRange(new TouhosuHitObject[]
                         {
+                            new ReverseSliderBullet
+                            {
+                                Angle = (float)(angleRandom.NextDouble() * 360f),
+                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
+                                StartTime = e.Time,
+                                Position = objPosition,
+                                NewCombo = comboData?.NewCombo ?? false,
+                                ComboOffset = comboData?.ComboOffset ?? 0,
+                                IndexInBeatmap = index
+                            },
                             new ReverseSliderBullet
                             {
                                 Angle = (float)(angleRandom.NextDouble() * 360f),
