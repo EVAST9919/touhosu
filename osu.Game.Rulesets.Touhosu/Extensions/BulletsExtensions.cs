@@ -197,7 +197,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                 }
             }
 
-            hitObjects.AddRange(generateSliderBody(obj.StartTime, objPosition, curve, index, comboData, 6, 50));
+            hitObjects.AddRange(generateSliderBody(obj.StartTime, objPosition, curve, index, comboData));
 
             return hitObjects;
         }
@@ -341,8 +341,11 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             return hitObjects;
         }
 
-        private static IEnumerable<TouhosuHitObject> generateSliderBody(double startTime, Vector2 position, IHasPathWithRepeats curve, int index, IHasCombo comboData, int objectsCount, float timeOffset)
+        private static IEnumerable<TouhosuHitObject> generateSliderBody(double startTime, Vector2 position, IHasPathWithRepeats curve, int index, IHasCombo comboData)
         {
+            var objectsCount = (int)Math.Clamp(curve.Distance / 40, 3, 10);
+            var timeOffset = (float)(curve.Duration / (curve.RepeatCount + 1) / 1000 * 100);
+
             for (int i = 0; i < objectsCount; i++)
             {
                 yield return new PathBullet
