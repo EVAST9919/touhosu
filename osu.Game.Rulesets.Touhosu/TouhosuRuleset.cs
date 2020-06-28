@@ -14,6 +14,10 @@ using osu.Game.Rulesets.Touhosu.Difficulty;
 using osu.Game.Rulesets.Touhosu.Beatmaps;
 using osu.Game.Rulesets.Touhosu.Mods;
 using osu.Game.Rulesets.Touhosu.UI;
+using osu.Game.Rulesets.Configuration;
+using osu.Game.Configuration;
+using osu.Game.Rulesets.Touhosu.Configuration;
+using osu.Game.Overlays.Settings;
 
 namespace osu.Game.Rulesets.Touhosu
 {
@@ -22,6 +26,10 @@ namespace osu.Game.Rulesets.Touhosu
         public TouhosuHealthProcessor HealthProcessor;
 
         public TouhosuScoreProcessor ScoreProcessor;
+
+        public override IRulesetConfigManager CreateConfig(SettingsStore settings) => new TouhosuRulesetConfigManager(settings, RulesetInfo);
+
+        public override RulesetSettingsSubsection CreateSettings() => new TouhosuSettingsSubsection(this);
 
         public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) => new DrawableTouhosuRuleset(this, beatmap, mods);
 

@@ -32,19 +32,8 @@ namespace osu.Game.Rulesets.Touhosu.UI
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
-            Masking = true;
-            BorderThickness = 1.5f;
-            MaskingSmoothness = 1;
-            BorderColour = Color4.White;
-
             InternalChildren = new Drawable[]
             {
-                new Box
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Alpha = 0,
-                    AlwaysPresent = true,
-                },
                 new Container
                 {
                     RelativeSizeAxes = Axes.Both,
@@ -52,6 +41,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     Masking = true,
                     Children = new Drawable[]
                     {
+                        new PlayfieldBackground(),
                         player = new TouhosuPlayer(),
                         HitObjectContainer
                     }
@@ -82,6 +72,20 @@ namespace osu.Game.Rulesets.Touhosu.UI
                                 new ScoreDisplay(ruleset.ScoreProcessor)
                             }
                         }
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Masking = true,
+                    BorderThickness = 2,
+                    MaskingSmoothness = 1,
+                    BorderColour = Color4.White,
+                    Child = new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Alpha = 0,
+                        AlwaysPresent = true,
                     }
                 }
             };
