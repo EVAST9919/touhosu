@@ -13,12 +13,17 @@ namespace osu.Game.Rulesets.Touhosu.Objects
 
         public double DeltaMultiplier { get; set; } = 1;
 
+        public double? CustomTimePreempt { get; set; }
+
         public override Judgement CreateJudgement() => new TouhosuJudgement();
 
         protected override void ApplyDefaultsToSelf(ControlPointInfo controlPointInfo, BeatmapDifficulty difficulty)
         {
             base.ApplyDefaultsToSelf(controlPointInfo, difficulty);
             SpeedMultiplier = controlPointInfo.DifficultyPointAt(StartTime).SpeedMultiplier;
+
+            if (CustomTimePreempt.HasValue)
+                TimePreempt = CustomTimePreempt.Value;
         }
     }
 }

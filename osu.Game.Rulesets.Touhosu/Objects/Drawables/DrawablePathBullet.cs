@@ -11,12 +11,15 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
     {
         private readonly IHasPathWithRepeats path;
         private readonly float pathTimeOffset;
+        private readonly float intensity;
 
         public DrawablePathBullet(PathBullet h)
             : base(h)
         {
             path = h.Path;
             pathTimeOffset = h.TimeOffset;
+            intensity = h.Intensity;
+            Alpha = intensity;
         }
 
         protected override void Update()
@@ -54,6 +57,11 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                 hitTime = time;
                 ApplyResult(r => r.Type = HitResult.Meh);
             }
+        }
+
+        protected override void UpdateInitialTransforms()
+        {
+            this.ScaleTo(intensity, HitObject.TimePreempt);
         }
 
         protected override void UpdateStateTransforms(ArmedState state)

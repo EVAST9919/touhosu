@@ -163,7 +163,9 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                             sliderEventPosition,
                             comboData,
                             index,
-                            MathExtensions.GetRandomTimedAngleOffset(e.Time)));
+                            MathExtensions.GetRandomTimedAngleOffset(e.Time),
+                            350f,
+                            0));
 
                         hitObjects.Add(new SoundHitObject
                         {
@@ -181,7 +183,9 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                             sliderEventPosition,
                             comboData,
                             index,
-                            MathExtensions.GetRandomTimedAngleOffset(e.Time)));
+                            MathExtensions.GetRandomTimedAngleOffset(e.Time),
+                            360f,
+                            0));
 
                         hitObjects.Add(new SoundHitObject
                         {
@@ -193,7 +197,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                 }
             }
 
-            hitObjects.AddRange(generateSliderBody(obj.StartTime, objPosition, curve, index, comboData, 5, 50));
+            hitObjects.AddRange(generateSliderBody(obj.StartTime, objPosition, curve, index, comboData, 6, 50));
 
             return hitObjects;
         }
@@ -337,25 +341,22 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             return hitObjects;
         }
 
-        private static List<TouhosuHitObject> generateSliderBody(double startTime, Vector2 position, IHasPathWithRepeats curve, int index, IHasCombo comboData, int objectsCount, float timeOffset)
+        private static IEnumerable<TouhosuHitObject> generateSliderBody(double startTime, Vector2 position, IHasPathWithRepeats curve, int index, IHasCombo comboData, int objectsCount, float timeOffset)
         {
-            List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
-
             for (int i = 0; i < objectsCount; i++)
             {
-                hitObjects.Add(new PathBullet
+                yield return new PathBullet
                 {
                     StartTime = startTime,
                     TimeOffset = timeOffset * i,
+                    Intensity = 1f - (float)i / (objectsCount + 1),
                     Position = position,
                     Path = curve,
                     NewCombo = comboData?.NewCombo ?? false,
                     ComboOffset = comboData?.ComboOffset ?? 0,
                     IndexInBeatmap = index
-                });
+                };
             }
-
-            return hitObjects;
         }
 
         public static List<TouhosuHitObject> ConvertSpinner(HitObject obj, IHasDuration endTime, int index)
@@ -381,7 +382,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             return hitObjects;
         }
 
-        private static IEnumerable<MovingBullet> generateExplosion(double startTime, int bulletCount, Vector2 position, IHasCombo comboData, int index, float angleOffset = 0, float angleRange = 360f)
+        private static IEnumerable<TouhosuHitObject> generateExplosion(double startTime, int bulletCount, Vector2 position, IHasCombo comboData, int index, float angleOffset = 0, float angleRange = 360f, double? timePreempt = null)
         {
             for (int i = 0; i < bulletCount; i++)
             {
@@ -392,14 +393,15 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                     Position = position,
                     NewCombo = comboData?.NewCombo ?? false,
                     ComboOffset = comboData?.ComboOffset ?? 0,
-                    IndexInBeatmap = index
+                    IndexInBeatmap = index,
+                    CustomTimePreempt = timePreempt
                 };
             }
         }
 
-        private static IEnumerable<MovingBullet> generatePolygonExplosion(double startTime, int bullets_per_side, int verticesCount, Vector2 position, IHasCombo comboData, int index, float angleOffset = 0)
+        private static IEnumerable<TouhosuHitObject> generatePolygonExplosion(double startTime, int bullets_per_side, int verticesCount, Vector2 position, IHasCombo comboData, int index, float angleOffset = 0)
         {
-            List<MovingBullet> hitObjects = new List<MovingBullet>();
+            List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
 
             for (int i = 0; i < verticesCount; i++)
                 hitObjects.AddRange(generatePolygonLine(startTime, bullets_per_side, verticesCount, position, comboData, index, i * (360f / verticesCount) + angleOffset));
@@ -407,7 +409,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             return hitObjects;
         }
 
-        private static IEnumerable<MovingBullet> generatePolygonLine(double startTime, int bullets_per_side, int verticesCount, Vector2 position, IHasCombo comboData, int index, float additionalOffset = 0)
+        private static IEnumerable<TouhosuHitObject> generatePolygonLine(double startTime, int bullets_per_side, int verticesCount, Vector2 position, IHasCombo comboData, int index, float additionalOffset = 0)
         {
             var s = 1.0;
             var side = s / (2 * Math.Sin(360.0 / (2 * verticesCount) * Math.PI / 180));
