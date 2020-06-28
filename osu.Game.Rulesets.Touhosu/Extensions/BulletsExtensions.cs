@@ -79,7 +79,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             hitObjects.AddRange(generatePolygonExplosion(
                 obj.StartTime,
-                4,
+                3,
                 randomBool ? 3 : 4,
                 circlePosition,
                 comboData,
