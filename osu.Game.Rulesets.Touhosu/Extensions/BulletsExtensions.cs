@@ -17,7 +17,6 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
     {
         private const int bullets_per_hitcircle = 5;
         private const int hitcircle_angle_offset = 5;
-        private const int max_visuals_per_slider_span = 120;
 
         private const int bullets_per_spinner_span = 20;
         private const float spinner_span_delay = 250f;
@@ -26,7 +25,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
         public static List<TouhosuHitObject> ConvertSlider(HitObject obj, IBeatmap beatmap, IHasPathWithRepeats curve, int index)
         {
             double spanDuration = curve.Duration / (curve.RepeatCount + 1);
-            bool isBuzz = spanDuration < 75 && curve.RepeatCount > 0;
+            bool isBuzz = spanDuration < 85 && curve.RepeatCount > 0;
 
             if (isBuzz)
                 return generateBuzzSlider(obj, beatmap, curve, spanDuration, index);
@@ -194,7 +193,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                 }
             }
 
-            hitObjects.AddRange(generateSliderBody(obj, curve, index));
+            hitObjects.AddRange(generateSliderBody(obj.StartTime, objPosition, curve, index, comboData, 5, 50));
 
             return hitObjects;
         }
@@ -224,15 +223,20 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             foreach (var e in SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, legacyLastTickOffset, new CancellationToken()))
             {
+                float angle, delta;
+
                 switch (e.Type)
                 {
                     case SliderEventType.Head:
+                        angle = (float)(angleRandom.NextDouble() * 360f);
+                        delta = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f);
+
                         hitObjects.AddRange(new TouhosuHitObject[]
                         {
                             new ReverseSliderBullet
                             {
-                                Angle = (float)(angleRandom.NextDouble() * 360f),
-                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
+                                Angle = angle,
+                                DeltaMultiplier = delta,
                                 StartTime = e.Time,
                                 Position = objPosition,
                                 NewCombo = comboData?.NewCombo ?? false,
@@ -241,8 +245,8 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                             },
                             new ReverseSliderBullet
                             {
-                                Angle = (float)(angleRandom.NextDouble() * 360f),
-                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
+                                Angle = angle + 180,
+                                DeltaMultiplier = delta,
                                 StartTime = e.Time,
                                 Position = objPosition,
                                 NewCombo = comboData?.NewCombo ?? false,
@@ -259,12 +263,15 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                         break;
 
                     case SliderEventType.Repeat:
+                        angle = (float)(angleRandom.NextDouble() * 360f);
+                        delta = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f);
+
                         hitObjects.AddRange(new TouhosuHitObject[]
                         {
                             new ReverseSliderBullet
                             {
-                                Angle = (float)(angleRandom.NextDouble() * 360f),
-                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
+                                Angle = angle,
+                                DeltaMultiplier = delta,
                                 StartTime = e.Time,
                                 Position = objPosition,
                                 NewCombo = comboData?.NewCombo ?? false,
@@ -273,8 +280,8 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                             },
                             new ReverseSliderBullet
                             {
-                                Angle = (float)(angleRandom.NextDouble() * 360f),
-                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
+                                Angle = angle + 180,
+                                DeltaMultiplier = delta,
                                 StartTime = e.Time,
                                 Position = objPosition,
                                 NewCombo = comboData?.NewCombo ?? false,
@@ -291,12 +298,15 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                         break;
 
                     case SliderEventType.Tail:
+                        angle = (float)(angleRandom.NextDouble() * 360f);
+                        delta = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f);
+
                         hitObjects.AddRange(new TouhosuHitObject[]
                         {
                             new ReverseSliderBullet
                             {
-                                Angle = (float)(angleRandom.NextDouble() * 360f),
-                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
+                                Angle = angle,
+                                DeltaMultiplier = delta,
                                 StartTime = e.Time,
                                 Position = objPosition,
                                 NewCombo = comboData?.NewCombo ?? false,
@@ -305,8 +315,8 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                             },
                             new ReverseSliderBullet
                             {
-                                Angle = (float)(angleRandom.NextDouble() * 360f),
-                                DeltaMultiplier = MathExtensions.Map((float)deltaRandom.NextDouble(), 0, 1, 0.9f, 1.1f),
+                                Angle = angle + 180,
+                                DeltaMultiplier = delta,
                                 StartTime = e.Time,
                                 Position = objPosition,
                                 NewCombo = comboData?.NewCombo ?? false,
@@ -327,31 +337,22 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             return hitObjects;
         }
 
-        private static List<SliderPartBullet> generateSliderBody(HitObject obj, IHasPathWithRepeats curve, int index)
+        private static List<TouhosuHitObject> generateSliderBody(double startTime, Vector2 position, IHasPathWithRepeats curve, int index, IHasCombo comboData, int objectsCount, float timeOffset)
         {
-            var objPosition = (obj as IHasPosition)?.Position ?? Vector2.Zero;
-            var comboData = obj as IHasCombo;
+            List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
 
-            List<SliderPartBullet> hitObjects = new List<SliderPartBullet>();
-
-            var bodyCherriesCount = Math.Min(curve.Distance * (curve.RepeatCount + 1) / 20, max_visuals_per_slider_span * (curve.RepeatCount + 1));
-
-            for (int i = 0; i < bodyCherriesCount; i++)
+            for (int i = 0; i < objectsCount; i++)
             {
-                var progress = (float)i / bodyCherriesCount;
-                var position = (curve.CurvePositionAt(progress) + objPosition) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
-
-                if (positionIsValid(position))
+                hitObjects.Add(new PathBullet
                 {
-                    hitObjects.Add(new SliderPartBullet
-                    {
-                        StartTime = obj.StartTime + curve.Duration * progress,
-                        Position = position,
-                        NewCombo = comboData?.NewCombo ?? false,
-                        ComboOffset = comboData?.ComboOffset ?? 0,
-                        IndexInBeatmap = index
-                    });
-                }
+                    StartTime = startTime,
+                    TimeOffset = timeOffset * i,
+                    Position = position,
+                    Path = curve,
+                    NewCombo = comboData?.NewCombo ?? false,
+                    ComboOffset = comboData?.ComboOffset ?? 0,
+                    IndexInBeatmap = index
+                });
             }
 
             return hitObjects;

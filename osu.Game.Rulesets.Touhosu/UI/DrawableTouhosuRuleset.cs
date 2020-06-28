@@ -29,9 +29,6 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 case SoundHitObject sound:
                     return new DrawableSoundHitObject(sound);
 
-                case SliderPartBullet sliderPart:
-                    return new DrawableSliderPartBullet(sliderPart);
-
                 case TickBullet tick:
                     return new DrawableTickBullet(tick);
 
@@ -43,6 +40,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
 
                 case MovingBullet moving:
                     return new DrawableMovingBullet(moving);
+
+                case PathBullet path:
+                    return new DrawablePathBullet(path);
             }
 
             return null;
