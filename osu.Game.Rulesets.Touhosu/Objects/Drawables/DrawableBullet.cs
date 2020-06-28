@@ -14,11 +14,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
     public abstract class DrawableBullet : DrawableTouhosuHitObject
     {
-        private const int hidden_distance = 70;
-        private const int hidden_distance_buffer = 50;
-
-        public bool HiddenApplied;
-
         protected virtual float GetBaseSize() => 25;
 
         protected virtual bool AffectPlayer() => false;
@@ -75,30 +70,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         protected override void UpdateInitialTransforms()
         {
             this.ScaleTo(Vector2.One, HitObject.TimePreempt);
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-
-            if (HiddenApplied)
-            {
-                var distance = CheckDistance.Invoke(this);
-
-                if (distance > hidden_distance + hidden_distance_buffer)
-                {
-                    Alpha = 1;
-                    return;
-                }
-
-                if (distance < hidden_distance)
-                {
-                    Alpha = 0;
-                    return;
-                }
-
-                Alpha = MathExtensions.Map(distance - hidden_distance, 0, hidden_distance_buffer, 0, 1);
-            }
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset)
