@@ -50,11 +50,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         protected override void CheckForResult(bool userTriggered, double timeOffset)
         {
-            var time = timeOffset - pathTimeOffset;
-
-            if (time > path.Duration)
+            if (timeOffset > path.Duration)
             {
-                hitTime = time;
+                hitTime = timeOffset;
                 ApplyResult(r => r.Type = HitResult.Meh);
             }
         }
@@ -69,7 +67,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             switch (state)
             {
                 case ArmedState.Hit:
-                    this.Delay(hitTime).FadeOut(150, Easing.Out);
+                    this.Delay(hitTime).FadeOut(200 / intensity, Easing.Out);
                     break;
             }
         }
