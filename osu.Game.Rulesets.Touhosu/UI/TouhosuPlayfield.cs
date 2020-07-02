@@ -32,6 +32,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             InternalChildren = new Drawable[]
             {
+                new PlayfieldBackground(),
                 new Container
                 {
                     RelativeSizeAxes = Axes.Both,
@@ -47,7 +48,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Size = new Vector2(550, 430),
+                    Size = new Vector2(550, 426),
                     X = -19,
                     Texture = textures.Get("Frame")
                 },
