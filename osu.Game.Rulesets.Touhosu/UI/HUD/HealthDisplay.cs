@@ -33,7 +33,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.HUD
             });
 
             for (int i = 0; i < 10; i++)
-                hearts[i] = new Sprite { Size = new Vector2(8) };
+                hearts[i] = new Sprite { Size = new Vector2(10) };
 
             hearts.ForEach(flow.Add);
         }
