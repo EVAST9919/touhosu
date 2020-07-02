@@ -73,6 +73,12 @@ namespace osu.Game.Rulesets.Touhosu
                         new TouhosuModHidden()
                     };
 
+                case ModType.Automation:
+                    return new Mod[]
+                    {
+                        new MultiMod(new TouhosuModAutoplay(), new TouhosuModCinema()),
+                    };
+
                 case ModType.Fun:
                     return new Mod[]
                     {
