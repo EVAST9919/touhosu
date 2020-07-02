@@ -9,8 +9,6 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
     public class FocusAnimation : CompositeDrawable
     {
-        public override bool RemoveCompletedTransforms => true;
-
         private readonly Sprite focus1;
         private readonly Sprite focus2;
 
