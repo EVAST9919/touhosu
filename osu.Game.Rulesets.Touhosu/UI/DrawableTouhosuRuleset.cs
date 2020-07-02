@@ -6,6 +6,9 @@ using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.UI;
 using System.Collections.Generic;
+using osu.Game.Input.Handlers;
+using osu.Game.Replays;
+using osu.Game.Rulesets.Touhosu.Replays;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -21,6 +24,10 @@ namespace osu.Game.Rulesets.Touhosu.UI
         protected override Playfield CreatePlayfield() => new TouhosuPlayfield((TouhosuRuleset)Ruleset);
 
         public override PlayfieldAdjustmentContainer CreatePlayfieldAdjustmentContainer() => new TouhosuPlayfieldAdjustmentContainer();
+
+        protected override ReplayRecorder CreateReplayRecorder(Replay replay) => new TouhosuReplayRecorder(replay, (TouhosuPlayfield)Playfield);
+
+        protected override ReplayInputHandler CreateReplayInputHandler(Replay replay) => new TouhosuFramedReplayInputHandler(replay);
 
         public override DrawableHitObject<TouhosuHitObject> CreateDrawableRepresentation(TouhosuHitObject h)
         {

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using osu.Game.Rulesets.UI;
 using osu.Framework.Bindables;
 using osu.Game.Rulesets.Touhosu.Extensions;
+using osu.Game.Rulesets.Touhosu.Replays;
 
 namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
@@ -178,11 +179,23 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         {
             base.Update();
 
+            updateReplayState();
+
             if (isDead)
                 return;
 
             move(Clock.ElapsedFrameTime, horizontalDirection, verticalDirection);
             updatePlayerState();
+        }
+
+        private void updateReplayState()
+        {
+            var state = (GetContainingInputManager().CurrentState as RulesetInputManagerInputState<TouhosuAction>)?.LastReplayState as TouhosuFramedReplayInputHandler.TouhosuReplayState ?? null;
+
+            if (state != null)
+            {
+                Player.Position = state.Position.Value;
+            }
         }
 
         private void move(double elapsedTime, int horizontalDirection, int verticalDirection)

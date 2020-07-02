@@ -22,7 +22,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         public static readonly float X_SCALE_MULTIPLIER = 0.6f;
 
         private readonly TouhosuRuleset ruleset;
-        private TouhosuPlayer player;
+        public TouhosuPlayer Player;
 
         public TouhosuPlayfield(TouhosuRuleset ruleset)
         {
@@ -42,7 +42,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     Children = new Drawable[]
                     {
                         new PlayfieldBackground(),
-                        player = new TouhosuPlayer(),
+                        Player = new TouhosuPlayer(),
                         HitObjectContainer
                     }
                 },
@@ -90,24 +90,24 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 }
             };
 
-            player.HitObjects = HitObjectContainer;
+            Player.HitObjects = HitObjectContainer;
         }
 
         public bool CheckHit(DrawableBullet obj)
         {
             var radius = obj.Size.X / 2;
-            var distance = MathExtensions.Distance(player.PlayerPosition(), obj.Position);
+            var distance = MathExtensions.Distance(Player.PlayerPosition(), obj.Position);
             var isHit = distance < radius + 2;
 
             if (isHit)
-                player.PlayMissAnimation();
+                Player.PlayMissAnimation();
 
             return isHit;
         }
 
-        public float CheckDistance(DrawableBullet obj) => (float)MathExtensions.Distance(player.PlayerPosition(), obj.Position);
+        public float CheckDistance(DrawableBullet obj) => (float)MathExtensions.Distance(Player.PlayerPosition(), obj.Position);
 
-        public float GetPlayerAngle(DrawableHomingBullet obj) => MathExtensions.GetPlayerAngle(player, obj.Position);
+        public float GetPlayerAngle(DrawableHomingBullet obj) => MathExtensions.GetPlayerAngle(Player, obj.Position);
 
         public override void Add(DrawableHitObject h)
         {
@@ -143,7 +143,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
 
         private void onFail()
         {
-            player.Die();
+            Player.Die();
         }
     }
 }

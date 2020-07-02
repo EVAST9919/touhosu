@@ -18,6 +18,8 @@ using osu.Game.Rulesets.Configuration;
 using osu.Game.Configuration;
 using osu.Game.Rulesets.Touhosu.Configuration;
 using osu.Game.Overlays.Settings;
+using osu.Game.Rulesets.Replays.Types;
+using osu.Game.Rulesets.Touhosu.Replays;
 
 namespace osu.Game.Rulesets.Touhosu
 {
@@ -38,6 +40,8 @@ namespace osu.Game.Rulesets.Touhosu
         public override HealthProcessor CreateHealthProcessor(double drainStartTime) => HealthProcessor = new TouhosuHealthProcessor();
 
         public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) => new TouhosuBeatmapConverter(beatmap, this);
+
+        public override IConvertibleReplayFrame CreateConvertibleReplayFrame() => new TouhosuReplayFrame();
 
         public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0) => new[]
         {
