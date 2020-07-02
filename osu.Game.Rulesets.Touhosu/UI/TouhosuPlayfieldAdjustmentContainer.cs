@@ -10,7 +10,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         protected override Container<Drawable> Content => content;
         private readonly Container content;
 
-        private const float playfield_size_adjust = 0.8f;
+        private const float playfield_size_adjust = 0.75f;
 
         public TouhosuPlayfieldAdjustmentContainer()
         {

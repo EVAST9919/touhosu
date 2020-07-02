@@ -3,8 +3,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Touhosu.UI.Objects;
 using osu.Game.Rulesets.UI;
 using osuTK;
-using osu.Framework.Graphics.Shapes;
-using osuTK.Graphics;
 using osu.Game.Rulesets.Touhosu.UI.HUD;
 using osu.Framework.Allocation;
 using osu.Game.Rulesets.Objects.Drawables;
@@ -41,10 +39,17 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     Masking = true,
                     Children = new Drawable[]
                     {
-                        new PlayfieldBackground(),
                         Player = new TouhosuPlayer(),
                         HitObjectContainer
                     }
+                },
+                new Sprite
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(550, 430),
+                    X = -19,
+                    Texture = textures.Get("Frame")
                 },
                 new Container
                 {
@@ -54,11 +59,6 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     X = X_SCALE_MULTIPLIER,
                     Children = new Drawable[]
                     {
-                        new Sprite
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Texture = textures.Get("Frame")
-                        },
                         new FillFlowContainer
                         {
                             Anchor = Anchor.Centre,
@@ -72,20 +72,6 @@ namespace osu.Game.Rulesets.Touhosu.UI
                                 new ScoreDisplay(ruleset.ScoreProcessor)
                             }
                         }
-                    }
-                },
-                new Container
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Masking = true,
-                    BorderThickness = 2,
-                    MaskingSmoothness = 1,
-                    BorderColour = Color4.White,
-                    Child = new Box
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        Alpha = 0,
-                        AlwaysPresent = true,
                     }
                 }
             };
