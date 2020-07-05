@@ -16,7 +16,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         public DrawableMovingBullet(MovingBullet h)
             : base(h)
         {
-            SpeedMultiplier = (float)(MathExtensions.Map((float)h.SpeedMultiplier, 0, 3, 0.4f, 0.5f) * h.DeltaMultiplier / 3f);
+            SpeedMultiplier = (float)(MathExtensions.Map((float)h.SpeedMultiplier, 0, 3, 0.4f, 0.5f) * h.DeltaMultiplier / 2.8f);
         }
 
         protected override bool AffectPlayer() => true;
