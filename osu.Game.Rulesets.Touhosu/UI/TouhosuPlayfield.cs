@@ -80,7 +80,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
             Player.HitObjects = HitObjectContainer;
         }
 
-        public bool CheckHit(DrawableBullet obj)
+        public bool CheckHit(DrawableProjectile obj)
         {
             var radius = obj.Size.X / 2;
             var distance = MathExtensions.Distance(Player.PlayerPosition(), obj.Position);
@@ -92,21 +92,21 @@ namespace osu.Game.Rulesets.Touhosu.UI
             return isHit;
         }
 
-        public float CheckDistance(DrawableBullet obj) => (float)MathExtensions.Distance(Player.PlayerPosition(), obj.Position);
+        public float CheckDistance(DrawableProjectile obj) => (float)MathExtensions.Distance(Player.PlayerPosition(), obj.Position);
 
-        public float GetPlayerAngle(DrawableHomingBullet obj) => MathExtensions.GetPlayerAngle(Player, obj.Position);
+        public float GetPlayerAngle(DrawableHomingProjectile obj) => MathExtensions.GetPlayerAngle(Player, obj.Position);
 
         public override void Add(DrawableHitObject h)
         {
             base.Add(h);
 
-            if (h is DrawableBullet bullet)
+            if (h is DrawableProjectile bullet)
             {
                 bullet.CheckHit += CheckHit;
                 bullet.CheckDistance += CheckDistance;
             }
 
-            if (h is DrawableHomingBullet homingBullet)
+            if (h is DrawableHomingProjectile homingBullet)
             {
                 homingBullet.PlayerAngle = GetPlayerAngle;
             }

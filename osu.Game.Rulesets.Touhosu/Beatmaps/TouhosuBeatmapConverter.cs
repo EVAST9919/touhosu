@@ -34,15 +34,15 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
             switch (obj)
             {
                 case IHasPathWithRepeats curve:
-                    hitObjects.AddRange(BulletsExtensions.ConvertSlider(obj, beatmap, curve, index));
+                    hitObjects.AddRange(ProjectileExtensions.ConvertSlider(obj, beatmap, curve, index));
                     break;
 
                 case IHasDuration endTime:
-                    hitObjects.AddRange(BulletsExtensions.ConvertSpinner(obj, endTime, index));
+                    hitObjects.AddRange(ProjectileExtensions.ConvertSpinner(obj, endTime, index));
                     break;
 
                 default:
-                    hitObjects.AddRange(BulletsExtensions.ConvertHitCircle(obj, index, objectIndexInCurrentCombo));
+                    hitObjects.AddRange(ProjectileExtensions.ConvertHitCircle(obj, index, objectIndexInCurrentCombo));
                     break;
             }
 

@@ -4,7 +4,7 @@ using osu.Game.Rulesets.Touhosu.Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public class DrawableMovingBullet : DrawableBullet
+    public class DrawableAngeledProjectile : DrawableProjectile
     {
         private const int hidden_distance = 70;
         private const int hidden_distance_buffer = 50;
@@ -13,7 +13,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         protected readonly float SpeedMultiplier;
 
-        public DrawableMovingBullet(MovingBullet h)
+        public DrawableAngeledProjectile(AngeledProjectile h)
             : base(h)
         {
             SpeedMultiplier = (float)(MathExtensions.Map((float)h.SpeedMultiplier, 0, 3, 0.4f, 0.5f) * h.DeltaMultiplier / 2.8f);
@@ -21,7 +21,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         protected override bool AffectPlayer() => true;
 
-        protected virtual float GetAngle() => MathExtensions.GetSafeAngle(((MovingBullet)HitObject).Angle);
+        protected virtual float GetAngle() => MathExtensions.GetSafeAngle(((AngeledProjectile)HitObject).Angle);
 
         private float? angle;
 
@@ -31,7 +31,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
             updateHidden();
 
-            Vector2 newPosition = (Time.Current > HitObject.StartTime) ? UpdatePosition(Time.Current) : HitObject.Position;
+            var time = Time.Current;
+
+            Vector2 newPosition = (time > HitObject.StartTime) ? UpdatePosition(time) : HitObject.Position;
 
             if (newPosition == Position)
                 return;
@@ -47,7 +49,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                 Rotation = angle ?? 0;
             }
 
-            var elapsedTime = Clock.CurrentTime - HitObject.StartTime;
+            var elapsedTime = currentTime - HitObject.StartTime;
             var xPosition = HitObject.Position.X + (elapsedTime * SpeedMultiplier * Math.Sin((angle ?? 0) * Math.PI / 180));
             var yPosition = HitObject.Position.Y + (elapsedTime * SpeedMultiplier * -Math.Cos((angle ?? 0) * Math.PI / 180));
             return new Vector2((float)xPosition, (float)yPosition);

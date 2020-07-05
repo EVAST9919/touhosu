@@ -11,13 +11,13 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
         public override IEnumerable<BeatmapStatistic> GetStatistics()
         {
             var totalCount = HitObjects.Count();
-            var hitCount = HitObjects.Count(s => s is MovingBullet);
+            var hitCount = HitObjects.Count(s => s is AngeledProjectile);
 
             return new[]
             {
                 new BeatmapStatistic
                 {
-                    Name = @"Bullets",
+                    Name = @"Projectiles",
                     Content = hitCount.ToString(),
                     Icon = FontAwesome.Regular.Circle
                 }

@@ -1,6 +1,6 @@
 ﻿namespace osu.Game.Rulesets.Touhosu.Objects
 {
-    public class HomingBullet : MovingBullet
+    public class HomingProjectile : AngeledProjectile
     {
     }
 }

@@ -5,7 +5,7 @@ using osu.Game.Rulesets.Judgements;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
-    public class MovingBullet : Bullet
+    public class AngeledProjectile : Projectile
     {
         public float Angle { get; set; }
 

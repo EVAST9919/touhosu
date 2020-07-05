@@ -2,14 +2,14 @@
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public class DrawableHomingBullet : DrawableMovingBullet
+    public class DrawableHomingProjectile : DrawableAngeledProjectile
     {
-        public DrawableHomingBullet(HomingBullet h)
+        public DrawableHomingProjectile(HomingProjectile h)
             : base(h)
         {
         }
 
-        public Func<DrawableHomingBullet, float> PlayerAngle;
+        public Func<DrawableHomingProjectile, float> PlayerAngle;
 
         protected override float GetAngle() => PlayerAngle.Invoke(this);
     }

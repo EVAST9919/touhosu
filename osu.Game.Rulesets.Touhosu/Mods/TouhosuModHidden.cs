@@ -11,10 +11,10 @@ namespace osu.Game.Rulesets.Touhosu.Mods
 
         protected override void ApplyHiddenState(DrawableHitObject drawable, ArmedState state)
         {
-            if (!(drawable is DrawableMovingBullet))
+            if (!(drawable is DrawableAngeledProjectile))
                 return;
 
-            var drawableCherry = (DrawableMovingBullet)drawable;
+            var drawableCherry = (DrawableAngeledProjectile)drawable;
             drawableCherry.HiddenApplied = true;
         }
     }

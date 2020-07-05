@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace osu.Game.Rulesets.Touhosu.Extensions
 {
-    public static class BulletsExtensions
+    public static class ProjectileExtensions
     {
         private const int bullets_per_hitcircle = 5;
         private const int hitcircle_angle_offset = 5;
@@ -136,7 +136,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         if (positionIsValid(sliderEventPosition))
                         {
-                            hitObjects.Add(new TickBullet
+                            hitObjects.Add(new TickProjectile
                             {
                                 Angle = 180,
                                 StartTime = e.Time,
@@ -237,7 +237,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         hitObjects.AddRange(new TouhosuHitObject[]
                         {
-                            new ReverseSliderBullet
+                            new BuzzSliderProjectile
                             {
                                 Angle = angle,
                                 DeltaMultiplier = delta,
@@ -247,7 +247,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                                 ComboOffset = comboData?.ComboOffset ?? 0,
                                 IndexInBeatmap = index
                             },
-                            new ReverseSliderBullet
+                            new BuzzSliderProjectile
                             {
                                 Angle = angle + 180,
                                 DeltaMultiplier = delta,
@@ -272,7 +272,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         hitObjects.AddRange(new TouhosuHitObject[]
                         {
-                            new ReverseSliderBullet
+                            new BuzzSliderProjectile
                             {
                                 Angle = angle,
                                 DeltaMultiplier = delta,
@@ -282,7 +282,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                                 ComboOffset = comboData?.ComboOffset ?? 0,
                                 IndexInBeatmap = index
                             },
-                            new ReverseSliderBullet
+                            new BuzzSliderProjectile
                             {
                                 Angle = angle + 180,
                                 DeltaMultiplier = delta,
@@ -307,7 +307,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
                         hitObjects.AddRange(new TouhosuHitObject[]
                         {
-                            new ReverseSliderBullet
+                            new BuzzSliderProjectile
                             {
                                 Angle = angle,
                                 DeltaMultiplier = delta,
@@ -317,7 +317,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                                 ComboOffset = comboData?.ComboOffset ?? 0,
                                 IndexInBeatmap = index
                             },
-                            new ReverseSliderBullet
+                            new BuzzSliderProjectile
                             {
                                 Angle = angle + 180,
                                 DeltaMultiplier = delta,
@@ -348,7 +348,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             for (int i = 0; i < objectsCount; i++)
             {
-                yield return new PathBullet
+                yield return new PathProjectile
                 {
                     StartTime = startTime,
                     TimeOffset = timeOffset * i,
@@ -389,7 +389,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
         {
             for (int i = 0; i < bulletCount; i++)
             {
-                yield return new MovingBullet
+                yield return new AngeledProjectile
                 {
                     Angle = MathExtensions.BulletDistribution(bulletCount, angleRange, i, angleOffset),
                     StartTime = startTime,
@@ -402,7 +402,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             }
         }
 
-        private static IEnumerable<TouhosuHitObject> generatePolygonExplosion(double startTime, int bullets_per_side, int verticesCount, Vector2 position, IHasCombo comboData, int index, float angleOffset = 0)
+        private static List<TouhosuHitObject> generatePolygonExplosion(double startTime, int bullets_per_side, int verticesCount, Vector2 position, IHasCombo comboData, int index, float angleOffset = 0)
         {
             List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
 
@@ -426,7 +426,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                 var missingAngle = c == 0 ? 0 : Math.Acos((MathExtensions.Pow((float)side) + MathExtensions.Pow((float)length) - MathExtensions.Pow(c)) / (2 * side * length)) * 180 / Math.PI;
                 var currentAngle = 180 + (90 - partialAngle) - missingAngle;
 
-                yield return new MovingBullet
+                yield return new AngeledProjectile
                 {
                     Angle = (float)currentAngle + additionalOffset,
                     DeltaMultiplier = length / side * 1.2f,

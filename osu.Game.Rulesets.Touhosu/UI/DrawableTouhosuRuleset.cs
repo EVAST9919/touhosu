@@ -36,20 +36,20 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 case SoundHitObject sound:
                     return new DrawableSoundHitObject(sound);
 
-                case TickBullet tick:
-                    return new DrawableTickBullet(tick);
+                case TickProjectile tick:
+                    return new DrawableTickProjectile(tick);
 
-                case HomingBullet homing:
-                    return new DrawableHomingBullet(homing);
+                case HomingProjectile homing:
+                    return new DrawableHomingProjectile(homing);
 
-                case ReverseSliderBullet rSlider:
-                    return new DrawableReverseSliderBullet(rSlider);
+                case BuzzSliderProjectile rSlider:
+                    return new DrawableBuzzSliderProjectile(rSlider);
 
-                case MovingBullet moving:
-                    return new DrawableMovingBullet(moving);
+                case AngeledProjectile moving:
+                    return new DrawableAngeledProjectile(moving);
 
-                case PathBullet path:
-                    return new DrawablePathBullet(path);
+                case PathProjectile path:
+                    return new DrawablePathProjectile(path);
             }
 
             return null;

@@ -7,13 +7,13 @@ using osuTK;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public class DrawablePathBullet : DrawableBullet
+    public class DrawablePathProjectile : DrawableProjectile
     {
         private readonly IHasPathWithRepeats path;
         private readonly float pathTimeOffset;
         private readonly float intensity;
 
-        public DrawablePathBullet(PathBullet h)
+        public DrawablePathProjectile(PathProjectile h)
             : base(h)
         {
             path = h.Path;

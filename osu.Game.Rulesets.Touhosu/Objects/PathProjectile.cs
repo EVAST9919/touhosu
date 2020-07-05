@@ -2,7 +2,7 @@
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
-    public class PathBullet : Bullet
+    public class PathProjectile : Projectile
     {
         public IHasPathWithRepeats Path { get; set; }
 

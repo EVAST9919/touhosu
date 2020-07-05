@@ -5,7 +5,7 @@ using osu.Game.Rulesets.Judgements;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
-    public class Bullet : TouhosuHitObject
+    public class Projectile : TouhosuHitObject
     {
         public float CircleSize { get; set; } = 1;
 

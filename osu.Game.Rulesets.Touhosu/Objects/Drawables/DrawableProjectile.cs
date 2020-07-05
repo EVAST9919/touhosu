@@ -12,9 +12,9 @@ using System;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public abstract class DrawableBullet : DrawableTouhosuHitObject
+    public abstract class DrawableProjectile : DrawableTouhosuHitObject
     {
-        protected virtual float GetBaseSize() => 25;
+        protected virtual float BaseSize() => 25;
 
         protected virtual bool AffectPlayer() => false;
 
@@ -25,11 +25,11 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         protected Container Content;
         private double missTime;
 
-        protected DrawableBullet(Bullet h)
+        protected DrawableProjectile(Projectile h)
             : base(h)
         {
             Origin = Anchor.Centre;
-            Size = new Vector2(GetBaseSize() * MathExtensions.Map(h.CircleSize, 0, 10, 0.2f, 1));
+            Size = new Vector2(BaseSize() * MathExtensions.Map(h.CircleSize, 0, 10, 0.2f, 1));
             Position = h.Position;
             Scale = Vector2.Zero;
         }
@@ -97,9 +97,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             }
         }
 
-        public Func<DrawableBullet, bool> CheckHit;
+        public Func<DrawableProjectile, bool> CheckHit;
 
-        public Func<DrawableBullet, float> CheckDistance;
+        public Func<DrawableProjectile, float> CheckDistance;
 
         protected override void UpdateStateTransforms(ArmedState state)
         {
