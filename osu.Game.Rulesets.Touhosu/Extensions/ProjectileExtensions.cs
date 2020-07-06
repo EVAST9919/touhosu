@@ -344,7 +344,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
         private static IEnumerable<TouhosuHitObject> generateSliderBody(double startTime, Vector2 position, IHasPathWithRepeats curve, int index, IHasCombo comboData)
         {
             var objectsCount = (int)Math.Clamp(curve.Distance / 35, 3, 12);
-            var timeOffset = (float)(curve.Duration / (curve.RepeatCount + 1) / 1000 * 100);
+            var timeOffset = (float)(curve.Duration / objectsCount);
 
             for (int i = 0; i < objectsCount; i++)
             {

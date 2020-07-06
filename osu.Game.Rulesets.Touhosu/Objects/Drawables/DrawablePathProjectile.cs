@@ -40,10 +40,10 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         {
             var elapsedTime = currentTime - HitObject.StartTime;
 
-            if (elapsedTime > path.Duration)
+            if (elapsedTime + pathTimeOffset > path.Duration)
                 return HitObject.Position + path.CurvePositionAt(1);
 
-            return HitObject.Position + path.CurvePositionAt(elapsedTime / path.Duration);
+            return HitObject.Position + path.CurvePositionAt(elapsedTime / (path.Duration - pathTimeOffset));
         }
 
         private double hitTime;
@@ -67,7 +67,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             switch (state)
             {
                 case ArmedState.Hit:
-                    this.Delay(hitTime).FadeOut(200 / intensity, Easing.Out);
+                    this.Delay(hitTime).FadeOut();
                     break;
             }
         }
