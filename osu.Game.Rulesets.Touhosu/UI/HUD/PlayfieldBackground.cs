@@ -23,7 +23,8 @@ namespace osu.Game.Rulesets.Touhosu.UI.HUD
             AddInternal(bg = new Box
             {
                 RelativeSizeAxes = Axes.Both,
-                Colour = Color4.Black
+                Colour = Color4.Black,
+                AlwaysPresent = true,
             });
         }
 

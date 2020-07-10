@@ -8,6 +8,9 @@ using osu.Framework.Allocation;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Touhosu.Objects.Drawables;
 using osu.Game.Rulesets.Touhosu.Extensions;
+using osuTK.Graphics;
+using osu.Framework.Graphics.Effects;
+using osu.Framework.Extensions.Color4Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -37,6 +40,15 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     Size = PLAYFIELD_SIZE,
                     Masking = true,
                     CornerRadius = 7,
+                    BorderThickness = 1.2f,
+                    BorderColour = Color4.White,
+                    EdgeEffect = new EdgeEffectParameters
+                    {
+                        Hollow = true,
+                        Radius = 10,
+                        Colour = Color4.Black.Opacity(0.4f),
+                        Type = EdgeEffectType.Shadow,
+                    },
                     Children = new Drawable[]
                     {
                         new PlayfieldBackground(),
