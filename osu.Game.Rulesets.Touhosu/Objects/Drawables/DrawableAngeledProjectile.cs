@@ -19,8 +19,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             SpeedMultiplier = (float)(MathExtensions.Map((float)h.SpeedMultiplier, 0, 3, 0.4f, 0.5f) * h.DeltaMultiplier / 2.8f);
         }
 
-        protected override bool AffectPlayer() => true;
-
         protected virtual float GetAngle() => MathExtensions.GetSafeAngle(((AngeledProjectile)HitObject).Angle);
 
         private float? angle;

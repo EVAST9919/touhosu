@@ -9,6 +9,10 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
     public class DrawablePathProjectile : DrawableProjectile
     {
+        protected override bool CheckWallCollision() => false;
+
+        protected override bool AffectPlayer() => false;
+
         private readonly IHasPathWithRepeats path;
         private readonly float pathTimeOffset;
         private readonly float intensity;

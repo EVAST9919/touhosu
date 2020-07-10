@@ -16,9 +16,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
     {
         protected virtual float BaseSize() => 25;
 
-        protected virtual bool AffectPlayer() => false;
+        protected virtual bool AffectPlayer() => true;
 
-        protected virtual float GetWallCheckOffset() => 0;
+        protected virtual bool CheckWallCollision() => true;
 
         private Sprite texture;
         private Sprite overlay;
@@ -86,7 +86,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                     }
                 }
 
-                if (timeOffset > GetWallCheckOffset())
+                if (CheckWallCollision())
                 {
                     if (Position.X > TouhosuPlayfield.ACTUAL_SIZE.X + Size.X / 2f
                     || Position.X < -Size.X / 2f
