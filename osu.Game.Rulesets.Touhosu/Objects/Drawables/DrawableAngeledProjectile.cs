@@ -16,7 +16,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         public DrawableAngeledProjectile(AngeledProjectile h)
             : base(h)
         {
-            SpeedMultiplier = (float)(MathExtensions.Map((float)h.SpeedMultiplier, 0, 3, 0.4f, 0.5f) * h.DeltaMultiplier / 2.8f);
+            SpeedMultiplier = (float)(MathExtensions.Map((float)h.SpeedMultiplier, 0, 3, 0.4f, 0.5f) * h.DeltaMultiplier / 2.5f);
         }
 
         protected virtual float GetAngle() => MathExtensions.GetSafeAngle(((AngeledProjectile)HitObject).Angle);
