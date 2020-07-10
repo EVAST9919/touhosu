@@ -39,7 +39,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                 },
             });
 
-            var time = speed_per_field * (position.Y / TouhosuPlayfield.ACTUAL_SIZE.Y);
+            var time = speed_per_field * (position.Y / TouhosuPlayfield.PLAYFIELD_SIZE.Y);
             left.MoveToY(0, time).Expire();
             right.MoveToY(0, time).Expire();
         }

@@ -53,7 +53,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                 Player = new Container
                 {
                     Origin = Anchor.Centre,
-                    Position = new Vector2(TouhosuPlayfield.ACTUAL_SIZE.X / 2f, TouhosuPlayfield.ACTUAL_SIZE.Y - 20),
+                    Position = new Vector2(TouhosuPlayfield.PLAYFIELD_SIZE.X / 2f, TouhosuPlayfield.PLAYFIELD_SIZE.Y - 20),
                     Children = new Drawable[]
                     {
                         focus = new FocusAnimation(),
@@ -221,8 +221,8 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                 newX += (horizontalDirection > 0 ? -1 : 1) * offset;
                 newY += (verticalDirection > 0 ? -1 : 1) * offset;
 
-                newX = Math.Clamp(newX, animationContainer.Width / 2, TouhosuPlayfield.ACTUAL_SIZE.X - animationContainer.Width / 2);
-                newY = Math.Clamp(newY, animationContainer.Height / 2, TouhosuPlayfield.ACTUAL_SIZE.Y - animationContainer.Height / 2);
+                newX = Math.Clamp(newX, animationContainer.Width / 2, TouhosuPlayfield.PLAYFIELD_SIZE.X - animationContainer.Width / 2);
+                newY = Math.Clamp(newY, animationContainer.Height / 2, TouhosuPlayfield.PLAYFIELD_SIZE.Y - animationContainer.Height / 2);
 
                 Player.Position = new Vector2((float)newX, (float)newY);
                 return;
@@ -230,14 +230,14 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
             if (movingV)
             {
-                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * elapsedTime * base_speed * speedMultiplier, animationContainer.Height / 2, TouhosuPlayfield.ACTUAL_SIZE.Y - animationContainer.Height / 2);
+                var position = Math.Clamp(Player.Y + Math.Sign(verticalDirection) * elapsedTime * base_speed * speedMultiplier, animationContainer.Height / 2, TouhosuPlayfield.PLAYFIELD_SIZE.Y - animationContainer.Height / 2);
                 Player.Y = (float)position;
                 return;
             }
 
             if (movingH)
             {
-                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * elapsedTime * base_speed * speedMultiplier, animationContainer.Width / 2, TouhosuPlayfield.ACTUAL_SIZE.X - animationContainer.Width / 2);
+                var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * elapsedTime * base_speed * speedMultiplier, animationContainer.Width / 2, TouhosuPlayfield.PLAYFIELD_SIZE.X - animationContainer.Width / 2);
                 Player.X = (float)position;
             }
         }

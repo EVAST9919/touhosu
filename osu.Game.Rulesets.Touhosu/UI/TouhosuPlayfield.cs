@@ -8,15 +8,13 @@ using osu.Framework.Allocation;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Touhosu.Objects.Drawables;
 using osu.Game.Rulesets.Touhosu.Extensions;
-using osu.Framework.Graphics.Textures;
-using osu.Framework.Graphics.Sprites;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
     public class TouhosuPlayfield : Playfield
     {
-        public static readonly Vector2 BASE_SIZE = new Vector2(512, 384);
-        public static readonly Vector2 ACTUAL_SIZE = new Vector2(307, 384);
+        public static readonly Vector2 FULL_SIZE = new Vector2(512, 384);
+        public static readonly Vector2 PLAYFIELD_SIZE = new Vector2(307, 384);
         public static readonly float X_SCALE_MULTIPLIER = 0.6f;
 
         private readonly TouhosuRuleset ruleset;
@@ -28,51 +26,22 @@ namespace osu.Game.Rulesets.Touhosu.UI
         }
 
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures)
+        private void load()
         {
             InternalChildren = new Drawable[]
             {
-                new PlayfieldBackground(),
                 new Container
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(X_SCALE_MULTIPLIER, 1),
-                    Masking = true,
-                    Children = new Drawable[]
-                    {
-                        Player = new TouhosuPlayer(),
-                        HitObjectContainer
-                    }
-                },
-                new Sprite
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Size = new Vector2(550, 426),
-                    X = -19,
-                    Texture = textures.Get("Frame")
-                },
-                new Container
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(1 - X_SCALE_MULTIPLIER, 1),
-                    RelativePositionAxes = Axes.Both,
-                    X = X_SCALE_MULTIPLIER,
+                    Size = PLAYFIELD_SIZE,
+                    Masking = true,
+                    CornerRadius = 7,
                     Children = new Drawable[]
                     {
-                        new FillFlowContainer
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            AutoSizeAxes = Axes.Both,
-                            Direction = FillDirection.Vertical,
-                            Spacing = new Vector2(0, 5),
-                            Children = new Drawable[]
-                            {
-                                new HealthDisplay(ruleset.HealthProcessor),
-                                new ScoreDisplay(ruleset.ScoreProcessor)
-                            }
-                        }
+                        new PlayfieldBackground(),
+                        Player = new TouhosuPlayer(),
+                        HitObjectContainer
                     }
                 }
             };

@@ -10,7 +10,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         protected override Container<Drawable> Content => content;
         private readonly Container content;
 
-        private const float playfield_size_adjust = 0.85f;
+        private const float playfield_size_adjust = 0.83f;
 
         public TouhosuPlayfieldAdjustmentContainer()
         {
@@ -38,7 +38,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
             protected override void Update()
             {
                 base.Update();
-                Scale = new Vector2(Parent.ChildSize.X / TouhosuPlayfield.BASE_SIZE.X);
+                Scale = new Vector2(Parent.ChildSize.X / TouhosuPlayfield.FULL_SIZE.X);
                 Size = Vector2.Divide(Vector2.One, Scale);
             }
         }

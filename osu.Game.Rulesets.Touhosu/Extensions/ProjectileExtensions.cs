@@ -448,7 +448,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
         private static bool positionIsValid(Vector2 position)
         {
-            if (position.X > TouhosuPlayfield.ACTUAL_SIZE.X || position.X < 0 || position.Y < 0 || position.Y > TouhosuPlayfield.ACTUAL_SIZE.Y)
+            if (position.X > TouhosuPlayfield.PLAYFIELD_SIZE.X || position.X < 0 || position.Y < 0 || position.Y > TouhosuPlayfield.PLAYFIELD_SIZE.Y)
                 return false;
 
             return true;

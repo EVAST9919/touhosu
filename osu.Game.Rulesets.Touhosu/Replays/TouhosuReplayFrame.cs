@@ -22,7 +22,7 @@ namespace osu.Game.Rulesets.Touhosu.Replays
         public TouhosuReplayFrame(double time, Vector2? position = null, bool focused = false, bool shooting = false, TouhosuReplayFrame lastFrame = null)
             : base(time)
         {
-            Position = position ?? new Vector2(TouhosuPlayfield.ACTUAL_SIZE.X / 2f, TouhosuPlayfield.ACTUAL_SIZE.Y + 100);
+            Position = position ?? new Vector2(TouhosuPlayfield.PLAYFIELD_SIZE.X / 2f, TouhosuPlayfield.PLAYFIELD_SIZE.Y + 100);
             Focused = focused;
             Shooting = shooting;
 

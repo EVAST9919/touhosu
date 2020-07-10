@@ -5,7 +5,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
     public class DrawableSoundHitObject : DrawableTouhosuHitObject
     {
-        protected override float SamplePlaybackPosition => HitObject.X / TouhosuPlayfield.ACTUAL_SIZE.X;
+        protected override float SamplePlaybackPosition => HitObject.X / TouhosuPlayfield.PLAYFIELD_SIZE.X;
 
         public DrawableSoundHitObject(SoundHitObject h)
             : base(h)

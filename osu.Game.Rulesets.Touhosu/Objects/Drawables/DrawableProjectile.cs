@@ -88,9 +88,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
                 if (CheckWallCollision())
                 {
-                    if (Position.X > TouhosuPlayfield.ACTUAL_SIZE.X + Size.X / 2f
+                    if (Position.X > TouhosuPlayfield.PLAYFIELD_SIZE.X + Size.X / 2f
                     || Position.X < -Size.X / 2f
-                    || Position.Y > TouhosuPlayfield.BASE_SIZE.Y + Size.Y / 2f
+                    || Position.Y > TouhosuPlayfield.PLAYFIELD_SIZE.Y + Size.Y / 2f
                     || Position.Y < -Size.Y / 2f)
                         ApplyResult(r => r.Type = HitResult.Perfect);
                 }
