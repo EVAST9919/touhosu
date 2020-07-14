@@ -13,6 +13,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         protected override bool AffectPlayer() => false;
 
+        protected override bool UseGlow() => false;
+
         private readonly IHasPathWithRepeats path;
         private readonly float pathTimeOffset;
         private readonly float intensity;

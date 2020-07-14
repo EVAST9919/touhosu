@@ -9,6 +9,8 @@ using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.Touhosu.UI;
 using System;
+using osu.Framework.Graphics.Effects;
+using osu.Framework.Extensions.Color4Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
@@ -20,9 +22,11 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         protected virtual bool CheckWallCollision() => true;
 
+        protected virtual bool UseGlow() => true;
+
         private Sprite texture;
         private Sprite overlay;
-        protected Container Content;
+        protected CircularContainer Content;
         private double missTime;
 
         protected DrawableProjectile(Projectile h)
@@ -37,7 +41,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
-            AddInternal(Content = new Container
+            AddInternal(Content = new CircularContainer
             {
                 RelativeSizeAxes = Axes.Both,
                 Anchor = Anchor.Centre,
@@ -59,10 +63,26 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                 }
             });
 
+            if (UseGlow())
+                Content.Masking = true;
+
             texture.Texture = textures.Get($"Projectiles/{ProjectileName()}/texture");
             overlay.Texture = textures.Get($"Projectiles/{ProjectileName()}/overlay");
 
-            AccentColour.BindValueChanged(accent => overlay.Colour = accent.NewValue, true);
+            AccentColour.BindValueChanged(accent =>
+            {
+                overlay.Colour = accent.NewValue;
+
+                if (UseGlow())
+                {
+                    Content.EdgeEffect = new EdgeEffectParameters
+                    {
+                        Colour = accent.NewValue.Opacity(0.5f),
+                        Type = EdgeEffectType.Glow,
+                        Radius = 5,
+                    };
+                }
+            }, true);
         }
 
         protected virtual string ProjectileName() => "Sphere";
