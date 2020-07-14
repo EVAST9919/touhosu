@@ -77,7 +77,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                 {
                     Content.EdgeEffect = new EdgeEffectParameters
                     {
-                        Colour = accent.NewValue.Opacity(0.5f),
+                        Colour = accent.NewValue.Opacity(0.35f),
                         Type = EdgeEffectType.Glow,
                         Radius = 5,
                     };
