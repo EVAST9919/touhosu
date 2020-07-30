@@ -29,18 +29,16 @@ namespace osu.Game.Rulesets.Touhosu.Replays
             }
         }
 
-        public override List<IInput> GetPendingInputs()
+        public override void CollectPendingInputs(List<IInput> inputs)
         {
-            if (!Position.HasValue) return new List<IInput>();
-
-            return new List<IInput>
+            if (Position.HasValue)
             {
-                new TouhosuReplayState
+                inputs.Add(new TouhosuReplayState
                 {
                     PressedActions = CurrentFrame?.Actions ?? new List<TouhosuAction>(),
                     Position = Position.Value
-                },
-            };
+                });
+            }
         }
 
         public class TouhosuReplayState : ReplayState<TouhosuAction>
