@@ -2,9 +2,9 @@
 {
     public class DrawableBuzzSliderProjectile : DrawableAngeledProjectile
     {
-        protected override float BaseSize() => base.BaseSize() * 0.65f;
+        protected override float BaseSize => base.BaseSize * 0.65f;
 
-        protected override string ProjectileName() => "Grain";
+        protected override string ProjectileName => "Grain";
 
         public DrawableBuzzSliderProjectile(BuzzSliderProjectile h)
             : base(h)
