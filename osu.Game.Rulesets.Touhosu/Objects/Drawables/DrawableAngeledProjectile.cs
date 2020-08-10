@@ -21,7 +21,15 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         protected virtual float GetAngle() => MathExtensions.GetSafeAngle(((AngeledProjectile)HitObject).Angle);
 
-        private float? angle;
+        private float angle;
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            angle = GetAngle();
+            Rotation = angle;
+        }
 
         protected override void Update()
         {
@@ -41,15 +49,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         protected virtual Vector2 UpdatePosition(double currentTime)
         {
-            if (angle == null)
-            {
-                angle = GetAngle();
-                Rotation = angle ?? 0;
-            }
-
             var elapsedTime = currentTime - HitObject.StartTime;
-            var xPosition = HitObject.Position.X + (elapsedTime * Speed * Math.Sin((angle ?? 0) * Math.PI / 180));
-            var yPosition = HitObject.Position.Y + (elapsedTime * Speed * -Math.Cos((angle ?? 0) * Math.PI / 180));
+            var xPosition = HitObject.Position.X + (elapsedTime * Speed * Math.Sin(angle * Math.PI / 180));
+            var yPosition = HitObject.Position.Y + (elapsedTime * Speed * -Math.Cos(angle * Math.PI / 180));
             return new Vector2((float)xPosition, (float)yPosition);
         }
 
@@ -58,7 +60,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             if (!HiddenApplied)
                 return;
 
-            var distance = CheckDistance.Invoke(this);
+            var distance = GetDistanceFromPlayer.Invoke(this);
 
             if (distance > hidden_distance + hidden_distance_buffer)
             {

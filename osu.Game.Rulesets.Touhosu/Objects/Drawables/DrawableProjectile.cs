@@ -73,7 +73,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         public Func<DrawableProjectile, bool> CheckHit;
 
-        public Func<DrawableProjectile, float> CheckDistance;
+        public Func<DrawableProjectile, float> GetDistanceFromPlayer;
 
         protected override void UpdateStateTransforms(ArmedState state)
         {

@@ -74,7 +74,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
             return isHit;
         }
 
-        public float CheckDistance(DrawableProjectile obj) => (float)MathExtensions.Distance(Player.PlayerPosition(), obj.Position);
+        public float GetDistanceFromPlayer(DrawableProjectile obj) => (float)MathExtensions.Distance(Player.PlayerPosition(), obj.Position);
 
         public float GetPlayerAngle(DrawableHomingProjectile obj) => MathExtensions.GetPlayerAngle(Player, obj.Position);
 
@@ -87,7 +87,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 cExplosion.ProjectilesContainer.ForEach(p =>
                 {
                     p.CheckHit += CheckHit;
-                    p.CheckDistance += CheckDistance;
+                    p.GetDistanceFromPlayer += GetDistanceFromPlayer;
                 });
 
                 return;
@@ -98,7 +98,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 spinner.ProjectilesContainer.ForEach(p =>
                 {
                     p.CheckHit += CheckHit;
-                    p.CheckDistance += CheckDistance;
+                    p.GetDistanceFromPlayer += GetDistanceFromPlayer;
                 });
 
                 return;
