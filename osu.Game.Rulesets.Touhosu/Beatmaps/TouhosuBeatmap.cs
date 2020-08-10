@@ -10,15 +10,21 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
     {
         public override IEnumerable<BeatmapStatistic> GetStatistics()
         {
-            var totalCount = HitObjects.Count();
-            var hitCount = HitObjects.Count(s => s is AngeledProjectile);
+            var explosions = HitObjects.Count(s => s is Explosion);
+            var spinners = HitObjects.Count(s => s is Spinner);
 
             return new[]
             {
                 new BeatmapStatistic
                 {
-                    Name = @"Projectiles",
-                    Content = hitCount.ToString(),
+                    Name = @"Explosions",
+                    Content = explosions.ToString(),
+                    Icon = FontAwesome.Regular.Circle
+                },
+                new BeatmapStatistic
+                {
+                    Name = @"Spinners",
+                    Content = spinners.ToString(),
                     Icon = FontAwesome.Regular.Circle
                 }
             };
