@@ -1,4 +1,5 @@
-﻿using osu.Framework.Graphics.Containers;
+﻿using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
@@ -44,6 +45,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             return base.CreateNestedHitObject(hitObject);
         }
 
+        private double completionTime;
+
         protected override void CheckForResult(bool userTriggered, double timeOffset)
         {
             base.CheckForResult(userTriggered, timeOffset);
@@ -57,7 +60,21 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                     return;
             }
 
+            completionTime = timeOffset;
             ApplyResult(r => r.Type = HitResult.Meh);
+        }
+
+        protected override void UpdateStateTransforms(ArmedState state)
+        {
+            base.UpdateStateTransforms(state);
+
+            switch (state)
+            {
+                case ArmedState.Hit:
+                    using (BeginDelayedSequence(completionTime, true))
+                        this.FadeOut();
+                    break;
+            }
         }
     }
 }
