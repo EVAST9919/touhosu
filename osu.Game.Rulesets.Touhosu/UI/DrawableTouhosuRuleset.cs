@@ -33,6 +33,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             switch (h)
             {
+                case Spinner spinner:
+                    return new DrawableSpinner(spinner);
+
                 case CircularExplosion cExplosion:
                     return new DrawableCircularExplosion(cExplosion);
 

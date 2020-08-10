@@ -42,7 +42,15 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
                     break;
 
                 case IHasDuration endTime:
-                    //hitObjects.AddRange(ProjectileExtensions.ConvertSpinner(obj, endTime, index));
+                    hitObjects.Add(new Spinner
+                    {
+                        Position = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
+                        StartTime = obj.StartTime,
+                        Duration = endTime.Duration,
+                        NewCombo = comboData?.NewCombo ?? false,
+                        ComboOffset = comboData?.ComboOffset ?? 0,
+                        IndexInBeatmap = index
+                    });
                     break;
 
                 default:

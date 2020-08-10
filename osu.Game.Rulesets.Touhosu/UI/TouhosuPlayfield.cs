@@ -93,6 +93,17 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 return;
             }
 
+            if (h is DrawableSpinner spinner)
+            {
+                spinner.ProjectilesContainer.ForEach(p =>
+                {
+                    p.CheckHit += CheckHit;
+                    p.CheckDistance += CheckDistance;
+                });
+
+                return;
+            }
+
             //if (h is DrawableProjectile bullet)
             //{
             //    bullet.CheckHit += CheckHit;
