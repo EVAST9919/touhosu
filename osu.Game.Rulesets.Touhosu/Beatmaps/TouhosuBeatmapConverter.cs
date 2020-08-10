@@ -7,6 +7,10 @@ using osu.Game.Rulesets.Touhosu.Objects;
 using osu.Game.Rulesets.Touhosu.Extensions;
 using osuTK;
 using osu.Game.Rulesets.Touhosu.UI;
+using osu.Game.Beatmaps.ControlPoints;
+using System.Threading;
+using osu.Game.Audio;
+using System;
 
 namespace osu.Game.Rulesets.Touhosu.Beatmaps
 {
@@ -38,7 +42,114 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
             switch (obj)
             {
                 case IHasPathWithRepeats curve:
-                    //hitObjects.AddRange(ProjectileExtensions.ConvertSlider(obj, beatmap, curve, index));
+                    var objPosition = (obj as IHasPosition)?.Position ?? Vector2.Zero;
+                    var difficulty = beatmap.BeatmapInfo.BaseDifficulty;
+
+                    var controlPointInfo = beatmap.ControlPointInfo;
+                    TimingControlPoint timingPoint = controlPointInfo.TimingPointAt(obj.StartTime);
+                    DifficultyControlPoint difficultyPoint = controlPointInfo.DifficultyPointAt(obj.StartTime);
+
+                    double scoringDistance = 100 * difficulty.SliderMultiplier * difficultyPoint.SpeedMultiplier;
+
+                    var velocity = scoringDistance / timingPoint.BeatLength;
+                    var tickDistance = scoringDistance / difficulty.SliderTickRate;
+
+                    double legacyLastTickOffset = (obj as IHasLegacyLastTickOffset)?.LegacyLastTickOffset ?? 0;
+
+                    double spanDuration = curve.Duration / curve.SpanCount();
+
+                    foreach (var e in SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.SpanCount(), legacyLastTickOffset, new CancellationToken()))
+                    {
+                        var sliderEventPosition = (curve.CurvePositionAt(e.PathProgress / (curve.RepeatCount + 1)) + objPosition) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
+
+                        switch (e.Type)
+                        {
+                            case SliderEventType.Head:
+                                if (objectIndexInCurrentCombo == 0)
+                                {
+                                    hitObjects.Add(new ShapedExplosion
+                                    {
+                                        Position = sliderEventPosition,
+                                        StartTime = e.Time,
+                                        ProjectilesPerSide = 3,
+                                        SideCount = MathExtensions.GetRandomTimedBool(obj.StartTime) ? 3 : 4,
+                                        Samples = obj.Samples,
+                                        NewCombo = comboData?.NewCombo ?? false,
+                                        ComboOffset = comboData?.ComboOffset ?? 0,
+                                        IndexInBeatmap = index,
+                                        AngleOffset = MathExtensions.GetRandomTimedAngleOffset(obj.StartTime)
+                                    });
+                                }
+                                else
+                                {
+                                    hitObjects.Add(new CircularExplosion
+                                    {
+                                        Position = sliderEventPosition,
+                                        StartTime = e.Time,
+                                        ProjectileCount = 5,
+                                        Samples = obj.Samples,
+                                        NewCombo = comboData?.NewCombo ?? false,
+                                        ComboOffset = comboData?.ComboOffset ?? 0,
+                                        IndexInBeatmap = index,
+                                        AngleOffset = hitcircle_angle_offset * objectIndexInCurrentCombo
+                                    });
+                                }
+
+                                break;
+
+                            case SliderEventType.Tick:
+                                if (positionIsValid(sliderEventPosition))
+                                {
+                                    hitObjects.Add(new TickProjectile
+                                    {
+                                        StartTime = e.Time,
+                                        Position = sliderEventPosition,
+                                        NewCombo = comboData?.NewCombo ?? false,
+                                        ComboOffset = comboData?.ComboOffset ?? 0,
+                                        IndexInBeatmap = index
+                                    });
+                                }
+
+                                hitObjects.Add(new SoundHitObject
+                                {
+                                    StartTime = e.Time,
+                                    Samples = getTickSamples(obj.Samples),
+                                    Position = sliderEventPosition
+                                });
+
+                                break;
+
+                            case SliderEventType.Repeat:
+                                hitObjects.Add(new CircularExplosion
+                                {
+                                    Position = sliderEventPosition,
+                                    StartTime = e.Time,
+                                    ProjectileCount = Math.Clamp((int)curve.Distance / 15, 3, 15),
+                                    Samples = obj.Samples,
+                                    NewCombo = comboData?.NewCombo ?? false,
+                                    ComboOffset = comboData?.ComboOffset ?? 0,
+                                    IndexInBeatmap = index,
+                                    AngleOffset = MathExtensions.GetRandomTimedAngleOffset(e.Time)
+                                });
+
+                                break;
+
+                            case SliderEventType.Tail:
+                                hitObjects.Add(new CircularExplosion
+                                {
+                                    Position = sliderEventPosition,
+                                    StartTime = e.Time,
+                                    ProjectileCount = Math.Clamp((int)curve.Distance * curve.SpanCount() / 15, 5, 20),
+                                    Samples = obj.Samples,
+                                    NewCombo = comboData?.NewCombo ?? false,
+                                    ComboOffset = comboData?.ComboOffset ?? 0,
+                                    IndexInBeatmap = index,
+                                    AngleOffset = MathExtensions.GetRandomTimedAngleOffset(e.Time)
+                                });
+
+                                break;
+                        }
+                    }
                     break;
 
                 case IHasDuration endTime:
@@ -54,7 +165,6 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
                     break;
 
                 default:
-
                     if (objectIndexInCurrentCombo == 0)
                     {
                         var randomBool = MathExtensions.GetRandomTimedBool(obj.StartTime);
@@ -95,5 +205,20 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
         }
 
         protected override Beatmap<TouhosuHitObject> CreateBeatmap() => new TouhosuBeatmap();
+
+        private static bool positionIsValid(Vector2 position)
+        {
+            if (position.X > TouhosuPlayfield.PLAYFIELD_SIZE.X || position.X < 0 || position.Y < 0 || position.Y > TouhosuPlayfield.PLAYFIELD_SIZE.Y)
+                return false;
+
+            return true;
+        }
+
+        private static List<HitSampleInfo> getTickSamples(IList<HitSampleInfo> objSamples) => objSamples.Select(s => new HitSampleInfo
+        {
+            Bank = s.Bank,
+            Name = @"slidertick",
+            Volume = s.Volume
+        }).ToList();
     }
 }

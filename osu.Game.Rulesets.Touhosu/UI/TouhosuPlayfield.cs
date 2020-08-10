@@ -82,9 +82,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             base.Add(h);
 
-            if (h is DrawableExplosion cExplosion)
+            if (h is DrawableExplosion explosion)
             {
-                cExplosion.ProjectilesContainer.ForEach(p =>
+                explosion.ProjectilesContainer.ForEach(p =>
                 {
                     p.CheckHit += CheckHit;
                     p.GetDistanceFromPlayer += GetDistanceFromPlayer;
@@ -104,16 +104,14 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 return;
             }
 
-            //if (h is DrawableProjectile bullet)
-            //{
-            //    bullet.CheckHit += CheckHit;
-            //    bullet.CheckDistance += CheckDistance;
-            //}
+            if (h is DrawableHomingProjectile homing)
+            {
+                homing.PlayerAngle = GetPlayerAngle;
+                homing.CheckHit += CheckHit;
+                homing.GetDistanceFromPlayer += GetDistanceFromPlayer;
 
-            //if (h is DrawableHomingProjectile homingBullet)
-            //{
-            //    homingBullet.PlayerAngle = GetPlayerAngle;
-            //}
+                return;
+            }
         }
 
         private bool failInvoked;

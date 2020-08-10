@@ -42,23 +42,11 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 case ShapedExplosion sExplosion:
                     return new DrawableShapedExplosion(sExplosion);
 
-                    //case SoundHitObject sound:
-                    //    return new DrawableSoundHitObject(sound);
+                case TickProjectile tick:
+                    return new DrawableTickProjectile(tick);
 
-                    //case TickProjectile tick:
-                    //    return new DrawableTickProjectile(tick);
-
-                    //case HomingProjectile homing:
-                    //    return new DrawableHomingProjectile(homing);
-
-                    //case BuzzSliderProjectile rSlider:
-                    //    return new DrawableBuzzSliderProjectile(rSlider);
-
-                    //case AngeledProjectile moving:
-                    //    return new DrawableAngeledProjectile(moving);
-
-                    //case PathProjectile path:
-                    //    return new DrawablePathProjectile(path);
+                case SoundHitObject sound:
+                    return new DrawableSoundHitObject(sound);
             }
 
             return null;
