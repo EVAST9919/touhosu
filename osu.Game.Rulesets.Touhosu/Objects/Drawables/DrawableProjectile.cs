@@ -1,7 +1,6 @@
 ﻿using osu.Framework.Graphics;
 using osuTK;
 using osu.Framework.Allocation;
-using osu.Game.Rulesets.Touhosu.Extensions;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.Touhosu.UI;
@@ -14,22 +13,23 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
     {
         protected virtual float BaseSize { get; } = 25;
 
-        protected virtual bool AffectPlayer { get; } = true;
-
-        protected virtual bool CheckWallCollision { get; } = true;
-
         protected virtual bool UseGlow { get; } = true;
 
         protected virtual string ProjectileName { get; } = "Sphere";
 
         protected readonly ProjectilePiece Piece;
+        private readonly bool expireOnWallHit;
+        private readonly bool affectPlayer;
         private double missTime;
 
         protected DrawableProjectile(Projectile h)
             : base(h)
         {
+            expireOnWallHit = h.ExpireOnWallHit;
+            affectPlayer = h.AffectPlayer;
+
             Origin = Anchor.Centre;
-            Size = new Vector2(BaseSize * MathExtensions.Map(h.CircleSize, 0, 10, 0.2f, 1));
+            Size = new Vector2(BaseSize * h.SizeAdjustValue);
             Position = h.Position;
             Scale = Vector2.Zero;
             AddInternal(Piece = new ProjectilePiece(ProjectileName, UseGlow));
@@ -50,7 +50,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         {
             if (timeOffset > 0)
             {
-                if (AffectPlayer)
+                if (affectPlayer)
                 {
                     if (CheckHit.Invoke(this))
                     {
@@ -60,7 +60,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                     }
                 }
 
-                if (CheckWallCollision)
+                if (expireOnWallHit)
                 {
                     if (Position.X > TouhosuPlayfield.PLAYFIELD_SIZE.X + Size.X / 2f
                     || Position.X < -Size.X / 2f
@@ -82,7 +82,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             switch (state)
             {
                 case ArmedState.Miss:
-                    // Check DrawableHitCircle L#168
                     this.Delay(missTime).FadeOut();
                     break;
             }

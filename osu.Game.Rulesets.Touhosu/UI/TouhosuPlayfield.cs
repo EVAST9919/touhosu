@@ -11,6 +11,7 @@ using osu.Game.Rulesets.Touhosu.Extensions;
 using osuTK.Graphics;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Extensions.Color4Extensions;
+using osu.Framework.Extensions.IEnumerableExtensions;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -80,6 +81,15 @@ namespace osu.Game.Rulesets.Touhosu.UI
         public override void Add(DrawableHitObject h)
         {
             base.Add(h);
+
+            if (h is DrawableCircularExplosion explosion)
+            {
+                explosion.ProjectilesContainer.ForEach(p =>
+                {
+                    p.CheckHit += CheckHit;
+                    p.CheckDistance += CheckDistance;
+                });
+            }
 
             if (h is DrawableProjectile bullet)
             {

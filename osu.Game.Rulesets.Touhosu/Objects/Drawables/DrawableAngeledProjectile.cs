@@ -11,12 +11,12 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         public bool HiddenApplied;
 
-        protected readonly float SpeedMultiplier;
+        protected readonly float Speed;
 
         public DrawableAngeledProjectile(AngeledProjectile h)
             : base(h)
         {
-            SpeedMultiplier = (float)(MathExtensions.Map((float)h.SpeedMultiplier, 0, 3, 0.4f, 0.5f) * h.DeltaMultiplier / 2.5f);
+            Speed = h.Speed;
         }
 
         protected virtual float GetAngle() => MathExtensions.GetSafeAngle(((AngeledProjectile)HitObject).Angle);
@@ -48,8 +48,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             }
 
             var elapsedTime = currentTime - HitObject.StartTime;
-            var xPosition = HitObject.Position.X + (elapsedTime * SpeedMultiplier * Math.Sin((angle ?? 0) * Math.PI / 180));
-            var yPosition = HitObject.Position.Y + (elapsedTime * SpeedMultiplier * -Math.Cos((angle ?? 0) * Math.PI / 180));
+            var xPosition = HitObject.Position.X + (elapsedTime * Speed * Math.Sin((angle ?? 0) * Math.PI / 180));
+            var yPosition = HitObject.Position.Y + (elapsedTime * Speed * -Math.Cos((angle ?? 0) * Math.PI / 180));
             return new Vector2((float)xPosition, (float)yPosition);
         }
 

@@ -33,23 +33,26 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             switch (h)
             {
-                case SoundHitObject sound:
-                    return new DrawableSoundHitObject(sound);
+                case CircularExplosion cExplosion:
+                    return new DrawableCircularExplosion(cExplosion);
 
-                case TickProjectile tick:
-                    return new DrawableTickProjectile(tick);
+                    //case SoundHitObject sound:
+                    //    return new DrawableSoundHitObject(sound);
 
-                case HomingProjectile homing:
-                    return new DrawableHomingProjectile(homing);
+                    //case TickProjectile tick:
+                    //    return new DrawableTickProjectile(tick);
 
-                case BuzzSliderProjectile rSlider:
-                    return new DrawableBuzzSliderProjectile(rSlider);
+                    //case HomingProjectile homing:
+                    //    return new DrawableHomingProjectile(homing);
 
-                case AngeledProjectile moving:
-                    return new DrawableAngeledProjectile(moving);
+                    //case BuzzSliderProjectile rSlider:
+                    //    return new DrawableBuzzSliderProjectile(rSlider);
 
-                case PathProjectile path:
-                    return new DrawablePathProjectile(path);
+                    //case AngeledProjectile moving:
+                    //    return new DrawableAngeledProjectile(moving);
+
+                    //case PathProjectile path:
+                    //    return new DrawablePathProjectile(path);
             }
 
             return null;

@@ -5,11 +5,15 @@ using osu.Game.Rulesets.Objects.Types;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Touhosu.Objects;
 using osu.Game.Rulesets.Touhosu.Extensions;
+using osuTK;
+using osu.Game.Rulesets.Touhosu.UI;
 
 namespace osu.Game.Rulesets.Touhosu.Beatmaps
 {
     public class TouhosuBeatmapConverter : BeatmapConverter<TouhosuHitObject>
     {
+        private const int hitcircle_angle_offset = 5;
+
         public TouhosuBeatmapConverter(IBeatmap beatmap, Ruleset ruleset)
             : base(beatmap, ruleset)
         {
@@ -34,15 +38,25 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
             switch (obj)
             {
                 case IHasPathWithRepeats curve:
-                    hitObjects.AddRange(ProjectileExtensions.ConvertSlider(obj, beatmap, curve, index));
+                    //hitObjects.AddRange(ProjectileExtensions.ConvertSlider(obj, beatmap, curve, index));
                     break;
 
                 case IHasDuration endTime:
-                    hitObjects.AddRange(ProjectileExtensions.ConvertSpinner(obj, endTime, index));
+                    //hitObjects.AddRange(ProjectileExtensions.ConvertSpinner(obj, endTime, index));
                     break;
 
                 default:
-                    hitObjects.AddRange(ProjectileExtensions.ConvertHitCircle(obj, index, objectIndexInCurrentCombo));
+                    hitObjects.Add(new CircularExplosion
+                    {
+                        Position = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
+                        StartTime = obj.StartTime,
+                        ProjectileCount = 5,
+                        Samples = obj.Samples,
+                        NewCombo = comboData?.NewCombo ?? false,
+                        ComboOffset = comboData?.ComboOffset ?? 0,
+                        IndexInBeatmap = index,
+                        AngleOffset = hitcircle_angle_offset * objectIndexInCurrentCombo
+                    });
                     break;
             }
 
