@@ -36,6 +36,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 case CircularExplosion cExplosion:
                     return new DrawableCircularExplosion(cExplosion);
 
+                case ShapedExplosion sExplosion:
+                    return new DrawableShapedExplosion(sExplosion);
+
                     //case SoundHitObject sound:
                     //    return new DrawableSoundHitObject(sound);
 

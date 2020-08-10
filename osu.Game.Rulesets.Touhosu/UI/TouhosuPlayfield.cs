@@ -82,25 +82,38 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             base.Add(h);
 
-            if (h is DrawableCircularExplosion explosion)
+            if (h is DrawableCircularExplosion cExplosion)
             {
-                explosion.ProjectilesContainer.ForEach(p =>
+                cExplosion.ProjectilesContainer.ForEach(p =>
                 {
                     p.CheckHit += CheckHit;
                     p.CheckDistance += CheckDistance;
                 });
+
+                return;
             }
 
-            if (h is DrawableProjectile bullet)
+            if (h is DrawableShapedExplosion sExplosion)
             {
-                bullet.CheckHit += CheckHit;
-                bullet.CheckDistance += CheckDistance;
+                sExplosion.ProjectilesContainer.ForEach(p =>
+                {
+                    p.CheckHit += CheckHit;
+                    p.CheckDistance += CheckDistance;
+                });
+
+                return;
             }
 
-            if (h is DrawableHomingProjectile homingBullet)
-            {
-                homingBullet.PlayerAngle = GetPlayerAngle;
-            }
+            //if (h is DrawableProjectile bullet)
+            //{
+            //    bullet.CheckHit += CheckHit;
+            //    bullet.CheckDistance += CheckDistance;
+            //}
+
+            //if (h is DrawableHomingProjectile homingBullet)
+            //{
+            //    homingBullet.PlayerAngle = GetPlayerAngle;
+            //}
         }
 
         private bool failInvoked;

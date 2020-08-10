@@ -46,17 +46,38 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
                     break;
 
                 default:
-                    hitObjects.Add(new CircularExplosion
+
+                    if (objectIndexInCurrentCombo == 0)
                     {
-                        Position = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
-                        StartTime = obj.StartTime,
-                        ProjectileCount = 5,
-                        Samples = obj.Samples,
-                        NewCombo = comboData?.NewCombo ?? false,
-                        ComboOffset = comboData?.ComboOffset ?? 0,
-                        IndexInBeatmap = index,
-                        AngleOffset = hitcircle_angle_offset * objectIndexInCurrentCombo
-                    });
+                        var randomBool = MathExtensions.GetRandomTimedBool(obj.StartTime);
+
+                        hitObjects.Add(new ShapedExplosion
+                        {
+                            Position = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
+                            StartTime = obj.StartTime,
+                            ProjectilesPerSide = 3,
+                            SideCount = randomBool ? 3 : 4,
+                            Samples = obj.Samples,
+                            NewCombo = comboData?.NewCombo ?? false,
+                            ComboOffset = comboData?.ComboOffset ?? 0,
+                            IndexInBeatmap = index,
+                            AngleOffset = MathExtensions.GetRandomTimedAngleOffset(obj.StartTime)
+                        });
+                    }
+                    else
+                    {
+                        hitObjects.Add(new CircularExplosion
+                        {
+                            Position = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
+                            StartTime = obj.StartTime,
+                            ProjectileCount = 5,
+                            Samples = obj.Samples,
+                            NewCombo = comboData?.NewCombo ?? false,
+                            ComboOffset = comboData?.ComboOffset ?? 0,
+                            IndexInBeatmap = index,
+                            AngleOffset = hitcircle_angle_offset * objectIndexInCurrentCombo
+                        });
+                    }
                     break;
             }
 
