@@ -1,23 +1,13 @@
-﻿using osu.Game.Audio;
-using osu.Game.Rulesets.Judgements;
-using osu.Game.Rulesets.Touhosu.Extensions;
-using osu.Game.Rulesets.Touhosu.Judgements;
+﻿using osu.Game.Rulesets.Touhosu.Extensions;
 using System;
-using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
-    public class ShapedExplosion : TouhosuHitObject
+    public class ShapedExplosion : Explosion
     {
         public int ProjectilesPerSide { get; set; }
 
         public int SideCount { get; set; }
-
-        public float AngleOffset { get; set; }
-
-        public new IList<HitSampleInfo> Samples { get; set; }
-
-        public override Judgement CreateJudgement() => new NullJudgement();
 
         protected override void CreateNestedHitObjects()
         {

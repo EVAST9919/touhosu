@@ -82,20 +82,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             base.Add(h);
 
-            if (h is DrawableCircularExplosion cExplosion)
+            if (h is DrawableExplosion cExplosion)
             {
                 cExplosion.ProjectilesContainer.ForEach(p =>
-                {
-                    p.CheckHit += CheckHit;
-                    p.CheckDistance += CheckDistance;
-                });
-
-                return;
-            }
-
-            if (h is DrawableShapedExplosion sExplosion)
-            {
-                sExplosion.ProjectilesContainer.ForEach(p =>
                 {
                     p.CheckHit += CheckHit;
                     p.CheckDistance += CheckDistance;
