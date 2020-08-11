@@ -22,10 +22,23 @@ namespace osu.Game.Rulesets.Touhosu.Edit.Blueprints
         {
         }
 
+        private bool isDragging;
+
+        protected override bool OnDragStart(DragStartEvent e)
+        {
+            isDragging = true;
+            return base.OnDragStart(e);
+        }
+
         protected override void OnMouseUp(MouseUpEvent e)
         {
             base.OnMouseUp(e);
+
+            if (!isDragging)
+                return;
+
             editorBeatmap.UpdateHitObject(HitObject);
+            isDragging = false;
         }
     }
 }
