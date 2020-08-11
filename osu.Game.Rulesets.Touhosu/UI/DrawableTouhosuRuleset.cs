@@ -45,6 +45,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 case TickProjectile tick:
                     return new DrawableTickProjectile(tick);
 
+                case AngeledProjectile angeled:
+                    return new DrawableAngeledProjectile(angeled);
+
                 case SoundHitObject sound:
                     return new DrawableSoundHitObject(sound);
             }
