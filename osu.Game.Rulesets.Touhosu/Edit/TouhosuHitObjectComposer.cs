@@ -14,6 +14,8 @@ namespace osu.Game.Rulesets.Touhosu.Edit
 
         protected override IReadOnlyList<HitObjectCompositionTool> CompositionTools => new HitObjectCompositionTool[]
         {
+            new TickCompositionTool(),
+            new AngeledProjectileCompositionTool(),
             new CircularExplosionCompositionTool(),
             new ShapedExplosionCompositionTool()
         };

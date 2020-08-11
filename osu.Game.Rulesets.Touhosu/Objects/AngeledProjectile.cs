@@ -10,7 +10,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects
     {
         public float Speed { get; private set; }
 
-        public float Angle { get; set; }
+        public float Angle { get; set; } = 180;
 
         public double DeltaMultiplier { get; set; } = 1;
 
