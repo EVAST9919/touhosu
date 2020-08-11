@@ -25,7 +25,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 Origin = Anchor.Centre,
                 RelativeSizeAxes = Axes.Both,
                 FillMode = FillMode.Fit,
-                FillAspectRatio = 4f / 3,
+                FillAspectRatio = 4f / 5,
                 Child = content = new ScalingContainer { RelativeSizeAxes = Axes.Both }
             };
         }
@@ -38,7 +38,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
             protected override void Update()
             {
                 base.Update();
-                Scale = new Vector2(Parent.ChildSize.X / TouhosuPlayfield.FULL_SIZE.X);
+                Scale = new Vector2(Parent.ChildSize.X / TouhosuPlayfield.PLAYFIELD_SIZE.X);
                 Size = Vector2.Divide(Vector2.One, Scale);
             }
         }

@@ -25,7 +25,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
         {
             List<TouhosuHitObject> hitObjects = new List<TouhosuHitObject>();
 
-            var objPosition = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
+            var objPosition = ((obj as IHasPosition)?.Position ?? Vector2.Zero);// * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
             var comboData = obj as IHasCombo;
 
             var difficulty = beatmap.BeatmapInfo.BaseDifficulty;

@@ -60,7 +60,8 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
 
                     foreach (var e in SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.SpanCount(), legacyLastTickOffset, new CancellationToken()))
                     {
-                        var sliderEventPosition = (curve.CurvePositionAt(e.PathProgress / (curve.RepeatCount + 1)) + objPosition) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f);
+                        var originalPosition = curve.CurvePositionAt(e.PathProgress / curve.SpanCount()) + objPosition;
+                        var sliderEventPosition = convertPosition(originalPosition);
 
                         switch (e.Type)
                         {
@@ -155,7 +156,7 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
                 case IHasDuration endTime:
                     hitObjects.Add(new Spinner
                     {
-                        Position = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
+                        Position = convertPosition((obj as IHasPosition)?.Position ?? Vector2.Zero),
                         StartTime = obj.StartTime,
                         Duration = endTime.Duration,
                         NewCombo = comboData?.NewCombo ?? false,
@@ -171,7 +172,7 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
 
                         hitObjects.Add(new ShapedExplosion
                         {
-                            Position = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
+                            Position = convertPosition((obj as IHasPosition)?.Position ?? Vector2.Zero),
                             StartTime = obj.StartTime,
                             ProjectilesPerSide = 3,
                             SideCount = randomBool ? 3 : 4,
@@ -186,7 +187,7 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
                     {
                         hitObjects.Add(new CircularExplosion
                         {
-                            Position = ((obj as IHasPosition)?.Position ?? Vector2.Zero) * new Vector2(TouhosuPlayfield.X_SCALE_MULTIPLIER, 0.5f),
+                            Position = convertPosition((obj as IHasPosition)?.Position ?? Vector2.Zero),
                             StartTime = obj.StartTime,
                             ProjectileCount = 5,
                             Samples = obj.Samples,
@@ -220,5 +221,12 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
             Name = @"slidertick",
             Volume = s.Volume
         }).ToList();
+
+        private static Vector2 convertPosition(Vector2 original)
+        {
+            var newXPosition = MathExtensions.Map(original.X, 0, TouhosuPlayfield.FULL_SIZE.X, 0, TouhosuPlayfield.PLAYFIELD_SIZE.X);
+            var newYPosition = original.Y * 0.5f;
+            return new Vector2(newXPosition, newYPosition);
+        }
     }
 }

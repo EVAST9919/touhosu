@@ -19,7 +19,6 @@ namespace osu.Game.Rulesets.Touhosu.UI
     {
         public static readonly Vector2 FULL_SIZE = new Vector2(512, 384);
         public static readonly Vector2 PLAYFIELD_SIZE = new Vector2(307, 384);
-        public static readonly float X_SCALE_MULTIPLIER = 0.6f;
 
         private readonly TouhosuRuleset ruleset;
         public TouhosuPlayer Player;
@@ -38,7 +37,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Size = PLAYFIELD_SIZE,
+                    RelativeSizeAxes = Axes.Both,
                     Masking = true,
                     CornerRadius = 7,
                     BorderThickness = 1.2f,
