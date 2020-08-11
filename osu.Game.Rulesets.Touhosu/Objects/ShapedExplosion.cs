@@ -1,4 +1,5 @@
 ﻿using osu.Game.Rulesets.Touhosu.Extensions;
+using osuTK;
 using System;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
@@ -29,7 +30,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects
 
                     AddNested(new AngeledProjectile
                     {
-                        Position = Position,
+                        Position = Vector2.Zero,
+                        ParentPosition = Position,
                         StartTime = StartTime,
                         Angle = MathExtensions.GetSafeAngle((float)currentAngle + (i * (360f / SideCount) + AngleOffset)),
                         DeltaMultiplier = length / side * 1.2f,

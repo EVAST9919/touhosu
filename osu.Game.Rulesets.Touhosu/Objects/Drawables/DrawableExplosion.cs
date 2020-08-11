@@ -14,6 +14,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         public DrawableExplosion(Explosion h)
             : base(h)
         {
+            Origin = Anchor.Centre;
+            Position = h.Position;
             AddRangeInternal(new Drawable[]
             {
                 ProjectilesContainer = new Container<DrawableAngeledProjectile>(),

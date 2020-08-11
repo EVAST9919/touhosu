@@ -19,7 +19,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             Speed = h.Speed;
         }
 
-        protected virtual float GetAngle() => MathExtensions.GetSafeAngle(((AngeledProjectile)HitObject).Angle);
+        protected virtual float GetAngle() => ((AngeledProjectile)HitObject).Angle;
 
         private float angle;
 
@@ -28,7 +28,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             base.LoadComplete();
 
             angle = GetAngle();
-            Rotation = angle;
+            Piece.Rotation = angle;
         }
 
         protected override void Update()

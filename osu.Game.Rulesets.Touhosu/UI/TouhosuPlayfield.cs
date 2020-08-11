@@ -65,7 +65,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         public bool CheckHit(DrawableProjectile obj)
         {
             var radius = obj.Size.X / 2;
-            var distance = MathExtensions.Distance(Player.PlayerPosition(), obj.Position);
+            var distance = MathExtensions.Distance(Player.PlayerPosition(), obj.Position + obj.ParentPosition);
             var isHit = distance < radius + 2;
 
             if (isHit)
@@ -74,9 +74,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
             return isHit;
         }
 
-        public float GetDistanceFromPlayer(DrawableProjectile obj) => (float)MathExtensions.Distance(Player.PlayerPosition(), obj.Position);
+        public float GetDistanceFromPlayer(DrawableProjectile obj) => (float)MathExtensions.Distance(Player.PlayerPosition(), obj.Position + obj.ParentPosition);
 
-        public float GetPlayerAngle(DrawableHomingProjectile obj) => MathExtensions.GetPlayerAngle(Player, obj.Position);
+        public float GetPlayerAngle(DrawableHomingProjectile obj) => MathExtensions.GetPlayerAngle(Player, obj.Position + obj.ParentPosition);
 
         public override void Add(DrawableHitObject h)
         {

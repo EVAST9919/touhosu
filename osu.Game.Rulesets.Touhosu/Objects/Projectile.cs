@@ -1,6 +1,7 @@
 ﻿using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.ControlPoints;
 using osu.Game.Rulesets.Touhosu.Extensions;
+using osuTK;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
@@ -11,6 +12,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects
         public bool ExpireOnWallHit { get; protected set; } = true;
 
         public bool AffectPlayer { get; protected set; } = true;
+
+        public Vector2 ParentPosition { get; set; } = Vector2.Zero;
 
         protected override void ApplyDefaultsToSelf(ControlPointInfo controlPointInfo, BeatmapDifficulty difficulty)
         {

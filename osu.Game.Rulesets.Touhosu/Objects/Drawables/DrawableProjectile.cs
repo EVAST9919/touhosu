@@ -21,6 +21,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         private readonly bool expireOnWallHit;
         private readonly bool affectPlayer;
         private double missTime;
+        public readonly Vector2 ParentPosition;
 
         protected DrawableProjectile(Projectile h)
             : base(h)
@@ -31,6 +32,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             Origin = Anchor.Centre;
             Size = new Vector2(BaseSize * h.SizeAdjustValue);
             Position = h.Position;
+            ParentPosition = h.ParentPosition;
             Scale = Vector2.Zero;
             AddInternal(Piece = new ProjectilePiece(ProjectileName, UseGlow));
         }
@@ -62,11 +64,11 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
                 if (expireOnWallHit)
                 {
-                    if (Position.X > TouhosuPlayfield.PLAYFIELD_SIZE.X + Size.X / 2f
-                    || Position.X < -Size.X / 2f
-                    || Position.Y > TouhosuPlayfield.PLAYFIELD_SIZE.Y + Size.Y / 2f
-                    || Position.Y < -Size.Y / 2f)
-                        ApplyResult(r => r.Type = HitResult.Perfect);
+                    if (Position.X + ParentPosition.X > TouhosuPlayfield.PLAYFIELD_SIZE.X + Size.X / 2f
+                    || Position.X + ParentPosition.X < -Size.X / 2f
+                    || Position.Y + ParentPosition.Y > TouhosuPlayfield.PLAYFIELD_SIZE.Y + Size.Y / 2f
+                    || Position.Y + ParentPosition.Y < -Size.Y / 2f)
+                        ApplyResult(r => r.Type = r.Judgement.MaxResult);
                 }
             }
         }

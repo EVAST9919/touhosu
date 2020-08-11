@@ -2,6 +2,7 @@
 using osu.Game.Rulesets.Objects.Types;
 using osu.Game.Rulesets.Touhosu.Extensions;
 using osu.Game.Rulesets.Touhosu.Judgements;
+using osuTK;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
@@ -33,7 +34,8 @@ namespace osu.Game.Rulesets.Touhosu.Objects
             {
                 AddNested(new AngeledProjectile
                 {
-                    Position = Position,
+                    Position = Vector2.Zero,
+                    ParentPosition = Position,
                     StartTime = StartTime + i,
                     Angle = MathExtensions.GetSafeAngle((float)i),
                     NewCombo = NewCombo,

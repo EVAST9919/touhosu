@@ -15,16 +15,5 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         }
 
         protected sealed override double InitialLifetimeOffset => HitObject.TimePreempt;
-
-        protected override void UpdateStateTransforms(ArmedState state)
-        {
-            switch (state)
-            {
-                case ArmedState.Idle:
-                    // Manually set to reduce the number of future alive objects to a bare minimum.
-                    LifetimeStart = HitObject.StartTime - HitObject.TimePreempt;
-                    break;
-            }
-        }
     }
 }
