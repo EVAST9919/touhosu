@@ -6,13 +6,13 @@ using osuTK;
 
 namespace osu.Game.Rulesets.Touhosu.Edit.Blueprints.Projectiles
 {
-    public class ProjectileSelectionBlueprint : TouhosuSelectionBlueprint<Projectile>
+    public class ProjectileSelectionBlueprint : TouhosuSelectionBlueprint<StandaloneProjectile>
     {
-        protected new DrawableProjectile DrawableObject => (DrawableProjectile)base.DrawableObject;
+        protected new DrawableStandaloneProjectile DrawableObject => (DrawableStandaloneProjectile)base.DrawableObject;
 
         protected readonly ProjectilePiece Piece;
 
-        public ProjectileSelectionBlueprint(DrawableProjectile drawable)
+        public ProjectileSelectionBlueprint(DrawableStandaloneProjectile drawable)
             : base(drawable)
         {
             InternalChild = Piece = new ProjectilePiece();

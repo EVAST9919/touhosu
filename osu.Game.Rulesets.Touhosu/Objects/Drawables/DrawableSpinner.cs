@@ -1,6 +1,6 @@
 ﻿namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public class DrawableSpinner : DrawableGroupedTouhosuHitObject<AngeledProjectile>
+    public class DrawableSpinner : DrawableGroupedTouhosuHitObject<AngeledProjectile, Spinner>
     {
         public DrawableSpinner(Spinner h)
             : base(h)

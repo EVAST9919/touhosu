@@ -12,6 +12,7 @@ using osuTK.Graphics;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Extensions.IEnumerableExtensions;
+using System.Linq;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -103,11 +104,16 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 return;
             }
 
-            if (h is DrawableHomingProjectile homing)
+            if (h is DrawableStandaloneProjectile standalone)
             {
-                homing.PlayerAngle = GetPlayerAngle;
-                homing.CheckHit += CheckHit;
-                homing.GetDistanceFromPlayer += GetDistanceFromPlayer;
+                var t = standalone.NestedHitObjects.OfType<DrawableProjectile>().First();
+                t.CheckHit += CheckHit;
+                t.GetDistanceFromPlayer += GetDistanceFromPlayer;
+
+                if (t is DrawableTickProjectile)
+                {
+                    ((DrawableTickProjectile)t).PlayerAngle = GetPlayerAngle;
+                }
 
                 return;
             }

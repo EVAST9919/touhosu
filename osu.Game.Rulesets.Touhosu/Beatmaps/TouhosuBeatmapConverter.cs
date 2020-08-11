@@ -101,22 +101,16 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
                             case SliderEventType.Tick:
                                 if (positionIsValid(sliderEventPosition))
                                 {
-                                    hitObjects.Add(new TickProjectile
+                                    hitObjects.Add(new StandaloneTickProjectile
                                     {
                                         StartTime = e.Time,
                                         Position = sliderEventPosition,
                                         NewCombo = comboData?.NewCombo ?? false,
                                         ComboOffset = comboData?.ComboOffset ?? 0,
-                                        IndexInBeatmap = index
+                                        IndexInBeatmap = index,
+                                        Samples = getTickSamples(obj.Samples)
                                     });
                                 }
-
-                                hitObjects.Add(new SoundHitObject
-                                {
-                                    StartTime = e.Time,
-                                    Samples = getTickSamples(obj.Samples),
-                                    Position = sliderEventPosition
-                                });
 
                                 break;
 

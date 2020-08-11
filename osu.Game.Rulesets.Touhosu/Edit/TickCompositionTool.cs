@@ -8,7 +8,7 @@ namespace osu.Game.Rulesets.Touhosu.Edit
     public class TickCompositionTool : HitObjectCompositionTool
     {
         public TickCompositionTool()
-            : base(nameof(TickProjectile))
+            : base(nameof(StandaloneTickProjectile))
         {
         }
 

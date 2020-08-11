@@ -42,11 +42,11 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 case ShapedExplosion sExplosion:
                     return new DrawableShapedExplosion(sExplosion);
 
-                case TickProjectile tick:
-                    return new DrawableTickProjectile(tick);
+                case StandaloneTickProjectile sTick:
+                    return new DrawableStandaloneTickProjectile(sTick);
 
-                case AngeledProjectile angeled:
-                    return new DrawableAngeledProjectile(angeled);
+                case StandaloneAngeledProjectile angeled:
+                    return new DrawableStandaloneAngeledProjectile(angeled);
 
                 case SoundHitObject sound:
                     return new DrawableSoundHitObject(sound);

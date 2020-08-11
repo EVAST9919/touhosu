@@ -27,7 +27,7 @@ namespace osu.Game.Rulesets.Touhosu.Edit
                 case DrawableExplosion explosion:
                     return new ExplosionSelectionBlueprint(explosion);
 
-                case DrawableProjectile projectile:
+                case DrawableStandaloneProjectile projectile:
                     return new ProjectileSelectionBlueprint(projectile);
             }
 

@@ -8,7 +8,7 @@ namespace osu.Game.Rulesets.Touhosu.Edit
     public class AngeledProjectileCompositionTool : HitObjectCompositionTool
     {
         public AngeledProjectileCompositionTool()
-            : base(nameof(AngeledProjectile))
+            : base(nameof(StandaloneAngeledProjectile))
         {
         }
 

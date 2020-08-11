@@ -3,12 +3,12 @@ using osu.Game.Rulesets.Touhosu.Objects;
 
 namespace osu.Game.Rulesets.Touhosu.Edit.Blueprints
 {
-    public class AngeledProjectilePlacementBlueprint : TouhosuPlacementBlueprint<AngeledProjectile>
+    public class AngeledProjectilePlacementBlueprint : TouhosuPlacementBlueprint<StandaloneAngeledProjectile>
     {
         private readonly ProjectilePiece piece;
 
         public AngeledProjectilePlacementBlueprint()
-            : base(new AngeledProjectile())
+            : base(new StandaloneAngeledProjectile())
         {
             InternalChild = piece = new ProjectilePiece();
         }

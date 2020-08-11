@@ -11,6 +11,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
         public Func<DrawableHomingProjectile, float> PlayerAngle;
 
-        protected override float GetAngle() => PlayerAngle.Invoke(this);
+        protected override float GetAngle() => PlayerAngle?.Invoke(this) ?? 180;
     }
 }
