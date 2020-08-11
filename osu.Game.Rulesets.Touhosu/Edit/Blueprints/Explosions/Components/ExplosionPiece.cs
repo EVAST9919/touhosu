@@ -7,7 +7,7 @@ using osu.Game.Graphics;
 
 namespace osu.Game.Rulesets.Touhosu.Edit.Blueprints.Explosions.Components
 {
-    public class ExplosionPiece : BlueprintPiece<Explosion>
+    public class ExplosionPiece : BlueprintPiece<TouhosuHitObject>
     {
         public ExplosionPiece()
         {

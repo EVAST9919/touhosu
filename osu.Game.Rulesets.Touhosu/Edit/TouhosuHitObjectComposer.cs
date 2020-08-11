@@ -17,7 +17,8 @@ namespace osu.Game.Rulesets.Touhosu.Edit
             new TickCompositionTool(),
             new AngeledProjectileCompositionTool(),
             new CircularExplosionCompositionTool(),
-            new ShapedExplosionCompositionTool()
+            new ShapedExplosionCompositionTool(),
+            new SpinnerCompositionTool()
         };
     }
 }
