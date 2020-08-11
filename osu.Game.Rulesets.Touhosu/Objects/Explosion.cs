@@ -9,7 +9,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects
     {
         public float AngleOffset { get; set; }
 
-        public new IList<HitSampleInfo> Samples { get; set; }
+        public new IList<HitSampleInfo> Samples { get; set; } = new List<HitSampleInfo>();
 
         public override Judgement CreateJudgement() => new NullJudgement();
     }

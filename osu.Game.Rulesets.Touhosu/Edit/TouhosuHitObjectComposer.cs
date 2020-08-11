@@ -1,7 +1,6 @@
 ﻿using osu.Game.Rulesets.Edit;
 using osu.Game.Rulesets.Edit.Tools;
 using osu.Game.Rulesets.Touhosu.Objects;
-using System;
 using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Touhosu.Edit
@@ -13,6 +12,10 @@ namespace osu.Game.Rulesets.Touhosu.Edit
         {
         }
 
-        protected override IReadOnlyList<HitObjectCompositionTool> CompositionTools => Array.Empty<HitObjectCompositionTool>();
+        protected override IReadOnlyList<HitObjectCompositionTool> CompositionTools => new HitObjectCompositionTool[]
+        {
+            new CircularExplosionCompositionTool(),
+            new ShapedExplosionCompositionTool()
+        };
     }
 }

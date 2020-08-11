@@ -6,9 +6,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects
 {
     public class ShapedExplosion : Explosion
     {
-        public int ProjectilesPerSide { get; set; }
+        public int ProjectilesPerSide { get; set; } = 3;
 
-        public int SideCount { get; set; }
+        public int SideCount { get; set; } = 3;
 
         protected override void CreateNestedHitObjects()
         {

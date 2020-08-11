@@ -24,7 +24,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         private readonly TouhosuRuleset ruleset;
         public TouhosuPlayer Player;
 
-        public TouhosuPlayfield(TouhosuRuleset ruleset)
+        public TouhosuPlayfield(TouhosuRuleset ruleset = null)
         {
             this.ruleset = ruleset;
         }
@@ -120,7 +120,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             base.Update();
 
-            if (!ruleset.HealthProcessor?.HasFailed ?? true)
+            if (!ruleset?.HealthProcessor?.HasFailed ?? true)
                 return;
 
             if (failInvoked)

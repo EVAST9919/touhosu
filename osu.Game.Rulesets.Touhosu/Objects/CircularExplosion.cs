@@ -5,7 +5,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects
 {
     public class CircularExplosion : Explosion
     {
-        public int ProjectileCount { get; set; }
+        public int ProjectileCount { get; set; } = 5;
 
         protected override void CreateNestedHitObjects()
         {
