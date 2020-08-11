@@ -8,19 +8,19 @@ using osuTK;
 
 namespace osu.Game.Rulesets.Touhosu.Edit.Blueprints.Projectiles.Components
 {
-    public class ProjectilePiece : BlueprintPiece<AngeledProjectile>
+    public class ProjectilePiece : BlueprintPiece<Projectile>
     {
         private readonly CircularContainer ring;
 
         public ProjectilePiece()
         {
             Origin = Anchor.Centre;
-            Size = new Vector2(50);
+            Size = new Vector2(40);
             InternalChild = ring = new CircularContainer
             {
                 RelativeSizeAxes = Axes.Both,
                 Masking = true,
-                BorderThickness = 3,
+                BorderThickness = 5,
                 Child = new Box
                 {
                     RelativeSizeAxes = Axes.Both,

@@ -14,6 +14,12 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         {
         }
 
+        protected override void Update()
+        {
+            base.Update();
+            Position = HitObject.Position;
+        }
+
         protected sealed override double InitialLifetimeOffset => HitObject.TimePreempt;
     }
 }
