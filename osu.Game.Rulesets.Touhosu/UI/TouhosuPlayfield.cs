@@ -120,7 +120,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         {
             base.Update();
 
-            if (!ruleset.HealthProcessor.HasFailed)
+            if (!ruleset.HealthProcessor?.HasFailed ?? true)
                 return;
 
             if (failInvoked)

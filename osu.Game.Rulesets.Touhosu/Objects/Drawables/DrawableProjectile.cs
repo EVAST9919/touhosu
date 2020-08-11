@@ -54,7 +54,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             {
                 if (affectPlayer)
                 {
-                    if (CheckHit.Invoke(this))
+                    if (CheckHit?.Invoke(this) ?? false)
                     {
                         missTime = timeOffset;
                         ApplyResult(r => r.Type = HitResult.Miss);

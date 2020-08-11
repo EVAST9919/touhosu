@@ -20,6 +20,8 @@ using osu.Game.Rulesets.Touhosu.Configuration;
 using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Replays.Types;
 using osu.Game.Rulesets.Touhosu.Replays;
+using osu.Game.Rulesets.Edit;
+using osu.Game.Rulesets.Touhosu.Edit;
 
 namespace osu.Game.Rulesets.Touhosu
 {
@@ -95,6 +97,8 @@ namespace osu.Game.Rulesets.Touhosu
         public override string ShortName => "Touhosu";
 
         public override string PlayingVerb => "Avoiding bullets";
+
+        public override HitObjectComposer CreateHitObjectComposer() => new TouhosuHitObjectComposer(this);
 
         public override Drawable CreateIcon() => new Sprite
         {
