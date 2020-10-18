@@ -28,7 +28,7 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
         private int index = -1;
         private int objectIndexInCurrentCombo = 0;
 
-        protected override IEnumerable<TouhosuHitObject> ConvertHitObject(HitObject obj, IBeatmap beatmap)
+        protected override IEnumerable<TouhosuHitObject> ConvertHitObject(HitObject obj, IBeatmap beatmap, CancellationToken token)
         {
             var comboData = obj as IHasCombo;
             if (comboData?.NewCombo ?? false)

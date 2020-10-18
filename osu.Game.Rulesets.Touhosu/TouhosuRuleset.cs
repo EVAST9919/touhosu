@@ -20,8 +20,6 @@ using osu.Game.Rulesets.Touhosu.Configuration;
 using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Replays.Types;
 using osu.Game.Rulesets.Touhosu.Replays;
-using osu.Game.Rulesets.Edit;
-using osu.Game.Rulesets.Touhosu.Edit;
 
 namespace osu.Game.Rulesets.Touhosu
 {
@@ -29,15 +27,11 @@ namespace osu.Game.Rulesets.Touhosu
     {
         public TouhosuHealthProcessor HealthProcessor;
 
-        public TouhosuScoreProcessor ScoreProcessor;
-
         public override IRulesetConfigManager CreateConfig(SettingsStore settings) => new TouhosuRulesetConfigManager(settings, RulesetInfo);
 
         public override RulesetSettingsSubsection CreateSettings() => new TouhosuSettingsSubsection(this);
 
         public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) => new DrawableTouhosuRuleset(this, beatmap, mods);
-
-        public override ScoreProcessor CreateScoreProcessor() => ScoreProcessor = new TouhosuScoreProcessor();
 
         public override HealthProcessor CreateHealthProcessor(double drainStartTime) => HealthProcessor = new TouhosuHealthProcessor();
 
@@ -98,13 +92,16 @@ namespace osu.Game.Rulesets.Touhosu
 
         public override string PlayingVerb => "Avoiding bullets";
 
-        public override HitObjectComposer CreateHitObjectComposer() => new TouhosuHitObjectComposer(this);
-
         public override Drawable CreateIcon() => new Sprite
         {
             Texture = new TextureStore(new TextureLoaderStore(CreateResourceStore()), false).Get("Textures/logo"),
         };
 
         public override DifficultyCalculator CreateDifficultyCalculator(WorkingBeatmap beatmap) => new TouhosuDifficultyCalculator(this, beatmap);
+
+        protected override IEnumerable<HitResult> GetValidHitResults() => new[]
+        {
+            HitResult.Perfect
+        };
     }
 }

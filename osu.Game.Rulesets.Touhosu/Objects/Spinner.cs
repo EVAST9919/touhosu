@@ -1,8 +1,8 @@
 ﻿using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Objects.Types;
 using osu.Game.Rulesets.Touhosu.Extensions;
-using osu.Game.Rulesets.Touhosu.Judgements;
 using osuTK;
+using System.Threading;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
@@ -24,11 +24,11 @@ namespace osu.Game.Rulesets.Touhosu.Objects
             }
         }
 
-        public override Judgement CreateJudgement() => new NullJudgement();
+        public override Judgement CreateJudgement() => new IgnoreJudgement();
 
-        protected override void CreateNestedHitObjects()
+        protected override void CreateNestedHitObjects(CancellationToken cancellationToken)
         {
-            base.CreateNestedHitObjects();
+            base.CreateNestedHitObjects(cancellationToken);
 
             for (double i = 0; i < Duration; i += time_between_spawn)
             {

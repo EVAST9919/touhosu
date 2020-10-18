@@ -24,7 +24,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 new SettingsSlider<double>
                 {
                     LabelText = "Playfield dim",
-                    Bindable = config.GetBindable<double>(TouhosuRulesetSetting.PlayfieldDim),
+                    Current = config.GetBindable<double>(TouhosuRulesetSetting.PlayfieldDim),
                     KeyboardStep = 0.01f,
                     DisplayAsPercentage = true
                 }

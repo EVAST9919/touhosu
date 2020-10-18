@@ -14,17 +14,5 @@ namespace osu.Game.Rulesets.Touhosu.Judgements
 
             return base.HealthIncreaseFor(result);
         }
-
-        protected override int NumericResultFor(HitResult result)
-        {
-            switch (result)
-            {
-                default:
-                    return 0;
-
-                case HitResult.Perfect:
-                    return 100;
-            }
-        }
     }
 }

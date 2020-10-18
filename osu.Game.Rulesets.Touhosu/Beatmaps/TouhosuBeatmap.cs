@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using osu.Framework.Graphics.Sprites;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Touhosu.Objects;
 
@@ -20,26 +19,22 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
                 new BeatmapStatistic
                 {
                     Name = @"Explosions",
-                    Content = explosions.ToString(),
-                    Icon = FontAwesome.Regular.Circle
+                    Content = explosions.ToString()
                 },
                 new BeatmapStatistic
                 {
                     Name = @"Spinners",
-                    Content = spinners.ToString(),
-                    Icon = FontAwesome.Regular.Circle
+                    Content = spinners.ToString()
                 },
                 new BeatmapStatistic
                 {
                     Name = @"Projectiles",
-                    Content = projectiles.ToString(),
-                    Icon = FontAwesome.Regular.Circle
+                    Content = projectiles.ToString()
                 },
                 new BeatmapStatistic
                 {
                     Name = @"Homing projectiles",
-                    Content = homing.ToString(),
-                    Icon = FontAwesome.Regular.Circle
+                    Content = homing.ToString()
                 }
             };
         }

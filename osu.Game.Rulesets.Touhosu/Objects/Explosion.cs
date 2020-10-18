@@ -1,5 +1,4 @@
 ﻿using osu.Game.Rulesets.Judgements;
-using osu.Game.Rulesets.Touhosu.Judgements;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
@@ -7,6 +6,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects
     {
         public float AngleOffset { get; set; }
 
-        public override Judgement CreateJudgement() => new NullJudgement();
+        public override Judgement CreateJudgement() => new IgnoreJudgement();
     }
 }

@@ -15,7 +15,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         protected override void CheckForResult(bool userTriggered, double timeOffset)
         {
             if (timeOffset > 0)
-                ApplyResult(r => r.Type = HitResult.Meh);
+                ApplyResult(r => r.Type = HitResult.IgnoreHit);
         }
     }
 }

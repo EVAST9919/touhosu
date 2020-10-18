@@ -5,6 +5,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects
 {
     public class SoundHitObject : TouhosuHitObject
     {
-        public override Judgement CreateJudgement() => new NullJudgement();
+        public override Judgement CreateJudgement() => new IgnoreJudgement();
     }
 }

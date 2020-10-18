@@ -1,6 +1,7 @@
 ﻿using osu.Game.Rulesets.Touhosu.Extensions;
 using osuTK;
 using System;
+using System.Threading;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
@@ -10,9 +11,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects
 
         public int SideCount { get; set; } = 3;
 
-        protected override void CreateNestedHitObjects()
+        protected override void CreateNestedHitObjects(CancellationToken cancellationToken)
         {
-            base.CreateNestedHitObjects();
+            base.CreateNestedHitObjects(cancellationToken);
 
             for (int i = 0; i < SideCount; i++)
             {

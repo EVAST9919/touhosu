@@ -1,15 +1,16 @@
 ﻿using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Touhosu.Judgements;
+using System.Threading;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
     public abstract class StandaloneProjectile : AngeledProjectile
     {
-        public override Judgement CreateJudgement() => new NullJudgement();
+        public override Judgement CreateJudgement() => new IgnoreJudgement();
 
-        protected override void CreateNestedHitObjects()
+        protected override void CreateNestedHitObjects(CancellationToken cancellationToken)
         {
-            base.CreateNestedHitObjects();
+            base.CreateNestedHitObjects(cancellationToken);
 
             AddNested(CreateProjectile());
 
