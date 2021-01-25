@@ -1,25 +1,16 @@
-﻿using osu.Game.Rulesets.Objects.Drawables;
-using osuTK.Graphics;
-using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using osu.Game.Rulesets.Objects.Drawables;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public abstract class DrawableTouhosuHitObject : DrawableHitObject<TouhosuHitObject>
+    public abstract class DrawableTouhosuHitObject<T> : DrawableHitObject<TouhosuHitObject>
+        where T : TouhosuHitObject
     {
-        protected override Color4 GetComboColour(IReadOnlyList<Color4> comboColours) =>
-            comboColours[(HitObject.IndexInBeatmap + 1) % comboColours.Count];
+        protected new T HitObject => (T)base.HitObject;
 
-        protected DrawableTouhosuHitObject(TouhosuHitObject hitObject)
-            : base(hitObject)
+        protected DrawableTouhosuHitObject([CanBeNull] T h = null)
+            : base(h)
         {
         }
-
-        protected override void Update()
-        {
-            base.Update();
-            Position = HitObject.Position;
-        }
-
-        protected sealed override double InitialLifetimeOffset => HitObject.TimePreempt;
     }
 }

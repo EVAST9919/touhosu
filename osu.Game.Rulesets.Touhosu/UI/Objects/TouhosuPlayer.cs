@@ -179,23 +179,21 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
         {
             base.Update();
 
-            updateReplayState();
+            var replayState = (GetContainingInputManager().CurrentState as RulesetInputManagerInputState<TouhosuAction>)?.LastReplayState as TouhosuFramedReplayInputHandler.TouhosuReplayState;
+
+            if (replayState?.Position.Value != null)
+            {
+                Player.Position = replayState.Position.Value;
+            }
+            else
+            {
+                move(Clock.ElapsedFrameTime, horizontalDirection, verticalDirection);
+            }
 
             if (isDead)
                 return;
 
-            move(Clock.ElapsedFrameTime, horizontalDirection, verticalDirection);
             updatePlayerState();
-        }
-
-        private void updateReplayState()
-        {
-            var state = (GetContainingInputManager().CurrentState as RulesetInputManagerInputState<TouhosuAction>)?.LastReplayState as TouhosuFramedReplayInputHandler.TouhosuReplayState ?? null;
-
-            if (state != null)
-            {
-                Player.Position = state.Position.Value;
-            }
         }
 
         private void move(double elapsedTime, int horizontalDirection, int verticalDirection)
@@ -215,7 +213,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                 var newY = oldY + Math.Sign(verticalDirection) * elapsedTime * base_speed * speedMultiplier;
 
                 var expectedDistance = Math.Abs(newX - oldX);
-                var realDistance = MathExtensions.Distance(new Vector2(oldX, oldY), new Vector2((float)newX, (float)newY));
+                var realDistance = Vector2.Distance(new Vector2(oldX, oldY), new Vector2((float)newX, (float)newY));
                 var offset = Math.Sqrt(MathExtensions.Pow(expectedDistance - realDistance) / 2);
 
                 newX += (horizontalDirection > 0 ? -1 : 1) * offset;

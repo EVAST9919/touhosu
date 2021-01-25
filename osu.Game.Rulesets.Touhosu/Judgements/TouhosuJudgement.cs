@@ -9,14 +9,10 @@ namespace osu.Game.Rulesets.Touhosu.Judgements
 
         protected override double HealthIncreaseFor(HitResult result)
         {
-            switch (result)
-            {
-                case HitResult.Miss:
-                    return -0.08f;
+            if (result == HitResult.Perfect)
+                return 0.0006f;
 
-                default:
-                    return 0;
-            }
+            return base.HealthIncreaseFor(result);
         }
     }
 }

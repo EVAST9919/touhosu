@@ -1,24 +1,46 @@
-﻿using osu.Game.Beatmaps;
-using osu.Game.Beatmaps.ControlPoints;
-using osu.Game.Rulesets.Touhosu.Extensions;
-using osuTK;
+﻿using osu.Framework.Bindables;
+using osu.Game.Rulesets.Objects.Types;
 
 namespace osu.Game.Rulesets.Touhosu.Objects
 {
-    public abstract class Projectile : TouhosuHitObject
+    public abstract class Projectile : TouhosuHitObject, IHasComboInformation
     {
-        public float SizeAdjustValue { get; protected set; } = 1;
+        public double TimePreempt { get; set; } = 400;
 
-        public bool ExpireOnWallHit { get; protected set; } = true;
+        public readonly Bindable<int> IndexInBeatmapBindable = new Bindable<int>();
 
-        public bool AffectPlayer { get; protected set; } = true;
-
-        public Vector2 ParentPosition { get; set; } = Vector2.Zero;
-
-        protected override void ApplyDefaultsToSelf(ControlPointInfo controlPointInfo, BeatmapDifficulty difficulty)
+        public int IndexInBeatmap
         {
-            base.ApplyDefaultsToSelf(controlPointInfo, difficulty);
-            SizeAdjustValue = MathExtensions.Map(difficulty.CircleSize, 0, 10, 0.2f, 1);
+            get => IndexInBeatmapBindable.Value;
+            set => IndexInBeatmapBindable.Value = value;
         }
+
+        public Bindable<int> IndexInCurrentComboBindable { get; } = new Bindable<int>();
+
+        public int IndexInCurrentCombo
+        {
+            get => IndexInCurrentComboBindable.Value;
+            set => IndexInCurrentComboBindable.Value = value;
+        }
+
+        public Bindable<int> ComboIndexBindable { get; } = new Bindable<int>();
+
+        public int ComboIndex
+        {
+            get => ComboIndexBindable.Value;
+            set => ComboIndexBindable.Value = value;
+        }
+
+        public virtual bool NewCombo { get; set; }
+
+        public Bindable<bool> LastInComboBindable { get; } = new Bindable<bool>();
+
+        public virtual bool LastInCombo
+        {
+            get => LastInComboBindable.Value;
+            set => LastInComboBindable.Value = value;
+        }
+
+        public int ComboOffset { get; set; }
     }
 }

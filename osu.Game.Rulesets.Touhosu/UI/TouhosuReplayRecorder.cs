@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using osu.Game.Replays;
 using osu.Game.Rulesets.Touhosu.Replays;
 using osu.Game.Rulesets.Replays;
 using osu.Game.Rulesets.UI;
 using osuTK;
+using osu.Game.Scoring;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -11,8 +11,8 @@ namespace osu.Game.Rulesets.Touhosu.UI
     {
         private readonly TouhosuPlayfield playfield;
 
-        public TouhosuReplayRecorder(Replay target, TouhosuPlayfield playfield)
-            : base(target)
+        public TouhosuReplayRecorder(Score score, TouhosuPlayfield playfield)
+            : base(score)
         {
             this.playfield = playfield;
         }

@@ -4,15 +4,16 @@ using osu.Game.Rulesets.Touhosu.UI.Objects;
 using osu.Game.Rulesets.UI;
 using osuTK;
 using osu.Game.Rulesets.Touhosu.UI.HUD;
-using osu.Framework.Allocation;
 using osu.Game.Rulesets.Objects.Drawables;
-using osu.Game.Rulesets.Touhosu.Objects.Drawables;
-using osu.Game.Rulesets.Touhosu.Extensions;
 using osuTK.Graphics;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Extensions.Color4Extensions;
-using osu.Framework.Extensions.IEnumerableExtensions;
-using System.Linq;
+using osu.Game.Rulesets.Touhosu.Scoring;
+using osu.Framework.Allocation;
+using osu.Game.Rulesets.Objects;
+using osu.Game.Rulesets.Touhosu.Objects;
+using osu.Game.Rulesets.Touhosu.Objects.Drawables;
+using osu.Game.Rulesets.Touhosu.Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -21,16 +22,9 @@ namespace osu.Game.Rulesets.Touhosu.UI
         public static readonly Vector2 FULL_SIZE = new Vector2(512, 384);
         public static readonly Vector2 PLAYFIELD_SIZE = new Vector2(307, 384);
 
-        private readonly TouhosuRuleset ruleset;
         public TouhosuPlayer Player;
 
-        public TouhosuPlayfield(TouhosuRuleset ruleset = null)
-        {
-            this.ruleset = ruleset;
-        }
-
-        [BackgroundDependencyLoader]
-        private void load()
+        public TouhosuPlayfield()
         {
             InternalChildren = new Drawable[]
             {
@@ -62,10 +56,30 @@ namespace osu.Game.Rulesets.Touhosu.UI
             Player.HitObjects = HitObjectContainer;
         }
 
-        public bool CheckHit(DrawableProjectile obj)
+        [BackgroundDependencyLoader(true)]
+        private void load()
         {
-            var radius = obj.Size.X / 2;
-            var distance = MathExtensions.Distance(Player.PlayerPosition(), obj.Position + obj.ParentPosition);
+            RegisterPool<AngeledProjectile, DrawableAngeledProjectile>(300, 1500);
+            RegisterPool<InstantProjectile, DrawableInstantProjectile>(300, 600);
+        }
+
+        protected override void OnNewDrawableHitObject(DrawableHitObject drawableHitObject)
+        {
+            base.OnNewDrawableHitObject(drawableHitObject);
+
+            switch (drawableHitObject)
+            {
+                case DrawableAngeledProjectile projectile:
+                    projectile.CheckHit += checkHit;
+                    projectile.DistanceToPlayer += getDistanceToPlayer;
+                    break;
+            }
+        }
+
+        private bool checkHit(Vector2 pos)
+        {
+            var radius = TouhosuExtensions.SPHERE_SIZE / 2;
+            var distance = Vector2.Distance(Player.PlayerPosition(), pos);
             var isHit = distance < radius + 2;
 
             if (isHit)
@@ -74,70 +88,38 @@ namespace osu.Game.Rulesets.Touhosu.UI
             return isHit;
         }
 
-        public float GetDistanceFromPlayer(DrawableProjectile obj) => (float)MathExtensions.Distance(Player.PlayerPosition(), obj.Position + obj.ParentPosition);
+        private float getDistanceToPlayer(Vector2 pos) => Vector2.Distance(Player.PlayerPosition(), pos);
 
-        public float GetPlayerAngle(DrawableHomingProjectile obj) => MathExtensions.GetPlayerAngle(Player, obj.Position + obj.ParentPosition);
-
-        public override void Add(DrawableHitObject h)
+        public void ApplyHealthProcessor(TouhosuHealthProcessor p)
         {
-            base.Add(h);
-
-            if (h is DrawableExplosion explosion)
-            {
-                explosion.ProjectilesContainer.ForEach(p =>
-                {
-                    p.CheckHit += CheckHit;
-                    p.GetDistanceFromPlayer += GetDistanceFromPlayer;
-                });
-
-                return;
-            }
-
-            if (h is DrawableSpinner spinner)
-            {
-                spinner.ProjectilesContainer.ForEach(p =>
-                {
-                    p.CheckHit += CheckHit;
-                    p.GetDistanceFromPlayer += GetDistanceFromPlayer;
-                });
-
-                return;
-            }
-
-            if (h is DrawableStandaloneProjectile standalone)
-            {
-                var t = standalone.NestedHitObjects.OfType<DrawableProjectile>().First();
-                t.CheckHit += CheckHit;
-                t.GetDistanceFromPlayer += GetDistanceFromPlayer;
-
-                if (t is DrawableTickProjectile)
-                {
-                    ((DrawableTickProjectile)t).PlayerAngle = GetPlayerAngle;
-                }
-
-                return;
-            }
+            p.Failed += onFail;
         }
 
-        private bool failInvoked;
-
-        protected override void Update()
-        {
-            base.Update();
-
-            if (!ruleset?.HealthProcessor?.HasFailed ?? true)
-                return;
-
-            if (failInvoked)
-                return;
-
-            onFail();
-            failInvoked = true;
-        }
-
-        private void onFail()
+        private bool onFail()
         {
             Player.Die();
+            return true;
+        }
+
+        protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject) => new TouhosuHitObjectLifetimeEntry(hitObject);
+
+        private class TouhosuHitObjectLifetimeEntry : HitObjectLifetimeEntry
+        {
+            public TouhosuHitObjectLifetimeEntry(HitObject hitObject)
+                : base(hitObject)
+            {
+            }
+
+            protected override double InitialLifetimeOffset
+            {
+                get
+                {
+                    if (HitObject is Projectile projectile)
+                        return projectile.TimePreempt;
+
+                    return base.InitialLifetimeOffset;
+                }
+            }
         }
     }
 }

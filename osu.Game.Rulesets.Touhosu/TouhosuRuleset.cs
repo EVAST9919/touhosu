@@ -25,17 +25,24 @@ namespace osu.Game.Rulesets.Touhosu
 {
     public class TouhosuRuleset : Ruleset
     {
-        public TouhosuHealthProcessor HealthProcessor;
+        private DrawableTouhosuRuleset ruleset;
 
         public override IRulesetConfigManager CreateConfig(SettingsStore settings) => new TouhosuRulesetConfigManager(settings, RulesetInfo);
 
         public override RulesetSettingsSubsection CreateSettings() => new TouhosuSettingsSubsection(this);
 
-        public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) => new DrawableTouhosuRuleset(this, beatmap, mods);
+        public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) => ruleset = new DrawableTouhosuRuleset(this, beatmap, mods);
 
-        public override HealthProcessor CreateHealthProcessor(double drainStartTime) => HealthProcessor = new TouhosuHealthProcessor();
+        public override HealthProcessor CreateHealthProcessor(double drainStartTime)
+        {
+            var hp = new TouhosuHealthProcessor();
+            ruleset.HealthProcessor = hp;
+            return hp;
+        }
 
         public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) => new TouhosuBeatmapConverter(beatmap, this);
+
+        public override IBeatmapProcessor CreateBeatmapProcessor(IBeatmap beatmap) => new TouhosuBeatmapProcessor(beatmap);
 
         public override IConvertibleReplayFrame CreateConvertibleReplayFrame() => new TouhosuReplayFrame();
 

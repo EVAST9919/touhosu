@@ -1,80 +1,36 @@
-﻿using osuTK;
-using System;
-using osu.Game.Rulesets.Touhosu.Extensions;
+﻿using JetBrains.Annotations;
+using osu.Framework.Bindables;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public class DrawableAngeledProjectile : DrawableProjectile
+    public class DrawableAngeledProjectile : DrawableConstantMovingProjectile<AngeledProjectile>
     {
-        private const int hidden_distance = 70;
-        private const int hidden_distance_buffer = 50;
+        public readonly IBindable<float> AngleBindable = new Bindable<float>();
 
-        public bool HiddenApplied;
+        protected override float GetTargetAngle() => AngleBindable.Value;
 
-        protected readonly float Speed;
+        public DrawableAngeledProjectile()
+            : this(null)
+        {
+        }
 
-        public DrawableAngeledProjectile(AngeledProjectile h)
+        public DrawableAngeledProjectile([CanBeNull] AngeledProjectile h = null)
             : base(h)
         {
-            Speed = h.Speed;
         }
 
-        protected virtual float GetAngle() => ((AngeledProjectile)HitObject).Angle;
-
-        private float angle;
-
-        protected override void LoadComplete()
+        protected override void OnApply()
         {
-            base.LoadComplete();
+            base.OnApply();
 
-            angle = GetAngle();
-            Piece.Rotation = angle;
+            AngleBindable.BindTo(HitObject.AngleBindable);
         }
 
-        protected override void Update()
+        protected override void OnFree()
         {
-            base.Update();
+            base.OnFree();
 
-            updateHidden();
-
-            var time = Time.Current;
-
-            Vector2 newPosition = (time > HitObject.StartTime) ? UpdatePosition(time) : HitObject.Position;
-
-            if (newPosition == Position)
-                return;
-
-            Position = newPosition;
-        }
-
-        protected virtual Vector2 UpdatePosition(double currentTime)
-        {
-            var elapsedTime = currentTime - HitObject.StartTime;
-            var xPosition = HitObject.Position.X + (elapsedTime * Speed * Math.Sin(angle * Math.PI / 180));
-            var yPosition = HitObject.Position.Y + (elapsedTime * Speed * -Math.Cos(angle * Math.PI / 180));
-            return new Vector2((float)xPosition, (float)yPosition);
-        }
-
-        private void updateHidden()
-        {
-            if (!HiddenApplied)
-                return;
-
-            var distance = GetDistanceFromPlayer.Invoke(this);
-
-            if (distance > hidden_distance + hidden_distance_buffer)
-            {
-                Alpha = 1;
-                return;
-            }
-
-            if (distance < hidden_distance)
-            {
-                Alpha = 0;
-                return;
-            }
-
-            Alpha = MathExtensions.Map(distance - hidden_distance, 0, hidden_distance_buffer, 0, 1);
+            AngleBindable.UnbindFrom(HitObject.AngleBindable);
         }
     }
 }

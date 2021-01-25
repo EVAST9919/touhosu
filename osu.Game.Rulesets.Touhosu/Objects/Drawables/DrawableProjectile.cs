@@ -1,85 +1,105 @@
-﻿using osu.Framework.Graphics;
-using osuTK;
+﻿using JetBrains.Annotations;
 using osu.Framework.Allocation;
-using osu.Game.Rulesets.Objects.Drawables;
-using osu.Game.Rulesets.Scoring;
-using osu.Game.Rulesets.Touhosu.UI;
+using osu.Framework.Bindables;
+using osu.Framework.Graphics;
+using osuTK;
 using System;
+using osu.Game.Rulesets.Objects.Drawables;
+using osu.Framework.Utils;
 using osu.Game.Rulesets.Touhosu.Objects.Drawables.Pieces;
+using osu.Game.Rulesets.Touhosu.Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public abstract class DrawableProjectile : DrawableTouhosuHitObject
+    public abstract class DrawableProjectile<T> : DrawableTouhosuHitObject<T>
+        where T : Projectile
     {
-        protected virtual float BaseSize { get; } = 25;
+        private const int hidden_distance = 70;
+        private const int hidden_distance_buffer = 50;
 
-        protected virtual bool UseGlow { get; } = true;
+        public readonly IBindable<Vector2> PositionBindable = new Bindable<Vector2>();
+        public readonly Bindable<int> IndexInBeatmap = new Bindable<int>();
 
-        protected virtual string ProjectileName { get; } = "Sphere";
+        protected abstract bool CanHitPlayer { get; set; }
 
-        protected readonly ProjectilePiece Piece;
-        private readonly bool expireOnWallHit;
-        private readonly bool affectPlayer;
-        private double missTime;
-        public readonly Vector2 ParentPosition;
+        public Func<Vector2, bool> CheckHit;
+        public Func<Vector2, float> DistanceToPlayer;
 
-        protected DrawableProjectile(Projectile h)
+        public bool HiddenApplied { get; set; }
+
+        private ProjectilePiece piece;
+
+        protected DrawableProjectile([CanBeNull] T h = null)
             : base(h)
         {
-            expireOnWallHit = h.ExpireOnWallHit;
-            affectPlayer = h.AffectPlayer;
-
-            Origin = Anchor.Centre;
-            Size = new Vector2(BaseSize * h.SizeAdjustValue);
-            Position = h.Position;
-            ParentPosition = h.ParentPosition;
-            Scale = Vector2.Zero;
-            AddInternal(Piece = new ProjectilePiece(ProjectileName, UseGlow));
         }
 
         [BackgroundDependencyLoader]
         private void load()
         {
-            AccentColour.BindValueChanged(accent => Piece.AccentColour = accent.NewValue, true);
+            Alpha = 0;
+            Scale = Vector2.Zero;
+
+            Origin = Anchor.Centre;
+            Size = new Vector2(TouhosuExtensions.SPHERE_SIZE);
+            AddInternal(piece = new ProjectilePiece("Sphere", true));
+
+            AccentColour.BindValueChanged(c => piece.AccentColour = c.NewValue);
+            PositionBindable.BindValueChanged(p => Position = p.NewValue);
         }
 
         protected override void UpdateInitialTransforms()
         {
+            base.UpdateInitialTransforms();
+            this.FadeInFromZero();
             this.ScaleTo(Vector2.One, HitObject.TimePreempt);
         }
 
+        protected override void Update()
+        {
+            base.Update();
+
+            if (IsHit || !HiddenApplied)
+                return;
+
+            var distance = DistanceToPlayer.Invoke(Position);
+
+            if (distance > hidden_distance + hidden_distance_buffer)
+            {
+                piece.Alpha = 1;
+                return;
+            }
+
+            if (distance < hidden_distance)
+            {
+                piece.Alpha = 0;
+                return;
+            }
+
+            piece.Alpha = Interpolation.ValueAt((float)distance - hidden_distance, 0f, 1f, 0, hidden_distance_buffer);
+        }
+
+        private double missTime;
+
         protected override void CheckForResult(bool userTriggered, double timeOffset)
         {
-            if (timeOffset > 0)
-            {
-                if (affectPlayer)
-                {
-                    if (CheckHit?.Invoke(this) ?? false)
-                    {
-                        missTime = timeOffset;
-                        ApplyResult(r => r.Type = HitResult.Miss);
-                        return;
-                    }
-                }
+            if (timeOffset < 0)
+                return;
 
-                if (expireOnWallHit)
-                {
-                    if (Position.X + ParentPosition.X > TouhosuPlayfield.PLAYFIELD_SIZE.X + Size.X / 2f
-                    || Position.X + ParentPosition.X < -Size.X / 2f
-                    || Position.Y + ParentPosition.Y > TouhosuPlayfield.PLAYFIELD_SIZE.Y + Size.Y / 2f
-                    || Position.Y + ParentPosition.Y < -Size.Y / 2f)
-                        ApplyResult(r => r.Type = r.Judgement.MaxResult);
-                }
+            if (!CanHitPlayer)
+                return;
+
+            if (CheckHit?.Invoke(Position) ?? false)
+            {
+                missTime = timeOffset;
+                ApplyResult(h => h.Type = h.Judgement.MinResult);
+                return;
             }
         }
 
-        public Func<DrawableProjectile, bool> CheckHit;
-
-        public Func<DrawableProjectile, float> GetDistanceFromPlayer;
-
-        protected override void UpdateStateTransforms(ArmedState state)
+        protected override void UpdateHitStateTransforms(ArmedState state)
         {
-            base.UpdateStateTransforms(state);
+            base.UpdateHitStateTransforms(state);
 
             switch (state)
             {
@@ -88,5 +108,24 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
                     break;
             }
         }
+
+        protected override void OnApply()
+        {
+            base.OnApply();
+
+            PositionBindable.BindTo(HitObject.PositionBindable);
+            IndexInBeatmap.BindTo(HitObject.IndexInBeatmapBindable);
+        }
+
+        protected override void OnFree()
+        {
+            base.OnFree();
+
+            PositionBindable.UnbindFrom(HitObject.PositionBindable);
+            IndexInBeatmap.UnbindFrom(HitObject.IndexInBeatmapBindable);
+        }
+
+
+        protected override double InitialLifetimeOffset => HitObject.TimePreempt;
     }
 }
