@@ -4,14 +4,18 @@ using osu.Game.Rulesets.Touhosu.Objects;
 using osu.Game.Rulesets.Touhosu.Replays;
 using osu.Game.Scoring;
 using osu.Game.Users;
+using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Touhosu.Mods
 {
     public class TouhosuModCinema : ModCinema<TouhosuHitObject>
     {
-        public override Score CreateReplayScore(IBeatmap beatmap) => new Score
+        public override Score CreateReplayScore(IBeatmap beatmap, IReadOnlyList<Mod> mods) => new Score
         {
-            ScoreInfo = new ScoreInfo { User = new User { Username = "Reimu" } },
+            ScoreInfo = new ScoreInfo
+            {
+                User = new User { Username = "Reimu" }
+            },
             Replay = new TouhosuAutoGenerator(beatmap).Generate(),
         };
     }
