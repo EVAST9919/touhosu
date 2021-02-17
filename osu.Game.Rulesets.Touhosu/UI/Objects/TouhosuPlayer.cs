@@ -4,7 +4,6 @@ using osuTK;
 using System;
 using osuTK.Graphics;
 using osu.Framework.Input.Bindings;
-using osu.Framework.Graphics.Shapes;
 using System.Collections.Generic;
 using osu.Game.Rulesets.UI;
 using osu.Framework.Bindables;
@@ -15,6 +14,8 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
     public class TouhosuPlayer : CompositeDrawable, IKeyBindingHandler<TouhosuAction>
     {
+        public static readonly float HITBOX_SIZE = 7;
+
         private const float base_speed = 0.2f;
         private const float shoot_delay = 80;
 
@@ -56,26 +57,13 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                     Position = new Vector2(TouhosuPlayfield.PLAYFIELD_SIZE.X / 2f, TouhosuPlayfield.PLAYFIELD_SIZE.Y - 20),
                     Children = new Drawable[]
                     {
-                        focus = new FocusAnimation(),
                         animationContainer = new Container
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                             Size = new Vector2(23.25f, 33.75f),
                         },
-                        new Circle
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            Size = new Vector2(3),
-                            Colour = Color4.Red,
-                        },
-                        new Circle
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            Size = new Vector2(2),
-                        }
+                        focus = new FocusAnimation()
                     }
                 }
             });
