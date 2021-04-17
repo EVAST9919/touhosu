@@ -13,7 +13,7 @@ namespace osu.Game.Rulesets.Touhosu.Configuration
         protected override void InitialiseDefaults()
         {
             base.InitialiseDefaults();
-            Set(TouhosuRulesetSetting.PlayfieldDim, 0.5, 0, 1);
+            SetDefault(TouhosuRulesetSetting.PlayfieldDim, 0.5, 0, 1);
         }
     }
 
