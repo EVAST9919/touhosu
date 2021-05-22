@@ -7,7 +7,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
     public class DrawableInstantProjectile : DrawableProjectile<InstantProjectile>
     {
-        protected override bool CanHitPlayer { get; set; } = false;
+        protected override bool CanHitPlayer => false;
 
         public DrawableInstantProjectile()
             : this(null)

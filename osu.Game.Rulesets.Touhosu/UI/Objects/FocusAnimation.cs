@@ -48,7 +48,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
             base.LoadComplete();
 
             focus1.Spin(4000, RotationDirection.Clockwise);
-            focus2.Spin(4000, RotationDirection.CounterClockwise);
+            focus2.Spin(4000, RotationDirection.Counterclockwise);
         }
 
         public void Focus()

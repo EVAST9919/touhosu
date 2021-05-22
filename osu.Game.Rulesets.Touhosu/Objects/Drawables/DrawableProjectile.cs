@@ -20,7 +20,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         public readonly IBindable<Vector2> PositionBindable = new Bindable<Vector2>();
         public readonly Bindable<int> IndexInBeatmap = new Bindable<int>();
 
-        protected abstract bool CanHitPlayer { get; set; }
+        protected abstract bool CanHitPlayer { get; }
 
         public Func<Vector2, bool> CheckHit;
         public Func<Vector2, float> DistanceToPlayer;

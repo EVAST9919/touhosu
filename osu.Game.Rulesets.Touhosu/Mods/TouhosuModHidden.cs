@@ -23,5 +23,13 @@ namespace osu.Game.Rulesets.Touhosu.Mods
                 }
             }
         }
+
+        protected override void ApplyIncreasedVisibilityState(DrawableHitObject hitObject, ArmedState state)
+        {
+        }
+
+        protected override void ApplyNormalVisibilityState(DrawableHitObject hitObject, ArmedState state)
+        {
+        }
     }
 }

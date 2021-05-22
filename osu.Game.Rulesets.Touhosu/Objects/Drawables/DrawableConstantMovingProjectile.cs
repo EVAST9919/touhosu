@@ -14,7 +14,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
     {
         public readonly IBindable<float> SpeedMultiplierBindable = new Bindable<float>();
 
-        protected override bool CanHitPlayer { get; set; } = true;
+        protected override bool CanHitPlayer => true;
 
         protected abstract float GetTargetAngle();
 
@@ -145,10 +145,10 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         private float getCornerAngle(Vector2 cornerPosition)
             => MathExtensions.GetSafeAngle((float)(Math.Atan2(HitObject.Y - cornerPosition.Y, HitObject.X - cornerPosition.X) * 180 / Math.PI) - 90);
 
-        private float getYPosition(Vector2 initialPosition, float finalX, float angle)
+        private static float getYPosition(Vector2 initialPosition, float finalX, float angle)
             => (float)(initialPosition.Y + ((finalX - initialPosition.X) / -Math.Tan(angle * Math.PI / 180)));
 
-        private float getXPosition(Vector2 initialPosition, float finalY, float angle)
+        private static float getXPosition(Vector2 initialPosition, float finalY, float angle)
             => (float)(initialPosition.X + ((finalY - initialPosition.Y) * -Math.Tan(angle * Math.PI / 180)));
 
         private enum Wall
