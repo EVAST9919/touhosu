@@ -18,7 +18,10 @@ namespace osu.Game.Rulesets.Touhosu.Difficulty
 
         protected override DifficultyAttributes CreateDifficultyAttributes(IBeatmap beatmap, Mod[] mods, Skill[] skills, double clockRate)
         {
-            return new DifficultyAttributes(mods, skills, 0);
+            return new DifficultyAttributes
+            {
+                StarRating = beatmap.HitObjects.Count / 15 / (beatmap.BeatmapInfo.Length / 1000 / clockRate)
+            };
         }
 
         protected override IEnumerable<DifficultyHitObject> CreateDifficultyHitObjects(IBeatmap beatmap, double clockRate) => Enumerable.Empty<DifficultyHitObject>();
