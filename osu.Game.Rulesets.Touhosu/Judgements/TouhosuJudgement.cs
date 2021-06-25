@@ -10,7 +10,7 @@ namespace osu.Game.Rulesets.Touhosu.Judgements
         protected override double HealthIncreaseFor(HitResult result)
         {
             if (result == HitResult.Perfect)
-                return 0.0006f;
+                return 0.0002f;
 
             return base.HealthIncreaseFor(result);
         }
