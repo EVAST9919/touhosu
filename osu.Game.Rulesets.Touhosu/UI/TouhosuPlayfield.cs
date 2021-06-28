@@ -78,7 +78,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
 
         private bool checkHit(Vector2 pos)
         {
-            var isHit = Vector2.Distance(Player.PlayerPosition(), pos) < (TouhosuExtensions.SPHERE_SIZE + TouhosuPlayer.HITBOX_SIZE) / 2f;
+            var isHit = Vector2.Distance(Player.PlayerPosition(), pos) < TouhosuPlayer.HITBOX_SIZE / 2f;
 
             if (isHit)
                 Player.PlayMissAnimation();
