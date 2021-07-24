@@ -11,7 +11,7 @@
     <EmbeddedResource Include="Resources\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework" Version="2021.714.0" />
-    <PackageReference Include="ppy.osu.Game" Version="2021.720.0" />
+    <PackageReference Include="ppy.osu.Framework" Version="2021.723.0" />
+    <PackageReference Include="ppy.osu.Game" Version="2021.724.0" />
   </ItemGroup>
 </Project>

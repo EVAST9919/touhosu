@@ -42,5 +42,13 @@ namespace osu.Game.Rulesets.Touhosu.Objects
         }
 
         public int ComboOffset { get; set; }
+
+        public Bindable<int> ComboIndexWithOffsetsBindable { get; } = new Bindable<int>();
+
+        public int ComboIndexWithOffsets
+        {
+            get => ComboIndexWithOffsetsBindable.Value;
+            set => ComboIndexWithOffsetsBindable.Value = value;
+        }
     }
 }
