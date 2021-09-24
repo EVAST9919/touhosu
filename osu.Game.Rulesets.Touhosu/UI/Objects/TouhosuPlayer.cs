@@ -9,6 +9,7 @@ using osu.Game.Rulesets.UI;
 using osu.Framework.Bindables;
 using osu.Game.Rulesets.Touhosu.Extensions;
 using osu.Game.Rulesets.Touhosu.Replays;
+using osu.Framework.Input.Events;
 
 namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
@@ -95,12 +96,12 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
 
         public Vector2 PlayerPosition() => Player.Position;
 
-        public bool OnPressed(TouhosuAction action)
+        public bool OnPressed(KeyBindingPressEvent<TouhosuAction> e)
         {
             if (isDead)
                 return true;
 
-            switch (action)
+            switch (e.Action)
             {
                 case TouhosuAction.MoveLeft:
                     horizontalDirection--;
@@ -130,12 +131,12 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
             return false;
         }
 
-        public void OnReleased(TouhosuAction action)
+        public void OnReleased(KeyBindingReleaseEvent<TouhosuAction> e)
         {
             if (isDead)
                 return;
 
-            switch (action)
+            switch (e.Action)
             {
                 case TouhosuAction.MoveLeft:
                     horizontalDirection++;
