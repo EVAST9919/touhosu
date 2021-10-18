@@ -78,8 +78,8 @@ namespace osu.Game.Rulesets.Touhosu.Beatmaps
 
                 if (h is ConstantMovingProjectile m)
                 {
-                    var sv = beatmap.ControlPointInfo.DifficultyPointAt(obj.StartTime).SpeedMultiplier;
-                    m.SpeedMultiplier *= Interpolation.ValueAt(sv, 0.8f, 1.3f, 0.5, 4.5);
+                    var bpm = beatmap.ControlPointInfo.TimingPointAt(h.StartTime).BPM;
+                    m.SpeedMultiplier *= Interpolation.ValueAt(bpm, 0.8f, 1.3f, 60, 300);
                 }
 
                 if (first)

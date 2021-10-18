@@ -49,9 +49,8 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             var controlPointInfo = beatmap.ControlPointInfo;
             TimingControlPoint timingPoint = controlPointInfo.TimingPointAt(obj.StartTime);
-            DifficultyControlPoint difficultyPoint = controlPointInfo.DifficultyPointAt(obj.StartTime);
 
-            double scoringDistance = 100 * difficulty.SliderMultiplier * difficultyPoint.SpeedMultiplier;
+            double scoringDistance = 100 * difficulty.SliderMultiplier;
 
             var velocity = scoringDistance / timingPoint.BeatLength;
             var tickDistance = scoringDistance / difficulty.SliderTickRate;
@@ -86,9 +85,8 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             var controlPointInfo = beatmap.ControlPointInfo;
             TimingControlPoint timingPoint = controlPointInfo.TimingPointAt(obj.StartTime);
-            DifficultyControlPoint difficultyPoint = controlPointInfo.DifficultyPointAt(obj.StartTime);
 
-            double scoringDistance = 100 * difficulty.SliderMultiplier * difficultyPoint.SpeedMultiplier;
+            double scoringDistance = 100 * difficulty.SliderMultiplier;
 
             var velocity = scoringDistance / timingPoint.BeatLength;
             var tickDistance = scoringDistance / difficulty.SliderTickRate;
