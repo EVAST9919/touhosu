@@ -1,9 +1,9 @@
 ﻿using osu.Game.Beatmaps;
+using osu.Game.Online.API.Requests.Responses;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Touhosu.Objects;
 using osu.Game.Rulesets.Touhosu.Replays;
 using osu.Game.Scoring;
-using osu.Game.Users;
 using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Touhosu.Mods
@@ -14,7 +14,7 @@ namespace osu.Game.Rulesets.Touhosu.Mods
         {
             ScoreInfo = new ScoreInfo
             {
-                User = new User { Username = "Reimu" }
+                User = new APIUser { Username = "Auto" }
             },
             Replay = new TouhosuAutoGenerator(beatmap).Generate(),
         };
