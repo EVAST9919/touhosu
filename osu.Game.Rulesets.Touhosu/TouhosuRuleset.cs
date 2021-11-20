@@ -104,11 +104,11 @@ namespace osu.Game.Rulesets.Touhosu
             Texture = new TextureStore(new TextureLoaderStore(CreateResourceStore()), false).Get("Textures/logo"),
         };
 
-        public override DifficultyCalculator CreateDifficultyCalculator(WorkingBeatmap beatmap) => new TouhosuDifficultyCalculator(this, beatmap);
-
         protected override IEnumerable<HitResult> GetValidHitResults() => new[]
         {
             HitResult.Perfect
         };
+
+        public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new TouhosuDifficultyCalculator(RulesetInfo, beatmap);
     }
 }

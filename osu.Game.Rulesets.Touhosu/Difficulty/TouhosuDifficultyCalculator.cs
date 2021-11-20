@@ -11,7 +11,7 @@ namespace osu.Game.Rulesets.Touhosu.Difficulty
 {
     public class TouhosuDifficultyCalculator : DifficultyCalculator
     {
-        public TouhosuDifficultyCalculator(Ruleset ruleset, WorkingBeatmap beatmap)
+        public TouhosuDifficultyCalculator(IRulesetInfo ruleset, IWorkingBeatmap beatmap)
             : base(ruleset, beatmap)
         {
         }
