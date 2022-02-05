@@ -29,7 +29,7 @@ namespace osu.Game.Rulesets.Touhosu.Replays
             }
         }
 
-        public override void CollectPendingInputs(List<IInput> inputs)
+        protected override void CollectReplayInputs(List<IInput> inputs)
         {
             if (Position.HasValue)
             {

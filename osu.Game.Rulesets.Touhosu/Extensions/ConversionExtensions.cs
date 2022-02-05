@@ -45,7 +45,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
         {
             List<TouhosuHitObject> converted = new List<TouhosuHitObject>();
 
-            var difficulty = beatmap.BeatmapInfo.BaseDifficulty;
+            var difficulty = beatmap.BeatmapInfo.Difficulty;
 
             var controlPointInfo = beatmap.ControlPointInfo;
             TimingControlPoint timingPoint = controlPointInfo.TimingPointAt(obj.StartTime);
@@ -81,7 +81,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
         {
             List<TouhosuHitObject> converted = new List<TouhosuHitObject>();
 
-            var difficulty = beatmap.BeatmapInfo.BaseDifficulty;
+            var difficulty = beatmap.BeatmapInfo.Difficulty;
 
             var controlPointInfo = beatmap.ControlPointInfo;
             TimingControlPoint timingPoint = controlPointInfo.TimingPointAt(obj.StartTime);
