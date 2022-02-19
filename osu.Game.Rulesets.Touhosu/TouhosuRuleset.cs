@@ -20,6 +20,7 @@ using osu.Game.Rulesets.Touhosu.Configuration;
 using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Replays.Types;
 using osu.Game.Rulesets.Touhosu.Replays;
+using osu.Game.Scoring;
 
 namespace osu.Game.Rulesets.Touhosu
 {
@@ -110,5 +111,7 @@ namespace osu.Game.Rulesets.Touhosu
         };
 
         public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new TouhosuDifficultyCalculator(RulesetInfo, beatmap);
+
+        public override PerformanceCalculator CreatePerformanceCalculator(DifficultyAttributes attributes, ScoreInfo score) => new TouhosuPerformanceCalculator(this, attributes, score);
     }
 }
