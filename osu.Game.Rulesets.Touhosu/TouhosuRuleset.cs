@@ -79,7 +79,7 @@ namespace osu.Game.Rulesets.Touhosu
                 case ModType.Automation:
                     return new Mod[]
                     {
-                        new MultiMod(new TouhosuModAutoplay(), new TouhosuModCinema()),
+                        new TouhosuModAutoplay()
                     };
 
                 case ModType.Fun:

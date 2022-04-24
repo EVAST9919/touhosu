@@ -5,7 +5,7 @@ using osu.Game.Rulesets.Replays;
 
 namespace osu.Game.Rulesets.Touhosu.Replays
 {
-    internal class TouhosuAutoGenerator : AutoGenerator
+    public class TouhosuAutoGenerator : AutoGenerator
     {
         public new TouhosuBeatmap Beatmap => (TouhosuBeatmap)base.Beatmap;
 
