@@ -20,6 +20,8 @@ using osu.Game.Rulesets.Touhosu.Configuration;
 using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Replays.Types;
 using osu.Game.Rulesets.Touhosu.Replays;
+using osu.Framework.Allocation;
+using osu.Framework.Platform;
 
 namespace osu.Game.Rulesets.Touhosu
 {
@@ -99,10 +101,7 @@ namespace osu.Game.Rulesets.Touhosu
 
         public override string PlayingVerb => "Avoiding bullets";
 
-        public override Drawable CreateIcon() => new Sprite
-        {
-            Texture = new TextureStore(new TextureLoaderStore(CreateResourceStore()), false).Get("Textures/logo"),
-        };
+        public override Drawable CreateIcon() => new TouhosuIcon(this);
 
         protected override IEnumerable<HitResult> GetValidHitResults() => new[]
         {
@@ -110,5 +109,21 @@ namespace osu.Game.Rulesets.Touhosu
         };
 
         public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new TouhosuDifficultyCalculator(RulesetInfo, beatmap);
+
+        private class TouhosuIcon : Sprite
+        {
+            private readonly TouhosuRuleset ruleset;
+
+            public TouhosuIcon(TouhosuRuleset ruleset)
+            {
+                this.ruleset = ruleset;
+            }
+
+            [BackgroundDependencyLoader]
+            private void load(GameHost host)
+            {
+                Texture = new TextureStore(host.Renderer, new TextureLoaderStore(ruleset.CreateResourceStore()), false).Get("Textures/logo");
+            }
+        }
     }
 }
