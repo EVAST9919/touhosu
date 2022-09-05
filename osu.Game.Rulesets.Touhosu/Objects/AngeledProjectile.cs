@@ -6,7 +6,10 @@ namespace osu.Game.Rulesets.Touhosu.Objects
 {
     public class AngeledProjectile : ConstantMovingProjectile
     {
-        public readonly Bindable<float> AngleBindable = new Bindable<float>();
+        public Bindable<float> AngleBindable = new Bindable<float>();
+
+        public double MissHealthIncrease = -0.1;
+        public double PerfectHealthIncrease = 0.0002f;
 
         public float Angle
         {
@@ -14,6 +17,10 @@ namespace osu.Game.Rulesets.Touhosu.Objects
             set => AngleBindable.Value = value;
         }
 
-        public override Judgement CreateJudgement() => new TouhosuJudgement();
+        public override Judgement CreateJudgement() => new TouhosuJudgement()
+        {
+            MissHealthIncrease = MissHealthIncrease,
+            PerfectHealthIncrease = PerfectHealthIncrease
+        };
     }
 }

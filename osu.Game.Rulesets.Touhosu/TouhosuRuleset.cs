@@ -73,6 +73,8 @@ namespace osu.Game.Rulesets.Touhosu
                 case ModType.DifficultyIncrease:
                     return new Mod[]
                     {
+                        new TouhosuModDamageMultiplier(),
+                        new TouhosuModNoRegen(),
                         new TouhosuModSuddenDeath(),
                         new MultiMod(new TouhosuModDoubleTime(), new TouhosuModNightcore()),
                         new TouhosuModHidden()
