@@ -2,7 +2,6 @@
 using osu.Game.Rulesets.Touhosu.Objects.Drawables;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects.Drawables;
-using osu.Framework.Localisation;
 
 namespace osu.Game.Rulesets.Touhosu.Mods
 {
