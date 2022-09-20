@@ -13,7 +13,6 @@ using osu.Framework.Allocation;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Touhosu.Objects;
 using osu.Game.Rulesets.Touhosu.Objects.Drawables;
-using osu.Game.Rulesets.Touhosu.Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
