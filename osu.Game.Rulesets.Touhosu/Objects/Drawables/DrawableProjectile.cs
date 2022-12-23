@@ -122,6 +122,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
             PositionBindable.BindTo(HitObject.PositionBindable);
             IndexInBeatmap.BindTo(HitObject.IndexInBeatmapBindable);
+            IsGrazed = false;
         }
 
         protected override void OnFree()
