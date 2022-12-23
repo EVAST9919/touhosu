@@ -93,19 +93,13 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             if (!CanHitPlayer)
                 return;
 
+            if (!IsGrazed && (CheckGrazed?.Invoke(Position) ?? false))
+                IsGrazed = true;
+
             if (CheckHit?.Invoke(Position) ?? false)
             {
                 missTime = timeOffset;
                 ApplyResult(h => h.Type = h.Judgement.MinResult);
-                return;
-            }
-
-            if (IsGrazed)
-                return;
-
-            if (CheckGrazed?.Invoke(Position) ?? false)
-            {
-                IsGrazed = true;
                 return;
             }
         }
