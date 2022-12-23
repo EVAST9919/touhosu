@@ -17,12 +17,16 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         private const int hidden_distance = 70;
         private const int hidden_distance_buffer = 50;
 
+        public bool IsGrazed = false;
+
         public readonly IBindable<Vector2> PositionBindable = new Bindable<Vector2>();
         public readonly Bindable<int> IndexInBeatmap = new Bindable<int>();
 
         protected abstract bool CanHitPlayer { get; }
 
         public Func<Vector2, bool> CheckHit;
+
+        public Func<Vector2, bool> CheckGrazed;
         public Func<Vector2, float> DistanceToPlayer;
 
         public bool HiddenApplied { get; set; }
@@ -89,6 +93,9 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             if (!CanHitPlayer)
                 return;
 
+            if (!IsGrazed && (CheckGrazed?.Invoke(Position) ?? false))
+                IsGrazed = true;
+
             if (CheckHit?.Invoke(Position) ?? false)
             {
                 missTime = timeOffset;
@@ -115,6 +122,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 
             PositionBindable.BindTo(HitObject.PositionBindable);
             IndexInBeatmap.BindTo(HitObject.IndexInBeatmapBindable);
+            IsGrazed = false;
         }
 
         protected override void OnFree()

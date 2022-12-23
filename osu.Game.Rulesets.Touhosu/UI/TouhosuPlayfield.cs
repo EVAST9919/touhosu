@@ -13,6 +13,7 @@ using osu.Framework.Allocation;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Touhosu.Objects;
 using osu.Game.Rulesets.Touhosu.Objects.Drawables;
+using osu.Framework.Audio.Sample;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
@@ -21,6 +22,8 @@ namespace osu.Game.Rulesets.Touhosu.UI
         public static readonly Vector2 FULL_SIZE = new Vector2(512, 384);
         public static readonly Vector2 PLAYFIELD_SIZE = new Vector2(307, 384);
 
+        private Sample grazeSample;
+        
         public TouhosuPlayer Player;
 
         public TouhosuPlayfield()
@@ -56,10 +59,11 @@ namespace osu.Game.Rulesets.Touhosu.UI
         }
 
         [BackgroundDependencyLoader(true)]
-        private void load()
+        private void load(ISampleStore samples)
         {
             RegisterPool<AngeledProjectile, DrawableAngeledProjectile>(300, 1500);
             RegisterPool<InstantProjectile, DrawableInstantProjectile>(300, 600);
+            grazeSample = samples.Get("graze");
         }
 
         protected override void OnNewDrawableHitObject(DrawableHitObject drawableHitObject)
@@ -71,6 +75,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 case DrawableAngeledProjectile projectile:
                     projectile.CheckHit += checkHit;
                     projectile.DistanceToPlayer += getDistanceToPlayer;
+                    projectile.CheckGrazed += checkGrazed;
                     break;
             }
         }
@@ -83,6 +88,18 @@ namespace osu.Game.Rulesets.Touhosu.UI
                 Player.PlayMissAnimation();
 
             return isHit;
+        }
+
+        private bool checkGrazed(Vector2 pos)
+        {
+            var isGrazed = Vector2.Distance(Player.PlayerPosition(), pos) < TouhosuPlayer.GRAZE_SIZE;
+
+            if (isGrazed)
+            {
+                grazeSample?.Play();
+            }
+
+            return isGrazed;
         }
 
         private float getDistanceToPlayer(Vector2 pos) => Vector2.Distance(Player.PlayerPosition(), pos);

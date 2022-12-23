@@ -17,6 +17,8 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
     {
         public static readonly float HITBOX_SIZE = 7;
 
+        public static readonly float GRAZE_SIZE = HITBOX_SIZE * 3;
+
         private const float base_speed = 0.2f;
         private const float shoot_delay = 80;
 
