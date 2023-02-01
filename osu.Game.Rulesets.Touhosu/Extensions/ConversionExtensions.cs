@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using osu.Framework.Utils;
 
 namespace osu.Game.Rulesets.Touhosu.Extensions
 {
@@ -134,15 +135,18 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             for (int i = 0; i < bodyCherriesCount; i++)
             {
-                var progress = (float)i / bodyCherriesCount;
+                var progress = i / bodyCherriesCount;
                 var position = curve.CurvePositionAt(progress) + originalPosition;
                 position = toPlayfieldSpace(position) * new Vector2(1, 0.4f);
 
-                yield return new InstantProjectile
+                if (withinPlayfield(position))
                 {
-                    StartTime = startTime + curve.Duration * progress,
-                    Position = position
-                };
+                    yield return new InstantProjectile
+                    {
+                        StartTime = startTime + curve.Duration * progress,
+                        Position = position
+                    };
+                }
             }
         }
 
@@ -182,23 +186,29 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
         private static IEnumerable<TouhosuHitObject> generateExplosion(double startTime, int bulletCount, Vector2 position, float angleOffset = 0, float angleRange = 360f)
         {
-            for (int i = 0; i < bulletCount; i++)
+            if (withinPlayfield(position))
             {
-                yield return new AngeledProjectile
+                for (int i = 0; i < bulletCount; i++)
                 {
-                    Angle = MathExtensions.BulletDistribution(bulletCount, angleRange, i, angleOffset),
-                    StartTime = startTime,
-                    Position = position,
-                };
+                    yield return new AngeledProjectile
+                    {
+                        Angle = MathExtensions.BulletDistribution(bulletCount, angleRange, i, angleOffset),
+                        StartTime = startTime,
+                        Position = position,
+                    };
+                }
             }
         }
 
         private static IEnumerable<TouhosuHitObject> generatePolygonExplosion(double startTime, int bullets_per_side, int verticesCount, Vector2 position, float angleOffset = 0)
         {
-            for (int i = 0; i < verticesCount; i++)
+            if (withinPlayfield(position))
             {
-                foreach (var h in generatePolygonLine(startTime, bullets_per_side, verticesCount, position, i * (360f / verticesCount) + angleOffset))
-                    yield return h;
+                for (int i = 0; i < verticesCount; i++)
+                {
+                    foreach (var h in generatePolygonLine(startTime, bullets_per_side, verticesCount, position, i * (360f / verticesCount) + angleOffset))
+                        yield return h;
+                }
             }
         }
 
@@ -228,9 +238,14 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
         private static Vector2 toPlayfieldSpace(Vector2 input)
         {
-            var newX = input.X / osu_playfield_size.X * TouhosuPlayfield.PLAYFIELD_SIZE.X;
-            var newY = input.Y / osu_playfield_size.Y * TouhosuPlayfield.PLAYFIELD_SIZE.Y + TouhosuExtensions.SPHERE_SIZE;
+            var newX = Interpolation.ValueAt(Math.Clamp(input.X / osu_playfield_size.X, 0f, 1f), 0f, TouhosuPlayfield.PLAYFIELD_SIZE.X, 0f, 1f);
+            var newY = Interpolation.ValueAt(Math.Clamp(input.Y / osu_playfield_size.Y, 0f, 1f), 0f, TouhosuPlayfield.PLAYFIELD_SIZE.Y, 0f, 1f);
             return new Vector2(newX, newY);
+        }
+
+        private static bool withinPlayfield(Vector2 position)
+        {
+            return position.X > 0f && position.Y < TouhosuPlayfield.PLAYFIELD_SIZE.X && position.Y > 0f && position.Y < TouhosuPlayfield.PLAYFIELD_SIZE.Y;
         }
     }
 }
