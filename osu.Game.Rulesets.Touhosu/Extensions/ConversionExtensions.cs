@@ -31,7 +31,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             => generateExplosion(
                 startTime,
                 bullets_per_hitcircle,
-                toPlayfieldSpace(originalPosition) * new Vector2(1, 0.4f),
+                toPlayfieldSpace(originalPosition * new Vector2(1, 0.4f)),
                 hitcircle_angle_offset * indexInCurrentCombo);
 
         public static IEnumerable<TouhosuHitObject> ConvertImpactCircle(double startTime, Vector2 originalPosition)
@@ -39,7 +39,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
                 startTime,
                 4,
                 MathExtensions.GetRandomTimedBool(startTime) ? 3 : 4,
-                toPlayfieldSpace(originalPosition) * new Vector2(1, 0.4f),
+                toPlayfieldSpace(originalPosition * new Vector2(1, 0.4f)),
                 MathExtensions.GetRandomTimedAngleOffset(startTime));
 
         public static IEnumerable<TouhosuHitObject> ConvertDefaultSlider(HitObject obj, Vector2 originalPosition, IBeatmap beatmap, IHasPathWithRepeats curve, double spanDuration)
@@ -61,7 +61,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             foreach (var e in SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, legacyLastTickOffset, new CancellationToken()))
             {
                 var curvePosition = curve.CurvePositionAt(e.PathProgress / (curve.RepeatCount + 1)) + originalPosition;
-                var sliderEventPosition = toPlayfieldSpace(curvePosition) * new Vector2(1, 0.4f);
+                var sliderEventPosition = toPlayfieldSpace(curvePosition * new Vector2(1, 0.4f));
 
                 switch (e.Type)
                 {
@@ -96,7 +96,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
             var slider = SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, legacyLastTickOffset, new CancellationToken());
 
-            var sliderEventPosition = toPlayfieldSpace(originalPosition) * new Vector2(1, 0.4f);
+            var sliderEventPosition = toPlayfieldSpace(originalPosition * new Vector2(1, 0.4f));
             var repeats = slider.Select(e => e.Type == SliderEventType.Repeat);
 
             var repeatCount = repeats.Count();
@@ -137,7 +137,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             {
                 var progress = i / bodyCherriesCount;
                 var position = curve.CurvePositionAt(progress) + originalPosition;
-                position = toPlayfieldSpace(position) * new Vector2(1, 0.4f);
+                position = toPlayfieldSpace(position * new Vector2(1, 0.4f));
 
                 if (withinPlayfield(position))
                 {
@@ -245,7 +245,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
 
         private static bool withinPlayfield(Vector2 position)
         {
-            return position.X > 0f && position.Y < TouhosuPlayfield.PLAYFIELD_SIZE.X && position.Y > 0f && position.Y < TouhosuPlayfield.PLAYFIELD_SIZE.Y;
+            return position.X > 0f && position.X < TouhosuPlayfield.PLAYFIELD_SIZE.X && position.Y > 0f && position.Y < TouhosuPlayfield.PLAYFIELD_SIZE.Y;
         }
     }
 }
