@@ -11,7 +11,7 @@ using osu.Game.Rulesets.Touhosu.Extensions;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public abstract class DrawableProjectile<T> : DrawableTouhosuHitObject<T>
+    public abstract partial class DrawableProjectile<T> : DrawableTouhosuHitObject<T>
         where T : Projectile
     {
         private const int hidden_distance = 70;
@@ -20,7 +20,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
         public bool IsGrazed = false;
 
         public readonly IBindable<Vector2> PositionBindable = new Bindable<Vector2>();
-        public readonly Bindable<int> IndexInBeatmap = new Bindable<int>();
 
         protected abstract bool CanHitPlayer { get; }
 
@@ -121,7 +120,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             base.OnApply();
 
             PositionBindable.BindTo(HitObject.PositionBindable);
-            IndexInBeatmap.BindTo(HitObject.IndexInBeatmapBindable);
             IsGrazed = false;
         }
 
@@ -130,7 +128,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             base.OnFree();
 
             PositionBindable.UnbindFrom(HitObject.PositionBindable);
-            IndexInBeatmap.UnbindFrom(HitObject.IndexInBeatmapBindable);
         }
 
 

@@ -44,7 +44,7 @@ namespace osu.Game.Rulesets.Touhosu
 
         public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) => new TouhosuBeatmapConverter(beatmap, this);
 
-        public override IBeatmapProcessor CreateBeatmapProcessor(IBeatmap beatmap) => new TouhosuBeatmapProcessor(beatmap);
+        public override IBeatmapProcessor CreateBeatmapProcessor(IBeatmap beatmap) => new BeatmapProcessor(beatmap);
 
         public override IConvertibleReplayFrame CreateConvertibleReplayFrame() => new TouhosuReplayFrame();
 
@@ -112,7 +112,7 @@ namespace osu.Game.Rulesets.Touhosu
 
         public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new TouhosuDifficultyCalculator(RulesetInfo, beatmap);
 
-        private class TouhosuIcon : Sprite
+        private partial class TouhosuIcon : Sprite
         {
             private readonly TouhosuRuleset ruleset;
 

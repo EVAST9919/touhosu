@@ -7,14 +7,6 @@ namespace osu.Game.Rulesets.Touhosu.Objects
     {
         public double TimePreempt { get; set; } = 400;
 
-        public readonly Bindable<int> IndexInBeatmapBindable = new Bindable<int>();
-
-        public int IndexInBeatmap
-        {
-            get => IndexInBeatmapBindable.Value;
-            set => IndexInBeatmapBindable.Value = value;
-        }
-
         public Bindable<int> IndexInCurrentComboBindable { get; } = new Bindable<int>();
 
         public int IndexInCurrentCombo
