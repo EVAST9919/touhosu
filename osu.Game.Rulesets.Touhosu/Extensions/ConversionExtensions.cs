@@ -56,9 +56,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             var velocity = scoringDistance / timingPoint.BeatLength;
             var tickDistance = scoringDistance / difficulty.SliderTickRate;
 
-            double legacyLastTickOffset = (obj as IHasLegacyLastTickOffset)?.LegacyLastTickOffset ?? 0;
-
-            foreach (var e in SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, legacyLastTickOffset, new CancellationToken()))
+            foreach (var e in SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, new CancellationToken()))
             {
                 var curvePosition = curve.CurvePositionAt(e.PathProgress / (curve.RepeatCount + 1)) + originalPosition;
                 var sliderEventPosition = toPlayfieldSpace(curvePosition * new Vector2(1, 0.4f));
@@ -95,9 +93,7 @@ namespace osu.Game.Rulesets.Touhosu.Extensions
             var velocity = scoringDistance / timingPoint.BeatLength;
             var tickDistance = scoringDistance / difficulty.SliderTickRate;
 
-            double legacyLastTickOffset = (obj as IHasLegacyLastTickOffset)?.LegacyLastTickOffset ?? 0;
-
-            var slider = SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, legacyLastTickOffset, new CancellationToken());
+            var slider = SliderEventGenerator.Generate(obj.StartTime, spanDuration, velocity, tickDistance, curve.Path.Distance, curve.RepeatCount + 1, new CancellationToken());
 
             var buzzPosition = toPlayfieldSpace(originalPosition * new Vector2(1, 0.4f));
             var repeats = slider.Select(e => e.Type == SliderEventType.Repeat);
