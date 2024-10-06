@@ -25,7 +25,7 @@ using osu.Framework.Platform;
 
 namespace osu.Game.Rulesets.Touhosu
 {
-    public class TouhosuRuleset : Ruleset
+    public partial class TouhosuRuleset : Ruleset
     {
         private DrawableTouhosuRuleset ruleset;
 

@@ -23,6 +23,12 @@ namespace osu.Game.Rulesets.Touhosu.UI
         public static readonly Vector2 FULL_SIZE = new Vector2(512, 384);
         public static readonly Vector2 PLAYFIELD_SIZE = new Vector2(307, 384);
 
+        public double SpeedMultiplier
+        {
+            get => Player.SpeedMultiplier;
+            set => Player.SpeedMultiplier = value;
+        }
+
         private Sample grazeSample;
 
         public TouhosuPlayer Player;

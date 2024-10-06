@@ -13,7 +13,7 @@ using osu.Framework.Input.Events;
 
 namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
-    public class TouhosuPlayer : CompositeDrawable, IKeyBindingHandler<TouhosuAction>
+    public partial class TouhosuPlayer : CompositeDrawable, IKeyBindingHandler<TouhosuAction>
     {
         public static readonly float HITBOX_SIZE = 7;
 
@@ -37,6 +37,8 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                 cardsController.HitObjects = value;
             }
         }
+
+        public double SpeedMultiplier { get; set; } = 1.0;
 
         public override bool RemoveCompletedTransforms => false;
 
@@ -178,7 +180,7 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
             }
             else
             {
-                move(Clock.ElapsedFrameTime, horizontalDirection, verticalDirection);
+                move(Clock.ElapsedFrameTime * SpeedMultiplier, horizontalDirection, verticalDirection);
             }
 
             if (isDead)
