@@ -14,16 +14,17 @@ using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Touhosu.Objects;
 using osu.Game.Rulesets.Touhosu.Objects.Drawables;
 using osu.Framework.Audio.Sample;
+using osu.Framework.Graphics.Shapes;
 
 namespace osu.Game.Rulesets.Touhosu.UI
 {
-    public class TouhosuPlayfield : Playfield
+    public partial class TouhosuPlayfield : Playfield
     {
         public static readonly Vector2 FULL_SIZE = new Vector2(512, 384);
         public static readonly Vector2 PLAYFIELD_SIZE = new Vector2(307, 384);
 
         private Sample grazeSample;
-        
+
         public TouhosuPlayer Player;
 
         public TouhosuPlayfield()
@@ -37,8 +38,6 @@ namespace osu.Game.Rulesets.Touhosu.UI
                     RelativeSizeAxes = Axes.Both,
                     Masking = true,
                     CornerRadius = 7,
-                    BorderThickness = 1.2f,
-                    BorderColour = Color4.White,
                     EdgeEffect = new EdgeEffectParameters
                     {
                         Hollow = true,
@@ -46,13 +45,48 @@ namespace osu.Game.Rulesets.Touhosu.UI
                         Colour = Color4.Black.Opacity(0.4f),
                         Type = EdgeEffectType.Shadow,
                     },
-                    Children = new Drawable[]
+                    Child = new Box
                     {
-                        new PlayfieldBackground(),
-                        Player = new TouhosuPlayer(),
-                        HitObjectContainer
+                        RelativeSizeAxes = Axes.Both,
+                        Alpha = 0,
+                        AlwaysPresent = true
                     }
-                }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Padding = new MarginPadding(1),
+                    Child = new Container
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        RelativeSizeAxes = Axes.Both,
+                        Masking = true,
+                        CornerRadius = 7,
+                        Children = new Drawable[]
+                        {
+                            new PlayfieldBackground(),
+                            Player = new TouhosuPlayer(),
+                            HitObjectContainer
+                        }
+                    }
+                },
+                new Container
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    RelativeSizeAxes = Axes.Both,
+                    Masking = true,
+                    CornerRadius = 7,
+                    BorderThickness = 1.2f,
+                    BorderColour = Color4.White,
+                    Child = new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Alpha = 0,
+                        AlwaysPresent = true
+                    }
+                },
             };
 
             Player.HitObjects = HitObjectContainer;
