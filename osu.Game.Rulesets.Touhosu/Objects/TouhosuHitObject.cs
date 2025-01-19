@@ -16,8 +16,17 @@ namespace osu.Game.Rulesets.Touhosu.Objects
             set => PositionBindable.Value = value;
         }
 
-        public float X => Position.X;
-        public float Y => Position.Y;
+        public float X
+        {
+            get => Position.X;
+            set => Position = new Vector2(value, Position.Y);
+        }
+
+        public float Y
+        {
+            get => Position.Y;
+            set => Position = new Vector2(Position.X, value);
+        }
 
         protected override HitWindows CreateHitWindows() => HitWindows.Empty;
     }
