@@ -10,7 +10,6 @@ using osu.Framework.Bindables;
 using osu.Game.Rulesets.Touhosu.Extensions;
 using osu.Game.Rulesets.Touhosu.Replays;
 using osu.Framework.Input.Events;
-using FFmpeg.AutoGen;
 
 namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
