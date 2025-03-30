@@ -10,6 +10,7 @@ using osu.Framework.Bindables;
 using osu.Game.Rulesets.Touhosu.Extensions;
 using osu.Game.Rulesets.Touhosu.Replays;
 using osu.Framework.Input.Events;
+using FFmpeg.AutoGen;
 
 namespace osu.Game.Rulesets.Touhosu.UI.Objects
 {
@@ -231,6 +232,13 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
                 var position = Math.Clamp(Player.X + Math.Sign(horizontalDirection) * elapsedTime * base_speed * speedMultiplier, animationContainer.Width / 2, TouhosuPlayfield.PLAYFIELD_SIZE.X - animationContainer.Width / 2);
                 Player.X = (float)position;
             }
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            var posX = Math.Clamp(position.X, animationContainer.Width / 2, TouhosuPlayfield.PLAYFIELD_SIZE.X - animationContainer.Width / 2);
+            var posY = Math.Clamp(position.Y, animationContainer.Height / 2, TouhosuPlayfield.PLAYFIELD_SIZE.Y - animationContainer.Height / 2);
+            Player.Position = new Vector2(posX, posY);
         }
 
         public List<Card> GetCards() => cardsController.GetCards();
