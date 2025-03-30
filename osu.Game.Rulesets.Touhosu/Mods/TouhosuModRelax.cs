@@ -1,14 +1,9 @@
-﻿using System;
-using osu.Framework.Graphics;
-using osu.Framework.Graphics.Sprites;
+﻿using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input;
 using osu.Framework.Localisation;
-using osu.Game.Graphics;
 using osu.Game.Rulesets.Mods;
-using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.Touhosu.Objects;
-using osu.Game.Rulesets.Touhosu.Scoring;
 using osu.Game.Rulesets.Touhosu.UI;
 using osu.Game.Rulesets.UI;
 using osu.Game.Screens.Play;
