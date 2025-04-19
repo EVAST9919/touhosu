@@ -9,7 +9,7 @@ using System;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public abstract class DrawableConstantMovingProjectile<T> : DrawableProjectile<T>
+    public abstract partial class DrawableConstantMovingProjectile<T> : DrawableProjectile<T>
         where T : ConstantMovingProjectile
     {
         public readonly IBindable<float> SpeedMultiplierBindable = new Bindable<float>();
@@ -56,7 +56,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             if (timeOffset < duration)
                 return;
 
-            ApplyResult(r => r.Type = r.Judgement.MaxResult);
+            ApplyResult((r, u) => r.Type = r.Judgement.MaxResult);
         }
 
         protected override void OnApply()

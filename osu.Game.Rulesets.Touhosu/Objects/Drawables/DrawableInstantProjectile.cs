@@ -5,7 +5,7 @@ using osu.Game.Rulesets.Scoring;
 
 namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
 {
-    public class DrawableInstantProjectile : DrawableProjectile<InstantProjectile>
+    public partial class DrawableInstantProjectile : DrawableProjectile<InstantProjectile>
     {
         protected override bool CanHitPlayer => false;
 
@@ -26,7 +26,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             if (timeOffset < 0)
                 return;
 
-            ApplyResult(r => r.Type = HitResult.IgnoreHit);
+            ApplyResult((r, u) => r.Type = HitResult.IgnoreHit);
         }
 
         protected override void UpdateHitStateTransforms(ArmedState state)

@@ -98,8 +98,7 @@ namespace osu.Game.Rulesets.Touhosu.Objects.Drawables
             if (CheckHit?.Invoke(Position) ?? false)
             {
                 missTime = timeOffset;
-                ApplyResult(h => h.Type = h.Judgement.MinResult);
-                return;
+                ApplyResult((r, u) => r.Type = r.Judgement.MinResult);
             }
         }
 
