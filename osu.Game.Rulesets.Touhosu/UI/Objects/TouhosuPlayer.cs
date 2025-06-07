@@ -233,6 +233,13 @@ namespace osu.Game.Rulesets.Touhosu.UI.Objects
             }
         }
 
+        public void SetPosition(Vector2 position)
+        {
+            var posX = Math.Clamp(position.X, animationContainer.Width / 2, TouhosuPlayfield.PLAYFIELD_SIZE.X - animationContainer.Width / 2);
+            var posY = Math.Clamp(position.Y, animationContainer.Height / 2, TouhosuPlayfield.PLAYFIELD_SIZE.Y - animationContainer.Height / 2);
+            Player.Position = new Vector2(posX, posY);
+        }
+
         public List<Card> GetCards() => cardsController.GetCards();
 
         private bool isFocused;

@@ -32,7 +32,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
         private Sample grazeSample;
 
         public TouhosuPlayer Player;
-
+        public Container TouhosuArea;
         public TouhosuPlayfield()
         {
             InternalChildren = new Drawable[]
@@ -58,7 +58,7 @@ namespace osu.Game.Rulesets.Touhosu.UI
                         AlwaysPresent = true
                     }
                 },
-                new Container
+                TouhosuArea = new Container
                 {
                     RelativeSizeAxes = Axes.Both,
                     Padding = new MarginPadding(1),
