@@ -15,5 +15,11 @@ namespace osu.Game.Rulesets.Touhosu.Scoring
 
             return false;
         }
+
+        public override void SetDifficulty(double difficulty)
+        {
+        }
+
+        public override double WindowFor(HitResult result) => 0;
     }
 }
