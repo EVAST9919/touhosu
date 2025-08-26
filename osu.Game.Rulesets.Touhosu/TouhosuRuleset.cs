@@ -83,7 +83,8 @@ namespace osu.Game.Rulesets.Touhosu
                 case ModType.Automation:
                     return new Mod[]
                     {
-                        new TouhosuModAutoplay()
+                        new TouhosuModAutoplay(),
+                        new TouhosuModRelax()
                     };
 
                 case ModType.Fun:
