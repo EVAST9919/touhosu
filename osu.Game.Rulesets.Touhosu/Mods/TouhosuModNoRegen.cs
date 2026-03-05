@@ -13,7 +13,7 @@ namespace osu.Game.Rulesets.Touhosu.Mods
         public override double ScoreMultiplier => 1.0;
         public override string Name => "No Regen";
         public override string Acronym => "NR";
-        public override IconUsage? Icon => OsuIcon.HeartBreak;
+        public override IconUsage? Icon => OsuIcon.Heart;
         public override ModType Type => ModType.DifficultyIncrease;
         public override LocalisableString Description => "No health regeneration.";
         public override Type[] IncompatibleMods => new[] { typeof(ModEasy) };

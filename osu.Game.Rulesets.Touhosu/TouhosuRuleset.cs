@@ -105,7 +105,7 @@ namespace osu.Game.Rulesets.Touhosu
 
         public override Drawable CreateIcon() => new TouhosuIcon(this);
 
-        protected override IEnumerable<HitResult> GetValidHitResults() => new[]
+        public override IEnumerable<HitResult> GetValidHitResults() => new[]
         {
             HitResult.Perfect
         };
