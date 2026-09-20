@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
       <StartupObject>osu.Game.Rulesets.Touhosu.Tests.VisualTestRunner</StartupObject>
-      <LangVersion>10</LangVersion>
+      <LangVersion>14</LangVersion>
     </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\osu.Game.Rulesets.Touhosu\osu.Game.Rulesets.Touhosu.csproj" />
   </ItemGroup>
   <PropertyGroup Label="Project">
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>osu.Game.Rulesets.Touhosu.Tests</RootNamespace>
   </PropertyGroup>
 </Project>
