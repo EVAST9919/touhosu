@@ -4,8 +4,6 @@ A custom game mode for osu!lazer project based on "Touhou" game.
 
 Support:
 
-https://www.patreon.com/evast
-
 https://boosty.to/evast
 
 Follow me:
